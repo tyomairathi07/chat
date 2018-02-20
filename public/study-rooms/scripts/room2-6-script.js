@@ -69,7 +69,7 @@ peer.on('open', function(id) {
 				clearInterval(iv);
 				$('.button-join').removeAttr('disabled');
 			}
-		})
+		}, 10);
 		room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 		
 		// start roomHandler
@@ -110,6 +110,9 @@ $(document).on('click', '#back', function() { // .click() won't work on dynamica
 		room.replaceStream(localStream);
 	});
 
+	// SW: send message to room
+	room.send('back');
+
 	// set style
 	setStyleOnJoin();
 
@@ -130,6 +133,7 @@ $('#break').click(function() {
 	});	
 })
 
+// goes to study-rooms.html
 $('#home').click(function() {
 	// DB: remove from on-break
 	removeFromOnBreak();
@@ -174,7 +178,22 @@ roomRef.on('child_removed', function(snapshot) {
 
 	// remove video from [row, col]
 	removeVideo(child_id);
+});
+
+/*
+rootRef.child('on-break').on('child_removed', function(snapshot) {
+	if (snapshot.child('room-id') == roomId) {
+		// remove coffee from cell
+		var r = snapshot.child('row-index');
+		var c = snapshot.child('cell-index');
+		var cell = getCell(r, c);
+		// remove img
+		cell.children('img').remove();
+		// show button
+		cell.children('button').css('display', 'inline');
+	}
 })
+*/
 
 /** FUNCTIONS **/
 function appendLog(text) {
@@ -182,6 +201,7 @@ function appendLog(text) {
 }
 
 function addCoffee(id) {
+	appendLog('addCoffee');
 	var cell = $('#' + id);
 	// remove video
 	cell.children('video').remove();
@@ -195,6 +215,7 @@ function addCoffee(id) {
 
 // called BEFORE addVideo
 function addCoffeeOnOpen(r, c) {
+	appendLog('addCoffeeOnOpen');
 	var cell = getCell(r, c);
 	// remove video
 	cell.children('video').remove();
@@ -205,7 +226,7 @@ function addCoffeeOnOpen(r, c) {
 }
 
 function addVideo(id, stream) {
-	appendLog('addVideo called');
+	appendLog('addVideo');
 
 	// get position
 	var r = null;
@@ -222,7 +243,8 @@ function addVideo(id, stream) {
 		var cell = getCell(r, c);
 		// set id to cell
 		cell.attr('id', id);
-		appendLog('added id to cell');
+		// remove coffee from cell (if any)
+		cell.children('img').remove();
 		// hide children
 		cell.children().css('display', 'none');
 		// set video
@@ -232,6 +254,7 @@ function addVideo(id, stream) {
 }
 
 function checkBreakStatus(user) {
+	appendLog('checkBreakStatus');
 	rootRef.child('on-break/' + user.uid).once('value')
 	.then(function(snapshot) {
 		if(snapshot.child('done').exists()) {
@@ -244,6 +267,7 @@ function checkBreakStatus(user) {
 
 // fires peerJoin event with a dummy peer
 function dummy() {
+	appendLog('dummy');
 	let dummyPeer = new Peer("dummyPeer", {
 		key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
 		debug: 3
@@ -279,6 +303,7 @@ function getUsersOnBreak() {
 
 // finds open break room and goes there
 function goToBreakroom() {
+	appendLog('goToBreakroom');
 	var rootRef = firebase.database().ref();
 	var prefix = "room0-";
 	var array = [];
@@ -309,7 +334,9 @@ function peerHandler(peer) {
 	})
 }
 
+// removes record from /on-break/
 function removeFromOnBreak() {
+	appendLog('removeFromOnBreak');
 	var user = firebase.auth().currentUser;
 	rootRef.child('on-break/' + user.uid).remove();
 }
@@ -339,6 +366,9 @@ function roomHandler() {
 		var msg = data.data;
 		if (msg == 'break') {
 			addCoffee(id);
+		} else if (msg == 'back') {
+			// remove coffee
+			$('#' + id).children('img').remove();
 		}
 	})
 
@@ -363,6 +393,7 @@ function roomHandler() {
 }
 
 function setStyleOnBack(r, c) {
+	appendLog('setStyleOnBack');
 	var cell = getCell(r, c);
 	// set border to cell
 	cell.css('border', '0.3rem solid #9b4dca');
@@ -379,13 +410,17 @@ function setStyleOnBack(r, c) {
 function setStyleOnJoin() {
 	appendLog('setStyleOnJoin');
 
+	var cell = $('#' + peerId);
+
 	if($('#back') != null) { // back from break
 		// show all "join" buttons
 		$('table').find('.button-join').css('display', 'inline');
 		// remove "back" button
 		$('#back').remove();
+		// remove coffee
+		cell.children('img').remove();
 	}
-	var cell = $('#' + peerId);
+
 	// set border
 	cell.css('border', '0.3rem solid black');
 	// hide "join" button in cell
@@ -410,6 +445,8 @@ function setStyleOnLeave() {
 	$("table").find('.button-join').removeAttr('disabled');
 	// hide bottom menu
 	$(".menu").removeAttr('style');
+	// show "join" button
+	cell.children('.button-join').css('display', 'inline');
 	// remove border
 	cell.removeAttr('style');
 	// remove id from cell
