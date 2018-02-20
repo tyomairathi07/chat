@@ -110,9 +110,6 @@ $(document).on('click', '#back', function() { // .click() won't work on dynamica
 		room.replaceStream(localStream);
 	});
 
-	// SW: send message to room
-	//room.send('back');
-
 	// set style
 	setStyleOnJoin();
 
@@ -126,8 +123,6 @@ $('#break').click(function() {
 		'cell-index': cellIndex,
 		'room-id': roomId
 	}).then(function() {
-		// SW: send message to room
-		//room.send('break');
 		// go to break room
 		goToBreakroom();
 	});	
@@ -184,7 +179,7 @@ rootRef.child('on-break').on('child_added', function(snapshot, prevkey) {
 	if (snapshot.child('room-id').val() == roomId) {
 		var r = snapshot.child('row-index').val();
 		var c = snapshot.child('cell-index').val();
-		appendLog('<b>on-break added: ' + r + ',' + c + '</b>');
+		appendLog('on-break added: ' + r + ',' + c);
 		addCoffee(r, c);
 	}
 });
@@ -194,7 +189,7 @@ rootRef.child('on-break').on('child_removed', function(snapshot) {
 		// remove coffee from cell
 		var r = snapshot.child('row-index').val();
 		var c = snapshot.child('cell-index').val();
-		appendLog('<b>on-break removed: ' + r + ',' + c + '</b>');
+		appendLog('on-break removed: ' + r + ',' + c);
 		removeCoffee(r, c);
 	}
 })
@@ -235,8 +230,6 @@ function addVideo(id, stream) {
 		var cell = getCell(r, c);
 		// set id to cell
 		cell.attr('id', id);
-		// remove coffee from cell (if any)
-		//cell.children('img').remove();
 		// hide children
 		cell.children().css('display', 'none');
 		// set video
@@ -298,7 +291,6 @@ function goToBreakroom() {
 					j++;
 				}
 				window.location.href = "/break-rooms/" + roomId + '.html';
-				//window.location.href = "/";
 			}
 		});
 	}
@@ -397,8 +389,6 @@ function setStyleOnJoin() {
 		$('table').find('.button-join').css('display', 'inline');
 		// remove "back" button
 		$('#back').remove();
-		// remove coffee
-		//cell.children('img').remove();
 	}
 
 	// set border
