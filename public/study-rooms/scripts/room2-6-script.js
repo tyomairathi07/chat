@@ -111,7 +111,7 @@ $(document).on('click', '#back', function() { // .click() won't work on dynamica
 	});
 
 	// SW: send message to room
-	room.send('back');
+	//room.send('back');
 
 	// set style
 	setStyleOnJoin();
@@ -127,7 +127,7 @@ $('#break').click(function() {
 		'room-id': roomId
 	}).then(function() {
 		// SW: send message to room
-		room.send('break');
+		//room.send('break');
 		// go to break room
 		goToBreakroom();
 	});	
@@ -180,51 +180,43 @@ roomRef.on('child_removed', function(snapshot) {
 	removeVideo(child_id);
 });
 
-/*
+rootRef.child('on-break').on('child_added', function(snapshot, prevkey) {
+	if (snapshot.child('room-id').val() == roomId) {
+		var r = snapshot.child('row-index').val();
+		var c = snapshot.child('cell-index').val();
+		appendLog('<b>on-break added: ' + r + ',' + c + '</b>');
+		addCoffee(r, c);
+	}
+});
+
 rootRef.child('on-break').on('child_removed', function(snapshot) {
-	if (snapshot.child('room-id') == roomId) {
+	if (snapshot.child('room-id').val() == roomId) {
 		// remove coffee from cell
-		var r = snapshot.child('row-index');
-		var c = snapshot.child('cell-index');
-		var cell = getCell(r, c);
-		// remove img
-		cell.children('img').remove();
-		// show button
-		cell.children('button').css('display', 'inline');
+		var r = snapshot.child('row-index').val();
+		var c = snapshot.child('cell-index').val();
+		appendLog('<b>on-break removed: ' + r + ',' + c + '</b>');
+		removeCoffee(r, c);
 	}
 })
-*/
 
 /** FUNCTIONS **/
 function appendLog(text) {
 	$('#log').append(text + '<br>');
 }
 
-function addCoffee(id) {
+// addCoffee -> addVideo
+function addCoffee(r, c) {
 	appendLog('addCoffee');
-	var cell = $('#' + id);
-	// remove video
-	cell.children('video').remove();
-	// hide button
-	cell.children('button').css('display', 'none');
-	// add coffee image
-	cell.append('<img src="/images/coffee.png">');
-	// remove id from cell
-	cell.removeAttr('id');
-}
-
-// called BEFORE addVideo
-function addCoffeeOnOpen(r, c) {
-	appendLog('addCoffeeOnOpen');
 	var cell = getCell(r, c);
-	// remove video
-	cell.children('video').remove();
-	// hide button
-	cell.children('button').css('display', 'none');
-	// add coffee image
+	// remove video (if any)
+	cell.children('video');
+	// hide "join" button
+	cell.children('.button-join').css('display', 'none');
+	// add coffee
 	cell.append('<img src="/images/coffee.png">');
 }
 
+// addVideo -> removeCoffee
 function addVideo(id, stream) {
 	appendLog('addVideo');
 
@@ -244,7 +236,7 @@ function addVideo(id, stream) {
 		// set id to cell
 		cell.attr('id', id);
 		// remove coffee from cell (if any)
-		cell.children('img').remove();
+		//cell.children('img').remove();
 		// hide children
 		cell.children().css('display', 'none');
 		// set video
@@ -284,21 +276,6 @@ function dummy() {
 
 function getCell(r, c) {
 	return $("table tr:eq("+r+") td:eq("+c+")");
-}
-
-function getUsersOnBreak() {
-	appendLog('getUsersOnBreak');
-
-	rootRef.child('on-break').once('value').then(function(snapshot) {
-		snapshot.forEach(function(childSnapshot) {
-			var rId = childSnapshot.child('room-id').val();
-			if (rId == roomId) {
-				var r = childSnapshot.child('row-index').val();
-				var c = childSnapshot.child('cell-index').val();
-				addCoffeeOnOpen(r, c);
-			}
-		})
-	})
 }
 
 // finds open break room and goes there
@@ -341,6 +318,20 @@ function removeFromOnBreak() {
 	rootRef.child('on-break/' + user.uid).remove();
 }
 
+function removeCoffee(r, c) {
+	appendLog('removeCoffee');
+	var cell = getCell(r, c);
+	// remove img
+	cell.children('img').remove();
+	if (cell.children().length > 1) { // video & button
+		// hide "join" button
+		cell.children('.button-join').css('display', 'none');
+	} else { // button only
+		// show "join button"
+		cell.children('.button-join').css('display', 'inline');
+	}
+}
+
 function removeVideo(id) {
 	appendLog('removeVideo');
 
@@ -361,20 +352,9 @@ function removeVideo(id) {
 
 // handle SFURoom events
 function roomHandler() {
-	room.on('data', function(data) {
-		var id = data.src;
-		var msg = data.data;
-		if (msg == 'break') {
-			addCoffee(id);
-		} else if (msg == 'back') {
-			// remove coffee
-			$('#' + id).children('img').remove();
-		}
-	})
-
 	room.on('open', function() {
 		dummy();
-		getUsersOnBreak();
+		// getUsersOnBreak();
 	})
 
 	room.on('peerLeave', function(id) {
@@ -418,7 +398,7 @@ function setStyleOnJoin() {
 		// remove "back" button
 		$('#back').remove();
 		// remove coffee
-		cell.children('img').remove();
+		//cell.children('img').remove();
 	}
 
 	// set border
