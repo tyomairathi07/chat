@@ -1,0 +1,5 @@
+SkyWay
+- removeStream: fired after peerLeave
+
+Firebase
+- child_added, child_removed must BOTH be used (can't be either one)

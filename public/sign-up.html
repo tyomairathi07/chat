@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>新規登録</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="styles/milligram.min.css">
+
+  </head>
+  <body>
+    <div>
+      <span id="message-verification"></span>
+      <span id="error-sign-up"></span>
+
+      <label for="email">メールアドレス(学生用メールアドレスを使用してください)</label>
+      <input type="email" id="email"><br>
+
+      <label for="password">パスワード(6文字以上)</label>
+      <input type="password" id="password"><br>
+
+      <label for="password-confirm">確認用パスワード</label>
+      <input type="password" id="password-confirm"><br>
+
+      【重要】<br>
+      当サイトを利用される際のデータは記録され、研究のために使用されます。<br>
+      データは統計的に処理され、個人の名前は特定されません。<br>
+      同意いただける場合のみ、下の「新規登録」ボタンをクリックしてください。<br><br>
+
+      <button id="sign-up">新規登録</button><br>
+    </div>
+
+    <!-- scripts -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="scripts/sign-up-script.js"></script>
+  </body>
+</html>

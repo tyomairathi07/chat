@@ -1,0 +1,17 @@
+room1-0: v1.0
+room1-1: v1.1
+room2-0: DB operations only v.01
+room2-1: v1.2 FAIL
+room2-2: DB operations only v.02
+room2-3: v1.3 working with problems (new user doesn't show stream)
+★room2-4: v1.4; working perfectly; uses dummypeer
+
+room2-5: v2.0; needs fix; h	andle disconnection, goes to breakroom
+room2-6: v2.1; working? possible errors: setting IDs for each cell
+
+===
+
+room0-0: v1.0 SkyWay only; stream working
+room0-1: v1.1 DB only; working
+room0-2: v1.2 working
+room0-3: v2.0 working? needs testing for stream

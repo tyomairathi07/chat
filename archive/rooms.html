@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="styles/milligram.min.css">
+
+  </head>
+  <body>
+    <div>
+      <ul class="ul-top-nav">
+        <li class="li-top-nav"><a href="rooms.html">部屋一覧</a></li>
+        <li class="li-top-nav"><a href="rooms.html#break-rooms">休憩室</a></li>
+        <li class="li-top-nav"><a href="rooms.html#study-rooms">自習室</a></li>
+        <li class="li-top-nav" style="float: right"><a href="">ログアウト</a></li>
+        <li class="li-top-nav" style="float: right"><a href="">質問/報告</a></li>
+      </ul>
+    </div>
+
+    <div>
+      休憩室: 私語OK <br>
+      自習室: 私語厳禁
+
+    </div>
+
+    <div>
+      <ul>
+        <li><a href="#break-rooms">休憩室</a></li>
+        <li>自習室
+          <ul>
+            <li><a href="#hokkaidou">北海道</a></li>
+            <li><a href="#touhoku">東北</a></li>
+            <li><a href="#kantou">関東</a></li>
+            <li><a href="#koushinetsu-hokuriku">甲信越・北陸</a></li>
+            <li><a href="#toukai">東海</a></li>
+            <li><a href="#kinki">近畿</a></li>
+            <li><a href="#chuugoku">中国</a></li>
+            <li><a href="#shikoku">四国</a></li>
+            <li><a href="#kyuushuu">九州</a></li>
+            <li><a href="#okinawa">沖縄</a></li>
+          </ul>
+    </div>
+
+    <div>
+      <div>
+        <h4 id="break-rooms">休憩室</h4>
+        <div>
+          <a href="rooms/room0-0.html"><button class="button button-outline">
+            休憩室1<br>
+            <span id="room0-0"></span>
+          </button></a>
+
+          <a href="rooms/room0-1.html"><button class="button button-outline">
+            休憩室2<br>
+            <span id="room0-1"></span>
+          </button></a>
+
+          <a href="rooms/room0-2.html"><button class="button button-outline">
+            休憩室3<br>
+            <span id="room0-2"></span>
+          </button></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 id="study-rooms">自習室</h4>
+
+        <h5 id="hokkaidou">北海道</h5>
+        <div>
+          <a href="rooms/room1-0.html"><button class="button button-outline">
+            北海道学習センター<br>
+            <span id="room1-0"></span>
+          </button></a>
+
+          <a href="rooms/room1-1.html"><button class="button button-outline">
+            旭川サテライトスペース<br>
+            <span id="room1-1"></span>
+          </button></a>
+        </div>
+
+        <h5 id="touhoku">東北</h5>
+        <div>
+          <a href="rooms/room2-0.html"><button class="button button-outline">
+            青森学習センター<br>
+            <span id="room2-0"></span>
+          </button></a>
+
+          <a href="rooms/room2-1.html"><button class="button button-outline">
+            八戸サテライトスペース<br>
+            <span id="room2-1"></span>
+          </button></a>
+
+          <a href="rooms/room2-2.html"><button class="button button-outline">
+            岩手学習センター<br>
+            <span id="room2-2"></span>
+          </button></a>
+
+          <a href="rooms/room2-3.html"><button class="button button-outline">
+            宮城学習センター<br>
+            <span id="room2-3"></span>
+          </button></a>
+
+          <a href="rooms/room2-4.html"><button class="button button-outline">
+            秋田学習センター<br>
+            <span id="room2-4"></span>
+          </button></a>
+
+          <a href="rooms/room2-5.html"><button class="button button-outline">
+            山形学習センター<br>
+            <span id="room2-5"></span>
+          </button></a>
+
+          <a href="rooms/room2-6.html"><button class="button button-outline">
+            福島学習センター<br>
+            <span id="room2-6"></span>
+          </button></a>
+
+          <a href="rooms/room2-7.html"><button class="button button-outline">
+            いわきサテライトスペース<br>
+            <span id="room2-7"></span>
+          </button></a>
+        </div>
+
+        <h5 id="kantou">関東</h5>
+        <div>
+          <a href="rooms/room3-0.html"><button class="button button-outline">
+            茨城学習センター<br>
+            <span id="room3-0"></span>
+          </button></a>
+
+          <a href="rooms/room3-1.html"><button class="button button-outline">
+            栃木学習センター<br>
+            <span id="room3-1"></span>
+          </button></a>
+
+          <a href="rooms/room3-2.html"><button class="button button-outline">
+            群馬学習センター<br>
+            <span id="room3-2"></span>
+          </button></a>
+
+          <a href="rooms/room3-3.html"><button class="button button-outline">
+            埼玉学習センター<br>
+            <span id="room3-3"></span>
+          </button></a>
+
+          <a href="rooms/room3-4.html"><button class="button button-outline">
+            千葉学習センター<br>
+            <span id="room3-4"></span>
+          </button></a>
+
+          <a href="rooms/room3-5.html"><button class="button button-outline">
+            東京渋谷学習センター<br>
+            <span id="room3-5"></span>
+          </button></a>
+
+          <a href="rooms/room3-6.html"><button class="button button-outline">
+            東京文京学習センター<br>
+            <span id="room3-6"></span>
+          </button></a>
+
+          <a href="rooms/room3-7.html"><button class="button button-outline">
+            東京足立学習センター<br>
+            <span id="room3-7"></span>
+          </button></a>
+
+          <a href="rooms/room3-8.html"><button class="button button-outline">
+            東京多摩学習センター<br>
+            <span id="room3-8"></span>
+          </button></a>
+
+          <a href="rooms/room3-9.html"><button class="button button-outline">
+            神奈川学習センター<br>
+            <span id="room3-9"></span>
+          </button></a>
+        </div>
+
+        <h5 id="koushinetsu-hokuriku">甲信越・北陸</h5>
+        <div>
+          <a href="rooms/room4-0.html"><button class="button button-outline">
+            新潟学習センター<br>
+            <span id="room4-0"></span>
+          </button></a>
+
+          <a href="rooms/room4-1.html"><button class="button button-outline">
+            富山学習センター<br>
+            <span id="room4-1"></span>
+          </button></a>
+
+          <a href="rooms/room4-2.html"><button class="button button-outline">
+            石川学習センター<br>
+            <span id="room4-2"></span>
+          </button></a>
+
+          <a href="rooms/room4-3.html"><button class="button button-outline">
+            福井学習センター<br>
+            <span id="room4-3"></span>
+          </button></a>
+
+          <a href="rooms/room4-4.html"><button class="button button-outline">
+          山梨学習センター<br>
+            <span id="room4-4"></span>
+          </button></a>
+
+          <a href="rooms/room4-5.html"><button class="button button-outline">
+            長野学習センター<br>
+            <span id="room4-5"></span>
+          </button></a>
+        </div>
+
+        <h5 id="toukai">東海</h5>
+        <div>
+          <a href="rooms/room5-0.html"><button class="button button-outline">
+            岐阜学習センター<br>
+            <span id="room5-0"></span>
+          </button></a>
+
+          <a href="rooms/room5-1.html"><button class="button button-outline">
+            静岡学習センター<br>
+            <span id="room5-1"></span>
+          </button></a>
+
+          <a href="rooms/room5-2.html"><button class="button button-outline">
+            浜松サテライトスペース<br>
+            <span id="room5-2"></span>
+          </button></a>
+
+          <a href="rooms/room5-3.html"><button class="button button-outline">
+            愛知学習センター<br>
+            <span id="room5-3"></span>
+          </button></a>
+
+          <a href="rooms/room5-4.html"><button class="button button-outline">
+            三重学習センター<br>
+            <span id="room5-4"></span>
+          </button></a>
+        </div>
+
+        <h5 id="kinki">近畿</h5>
+        <div>
+          <a href="rooms/room6-0.html"><button class="button button-outline">
+            滋賀学習センター<br>
+            <span id="room6-0"></span>
+          </button></a>
+
+          <a href="rooms/room6-1.html"><button class="button button-outline">
+            京都学習センター<br>
+            <span id="room6-1"></span>
+          </button></a>
+
+          <a href="rooms/room6-2.html"><button class="button button-outline">
+            大阪学習センター<br>
+            <span id="room6-2"></span>
+          </button></a>
+
+          <a href="rooms/room6-3.html"><button class="button button-outline">
+            兵庫学習センター<br>
+            <span id="room6-3"></span>
+          </button></a>
+
+          <a href="rooms/room6-4.html"><button class="button button-outline">
+            姫路サテライトスペース<br>
+            <span id="room6-4"></span>
+          </button></a>
+
+          <a href="rooms/room6-5.html"><button class="button button-outline">
+            奈良学習センター<br>
+            <span id="room6-5"></span>
+          </button></a>
+
+          <a href="rooms/room6-6.html"><button class="button button-outline">
+            和歌山学習センター<br>
+            <span id="room6-6"></span>
+          </button></a>
+        </div>
+
+        <h5 id="chuugoku">中国</h5>
+        <div>
+          <a href="rooms/room7-0.html"><button class="button button-outline">
+            鳥取学習センター<br>
+            <span id="room7-0"></span>
+          </button></a>
+
+          <a href="rooms/room7-1.html"><button class="button button-outline">
+            島根学習センター<br>
+            <span id="room7-1"></span>
+          </button></a>
+
+          <a href="rooms/room7-2.html"><button class="button button-outline">
+            岡山学習センター<br>
+            <span id="room7-2"></span>
+          </button></a>
+
+          <a href="rooms/room7-3.html"><button class="button button-outline">
+            広島学習センター<br>
+            <span id="room7-3"></span>
+          </button></a>
+
+          <a href="rooms/room7-4.html"><button class="button button-outline">
+            福山サテライトスペース<br>
+            <span id="room7-4"></span>
+          </button></a>
+
+          <a href="rooms/room7-5.html"><button class="button button-outline">
+            山口学習センター<br>
+            <span id="room7-5"></span>
+          </button></a>
+        </div>
+
+        <h5 id="shikoku">四国</h5>
+        <div>
+          <a href="rooms/room8-0.html"><button class="button button-outline">
+            徳島学習センター<br>
+            <span id="room8-0"></span>
+          </button></a>
+
+          <a href="rooms/room8-1.html"><button class="button button-outline">
+            香川学習センター<br>
+            <span id="room8-1"></span>
+          </button></a>
+
+          <a href="rooms/room8-2.html"><button class="button button-outline">
+            愛媛学習センター<br>
+            <span id="room8-2"></span>
+          </button></a>
+
+          <a href="rooms/room8-3.html"><button class="button button-outline">
+            高知学習センター<br>
+            <span id="room8-3"></span>
+          </button></a>
+        </div>
+
+        <h5 id="kyuushuu">九州</h5>
+        <div>
+          <a href="rooms/room9-0.html"><button class="button button-outline">
+            福岡学習センター<br>
+            <span id="room9-0"></span>
+          </button></a>
+
+          <a href="rooms/room9-1.html"><button class="button button-outline">
+            北九州サテライトスペース<br>
+            <span id="room9-1"></span>
+          </button></a>
+
+          <a href="rooms/room9-2.html"><button class="button button-outline">
+            佐賀学習センター<br>
+            <span id="room9-2"></span>
+          </button></a>
+
+          <a href="rooms/room9-3.html"><button class="button button-outline">
+            長崎学習センター<br>
+            <span id="room9-3"></span>
+          </button></a>
+
+          <a href="rooms/room9-4.html"><button class="button button-outline">
+            熊本学習センター<br>
+            <span id="room9-4"></span>
+          </button></a>
+
+          <a href="rooms/room9-5.html"><button class="button button-outline">
+            大分学習センター<br>
+            <span id="room9-5"></span>
+          </button></a>
+
+          <a href="rooms/room9-6.html"><button class="button button-outline">
+            宮崎学習センター<br>
+            <span id="room9-6"></span>
+          </button></a>
+
+          <a href="rooms/room9-7.html"><button class="button button-outline">
+            鹿児島学習センター<br>
+            <span id="room9-7"></span>
+          </button></a>
+        </div>
+
+        <h5 id="okinawa">沖縄</h5>
+        <div>
+          <a href="rooms/room10-0.html"><button class="button button-outline">
+            沖縄学習センター<br>
+            <span id="room10-0"></span>
+          </button></a>
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- scripts -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="scripts/rooms-script.js"></script>
+  </body>
+</html>
