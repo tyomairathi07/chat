@@ -50,16 +50,6 @@ let room = null;
 
 // open page
 peer.on('open', function(id) {
-	/*
-	// DB: get users
-	roomRef.once('value').then(function(snapshot) {
-		snapshot.forEach(function(childSnapshot) { 
-			var remoteId = childSnapshot.key;
-			// show pic & name for each user
-			addUser(remoteId);
-		})
-	});
-	*/
 	// set peer Id
 	peerId = id;
 	appendLog('my ID: ' + peerId);
@@ -143,17 +133,6 @@ roomRef.on('child_removed', function(snapshot) {
 
 /** FUNCTIONS **/
 function addUser(id, name, url) {
-	/*
-	roomRef.child(id).once('value').then(function(snapshot) {
-		if (snapshot.exists() == false) {
-			appendLog('snapshot does not exist');
-		}
-		var name = snapshot.child('name').val();
-		var url = snapshot.child('url').val();
-		$('.users').append('<div class="user-wrapper" id="' + id + '"><img src="' + url +
-		 '" class="user-pic"><br>' + name + '</div>');
-	})
-	*/
 	$('.users').append('<div class="user-wrapper" id="' + id + '"><img src="' + url +
 		 '" class="user-pic"><br><span>' + name + '</span></div>');
 	appendLog('added user: ' + id);
@@ -237,31 +216,13 @@ function roomHandler() {
 			"name": name,
 			"url": url
 		})
-		// show pic & name: self
-		// addUser(peerId, );
-		// chat log
-		//appendChatLog('SYSTEM', '入室しました');
+		// show chat input
 		$('.container-input').css('display', 'block');
-	});
-
-	room.on('peerJoin', function(id) {
-		/*
-		// DB: add user
-		roomRef.child(id).set(true);
-		*/
-		// add user pic & name
-		//addUser(id);
-		// chat log
-		//appendChatLog('SYSTEM', id + ' が入室しました');
 	});
 
 	room .on('peerLeave', function(id) {
 		// DB: remove user
 		roomRef.child(id).remove();
-		// remove user pic & name
-		//removeUser(id);
-		// chat log
-		//appendChatLog('SYSTEM', id + ' が退室しました');
 	});
 
 	room.on('stream', function(stream) {
