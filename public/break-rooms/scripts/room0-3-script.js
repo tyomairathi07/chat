@@ -1,8 +1,3 @@
-/**
-open page: only shows icons
-click "join": send & receive audio; send & receive chat
-**/
-
 /** TODO
 - get user name & icon from DB
 - make links clickable
@@ -19,107 +14,87 @@ messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
-let currentUser = null;
-
-// check sign in status
-firebase.auth().onAuthStateChanged(function(user) {
-	if (user) {
-		currentUser = user;
-		setStudyroomName(user);
-	} else {
-		window.location.href = "/";
-	}
-})
-
 const roomId = "room0-3";
 const rootRef = firebase.database().ref();
 const roomRef = rootRef.child(roomId + '/');
 const onBreakRef = rootRef.child('on-break');
 
-// set room names
-setBreakroomName();
+// check sign in status
+firebase.auth().onAuthStateChanged(function(user) {
+	if (user) {
+		// set room names
+		setBreakroomName();
+		setStudyroomName(user);
 
-// create peer
-const peer = new Peer({
-	key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
-	debug: 3
-});
+		// SW: create peer
+		const peer = new Peer({
+			key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
+			debug: 3
+		});
 
+		let peerId = null;
+		let room = null;
 
-let peerId = null;
-let room = null;
+		// open page
+		peer.on('open', function(id) {
+			// set peer Id
+			peerId = id;
+			appendLog('my ID: ' + peerId);
 
-// open page
-peer.on('open', function(id) {
-	// set peer Id
-	peerId = id;
-	appendLog('my ID: ' + peerId);
+			// DB: handle disconnections;
+			roomRef.child(peerId).onDisconnect().remove();
+			onBreakRef.child(user.uid).onDisconnect().remove();
+			
+			// SW: start peerHandler
+			peerHandler(peer);
 
-	// DB: handle disconnections; removes data for last user in room
-	roomRef.child(peerId).onDisconnect().remove();
-	firebase.auth().onAuthStateChanged(function (user) {
-		onBreakRef.child(user.uid).onDisconnect().remove();
-	});
-	
-	// start peerHandler
-	peerHandler();
+			// SW: join room
+			navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(function(stream) {
+				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
+				// start room handler
+				roomHandler(room, peer, user);
+			});
+		});
 
-});
+		$('#send').click(function() {
+			sendChat(room);
+		})
 
-$('#join').click(function() {
-	// toggle button
-	toggleButton('join');
+		$('#study').click(function() {
+			var uid = user.uid;
+			var uidRef = onBreakRef.child(uid);
+			// DB: cancel onDisconnect; ONLY when goes back to study room
+			uidRef.onDisconnect().cancel();
+			// DB: set 'done' field
+			uidRef.child('done').set(true);
 
-	// SW: join room
-	navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(function(stream) {
-		room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
-		roomHandler();
-	})
+			// DB: get studyroom id
+			uidRef.child('room-id').once('value')
+			.then(function(snapshot) {
+				var roomId = snapshot.val();
+				// go to studyroom
+				window.location.href = "/study-rooms/" + roomId + '.html';
+			})
+		});
 
-});
-
-$('#leave').click(function() {
-	// toggle button
-	toggleButton('leave');
-	// SW: close room
-	room.close();
-});
-
-$('#send').click(function() {
-	sendChat();
-})
-
-$('#study').click(function() {
-	var uid = currentUser.uid;
-	var uidRef = onBreakRef.child(uid);
-	// DB: cancel onDisconnect; ONLY when goes back to study room
-	uidRef.onDisconnect().cancel();
-	// DB: set 'done' field
-	uidRef.child('done').set(true);
-
-	// DB: get studyroom id
-	uidRef.child('room-id').once('value')
-	.then(function(snapshot) {
-		var roomId = snapshot.val();
-		// go to studyroom
-		window.location.href = "/study-rooms/" + roomId + '.html';
-	})
-});
-
-$('#textarea-chat').keypress(function(e) {
-	if (e.which == 13) {
-		sendChat();
-		return false; // equal to e.preventDefault(); prevents newline
+		$('#textarea-chat').keypress(function(e) {
+			if (e.which == 13) {
+				sendChat(room);
+				return false; // equal to e.preventDefault(); prevents newline
+			}
+		});
+	} else {
+		window.location.href = "/";
 	}
-});
+})
 
 /** DB LISTENERS **/
 roomRef.on('child_added', function(snapshot, prevkey) {
 	var r_id = snapshot.key;
 	var r_name = snapshot.child('name').val();
 	var r_url = snapshot.child('url').val();
-	addUser(r_id, r_name, r_url);
 	appendLog('child_added: ' + r_id);
+	addUser(r_id, r_name, r_url);
 	appendChatLog('SYSTEM', r_name + 'が入室しました');
 });
 
@@ -146,17 +121,10 @@ function appendChatLog(sender, message) {
 	$('#chat-log').append('<b>' + sender + ': </b>' + message + '<br>');
 }
 
-function peerHandler() {
-	peer.on('open', function() {
-		// DB: handle disconnections
-		roomRef.child(peerId).onDisconnect().remove();
-	});
-
+function peerHandler(peer) {
 	peer.on('disconnected', function() {
-		// DB: remove peer
-		roomRef.child(peerId).remove();
 		// remove pic & name: self
-		removeUser(peerId);
+		removeUser(peer.id);
 	});
 }
 
@@ -165,12 +133,12 @@ function removeUser(id) {
 	appendLog('removed user: ' + id);
 }
 
-function roomHandler() {
+function roomHandler(room, peer, user) {
 	room.on('close', function() {
 		// DB: remove peer
-		roomRef.child(peerId).remove();
+		roomRef.child(peer.id).remove();
 		// remove pic & name: self
-		removeUser(peerId);
+		removeUser(peer.id);
 		// hide chat input
 		$('.container-input').css('display', 'none');
 	});
@@ -187,15 +155,15 @@ function roomHandler() {
 
 	room.on('open', function() {
 		// DB: add peer
-		var name = currentUser.displayName;
-		var url = currentUser.photoURL;
+		var name = user.displayName;
+		var url = user.photoURL;
 		if (name == null) {
 			name = 'ユーザー';
 		}
 		if (url == null) { // no photo is set
 			url = '/images/monster.png';
 		}
-		roomRef.child(peerId).set({
+		roomRef.child(peer.id).set({
 			"name": name,
 			"url": url
 		})
@@ -209,19 +177,23 @@ function roomHandler() {
 	});
 
 	room.on('stream', function(stream) {
+		appendLog('stream from: ' + stream.peerId);
 		var id = stream.peerId;
 		// play stream
-		var timer = setTimeout(function() {
-			$('#' + id).append('<audio autoplay></audio>');
-			$('#' + id).children('audio').get(0).srcObject = stream;
-			// log
-			appendLog('stream from: ' + id);
-		}, 200);
-		
+		appendLog('<b>start interval</b>');
+		var iv = setInterval(function() {
+			var wrapper = $('#' + id);
+			if (wrapper.length) {
+				clearInterval(iv);
+				appendLog('<b>end interval</b>');
+				wrapper.append('<audio autoplay></audio>');
+				wrapper.children('audio').get(0).srcObject = stream;
+			}
+		}, 10);
 	});
 }
 
-function sendChat() {
+function sendChat(room) {
 	// get message
 	var message = $('#textarea-chat').val();
 	// clear textarea
