@@ -34,6 +34,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 const roomId = "room0-3";
 const rootRef = firebase.database().ref();
 const roomRef = rootRef.child(roomId + '/');
+const onBreakRef = rootRef.child('on-break');
 
 // set room names
 setBreakroomName();
@@ -56,6 +57,9 @@ peer.on('open', function(id) {
 
 	// DB: handle disconnections; removes data for last user in room
 	roomRef.child(peerId).onDisconnect().remove();
+	firebase.auth().onAuthStateChanged(function (user) {
+		onBreakRef.child(user.uid).onDisconnect().remove();
+	});
 	
 	// start peerHandler
 	peerHandler();
@@ -74,11 +78,6 @@ $('#join').click(function() {
 
 });
 
-$('#home').click(function() {
-	// DB: remove record from on-break
-	removeFromOnBreak();
-})
-
 $('#leave').click(function() {
 	// toggle button
 	toggleButton('leave');
@@ -92,7 +91,9 @@ $('#send').click(function() {
 
 $('#study').click(function() {
 	var uid = currentUser.uid;
-	var uidRef = rootRef.child('on-break/' + uid);
+	var uidRef = onBreakRef.child(uid);
+	// DB: cancel onDisconnect; ONLY when goes back to study room
+	uidRef.onDisconnect().cancel();
 	// DB: set 'done' field
 	uidRef.child('done').set(true);
 
@@ -157,11 +158,6 @@ function peerHandler() {
 		// remove pic & name: self
 		removeUser(peerId);
 	});
-}
-
-function removeFromOnBreak() {
-	var user = firebase.auth().currentUser;
-	rootRef.child('on-break/' + user.uid).remove();
 }
 
 function removeUser(id) {

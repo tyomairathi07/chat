@@ -12,7 +12,6 @@ firebase.initializeApp(config);
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if(user) {
-		//initPage(user);
 		return;
 	} else {
 		window.location.href = "/";
@@ -55,9 +54,11 @@ peer.on('open', function(id) {
 
 	// DB: handle disconnections; removes data for last user in room
 	roomRef.child(peerId).onDisconnect().remove();
-
-	// DB: check break status
 	firebase.auth().onAuthStateChanged(function(user) {
+		// DB: handle disconnections for /on-break/; 
+		// record deleted onDisconnect EXCEPT when going to breakroom
+		rootRef.child('on-break/' + user.uid).onDisconnect().remove();
+		// DB: check break status
 		checkBreakStatus(user);
 	})
 
@@ -116,16 +117,20 @@ $(document).on('click', '#back', function() { // .click() won't work on dynamica
 })
 
 $('#break').click(function() {
-	var user = firebase.auth().currentUser;
-	// DB: add record to on-break
-	rootRef.child('on-break/' + user.uid).set({
-		'row-index': rowIndex,
-		'cell-index': cellIndex,
-		'room-id': roomId
-	}).then(function() {
-		// go to break room
-		goToBreakroom();
-	});	
+	firebase.auth().onAuthStateChanged(function(user) {
+		// DB: cancel onDisconnect
+		rootRef.child('on-break/' + user.uid).onDisconnect().cancel();
+		// DB: add record to on-break
+		rootRef.child('on-break/' + user.uid).set({
+			'row-index': rowIndex,
+			'cell-index': cellIndex,
+			'room-id': roomId
+		}).then(function() {
+			// go to break room
+			goToBreakroom();
+		});	
+	})
+	
 })
 
 // goes to study-rooms.html
