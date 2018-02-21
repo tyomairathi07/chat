@@ -1,3 +1,8 @@
+/**
+TODO
+rewrite room#stream event with wrapper.length
+**/
+
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
@@ -9,195 +14,184 @@ var config = {
 };
 firebase.initializeApp(config);
 
-// check sign in status
-firebase.auth().onAuthStateChanged(function(user) {
-	if(user) {
-		return;
-	} else {
-		window.location.href = "/";
-	}
-});
-
-const rootRef = firebase.database().ref();
 const roomId = "room2-6";
+const rootRef = firebase.database().ref();
 const roomRef = rootRef.child('/' + roomId + '/');
-
-// set room name
-firebase.database().ref('/study-rooms/' + roomId + '/name').once('value')
-.then(function(snapshot) {
-	$('#roomName').text(snapshot.val());
-});
-
-// create Peer
-const peer = new Peer({
-	key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
-	debug: 3
-});
-
-let peerId = null;
-let room = null;
-let localStream = null;
-
-let rowIndex = null;
-let cellIndex = null;
 
 const MAX_MEMBER_COUNT = 5;
 const NUM_BREAKROOMS = 4;
 
-/** ACTIONS BY USER **/
-// open page
-peer.on('open', function(id) {
-	appendLog('my ID: ' + id);
-	// set peerId
-	peerId = id;
-	peerHandler(peer);
+// check sign in status
+firebase.auth().onAuthStateChanged(function(user) {
+	if(user) {
+		let peerId = null;
+		let room = null;
+		let localStream = null;
 
-	// DB: handle disconnections; removes data for last user in room
-	roomRef.child(peerId).onDisconnect().remove();
-	firebase.auth().onAuthStateChanged(function(user) {
-		// DB: handle disconnections for /on-break/; 
-		// record deleted onDisconnect EXCEPT when going to breakroom
-		rootRef.child('on-break/' + user.uid).onDisconnect().remove();
-		// DB: check break status
-		checkBreakStatus(user);
-	})
+		let rowIndex = null;
+		let cellIndex = null;
 
-	// SW: join room with stream 
-	navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
-		var iv = setInterval(function() {
-			localStream = stream;
-			if(localStream != null) {
-				clearInterval(iv);
-				$('.button-join').removeAttr('disabled');
-			}
-		}, 10);
-		room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
-		
-		// start roomHandler
-		roomHandler();
-	})
-})
+		// set room name
+		firebase.database().ref('/study-rooms/' + roomId + '/name').once('value')
+		.then(function(snapshot) {
+			$('#roomName').text(snapshot.val());
+		});
 
-// click: "join" button
-$(".button-join").click(function() {
-	// get cellIndex, rowIndex
-	cellIndex = $(this).parent().index();
-	rowIndex = $(this).parent().parent().index();
+		// create Peer
+		const peer = new Peer({
+			key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
+			debug: 3
+		});
 
-	// DB: peerId, cellIndex, rowIndex -> fires Firebase#child_added
-	roomRef.child(peerId).set({"row-index": rowIndex, "cell-index": cellIndex});
+		/** ACTIONS BY USER **/
+		// open page
+		peer.on('open', function(id) {
+			appendLog('my ID: ' + id);
+			// set peerId
+			peerId = id;
+			peerHandler(peer);
 
-	// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
-	navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
-		localStream = stream;
-		room.replaceStream(localStream);
-	});
+			// DB: handle disconnections
+			roomRef.child(peerId).onDisconnect().remove();
+			rootRef.child('on-break/' + user.uid).onDisconnect().remove(); // record deleted onDisconnect EXCEPT when going to breakroom
+			// DB: check break status
+			checkBreakStatus(user);
 
-	// set style
-	setStyleOnJoin();
-});
+			// SW: join room with stream 
+			navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
+				var iv = setInterval(function() {
+					localStream = stream;
+					if(localStream != null) {
+						clearInterval(iv);
+						$('.button-join').removeAttr('disabled');
+					}
+				}, 10);
+				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
+				// start roomHandler
+				roomHandler(room);
+			})
+		})
 
-$(document).on('click', '#back', function() { // .click() won't work on dynamically added DOMs
-	// DB: add record
-	roomRef.child(peerId).set({'row-index': rowIndex, 'cell-index': cellIndex})
-	.then(function() {
-		// DB: remove record from on-break
-		removeFromOnBreak();
-	});
+		// click: "join" button
+		$(".button-join").click(function() {
+			// get cellIndex, rowIndex
+			cellIndex = $(this).parent().index();
+			rowIndex = $(this).parent().parent().index();
 
-	// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
-	navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
-		localStream = stream;
-		room.replaceStream(localStream);
-	});
+			// DB: peerId, cellIndex, rowIndex -> fires Firebase#child_added
+			roomRef.child(peerId).set({"row-index": rowIndex, "cell-index": cellIndex});
 
-	// set style
-	setStyleOnJoin();
+			// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
+			navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
+				localStream = stream;
+				room.replaceStream(localStream);
+			});
 
-})
+			// set style
+			setStyleOnJoin(peerId);
+		});
 
-$('#break').click(function() {
-	firebase.auth().onAuthStateChanged(function(user) {
-		// DB: cancel onDisconnect
-		rootRef.child('on-break/' + user.uid).onDisconnect().cancel();
-		// DB: add record to on-break
-		rootRef.child('on-break/' + user.uid).set({
-			'row-index': rowIndex,
-			'cell-index': cellIndex,
-			'room-id': roomId
-		}).then(function() {
-			// go to break room
-			goToBreakroom();
+		$(document).on('click', '#back', function() { // .click() won't work on dynamically added DOMs
+			// DB: add record
+			roomRef.child(peerId).set({'row-index': rowIndex, 'cell-index': cellIndex})
+			.then(function() {
+				// DB: remove record from on-break
+				removeFromOnBreak();
+			});
+
+			// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
+			navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
+				localStream = stream;
+				room.replaceStream(localStream);
+			});
+
+			// set style
+			setStyleOnJoin();
+
+		})
+
+		$('#break').click(function() {
+			// DB: cancel onDisconnect
+			rootRef.child('on-break/' + user.uid).onDisconnect().cancel();
+			// DB: add record to on-break
+			rootRef.child('on-break/' + user.uid).set({
+				'row-index': rowIndex,
+				'cell-index': cellIndex,
+				'room-id': roomId
+			}).then(function() {
+				// go to break room
+				goToBreakroom();
+			});	
+		});
+
+		// goes to study-rooms.html
+		$('#home').click(function() {
+			// DB: remove from on-break
+			removeFromOnBreak();
+		})
+
+		// click: "leave" button
+		$("#leave").click(function() {
+			// DB: remove record
+			roomRef.child(peerId).remove();
+
+			// set style
+			setStyleOnLeave(peerId);
+
+			// set rowIndex, cellIndex to null
+			rowIndex = null;
+			cellIndex = null;
 		});	
-	})
-	
-})
 
-// goes to study-rooms.html
-$('#home').click(function() {
-	// DB: remove from on-break
-	removeFromOnBreak();
-})
+		/** DB LISTENERS **/
+		roomRef.on('child_added', function(snapshot, prevKey) {
+			// get position
+			var child_id = snapshot.key;
+			var child_c = snapshot.child('cell-index').val();
+			var child_r = snapshot.child('row-index').val();
 
-// click: "leave" button
-$("#leave").click(function() {
-	// DB: remove record
-	roomRef.child(peerId).remove();
+			appendLog('child_added: ' + child_r + ', ' + child_c);
+			
+			if (child_id == peerId) {
+				addVideo(peerId, localStream);
+			}
 
-	// set style
-	setStyleOnLeave();
+		});
 
-	// set rowIndex, cellIndex to null
-	rowIndex = null;
-	cellIndex = null;
-});	
+		roomRef.on('child_removed', function(snapshot) {
+			// get position
+			var child_id = snapshot.key;
+			var child_c = snapshot.child('cell-index').val();
+			var child_r = snapshot.child('row-index').val();
 
+			appendLog('child_removed: ' + child_r + ', ' + child_c);
 
-/** DB LISTENERS **/
-roomRef.on('child_added', function(snapshot, prevKey) {
-	// get position
-	var child_id = snapshot.key;
-	var child_c = snapshot.child('cell-index').val();
-	var child_r = snapshot.child('row-index').val();
+			// remove video from [row, col]
+			removeVideo(child_id, peerId);
+		});
 
-	appendLog('child_added: ' + child_r + ', ' + child_c);
-	
-	if (child_id == peerId) {
-		addVideo(peerId, localStream);
-	}
+		rootRef.child('on-break').on('child_added', function(snapshot, prevkey) {
+			if (snapshot.child('room-id').val() == roomId) {
+				var r = snapshot.child('row-index').val();
+				var c = snapshot.child('cell-index').val();
+				appendLog('on-break added: ' + r + ',' + c);
+				addCoffee(r, c);
+			}
+		});
 
-});
-
-roomRef.on('child_removed', function(snapshot) {
-	// get position
-	var child_id = snapshot.key;
-	var child_c = snapshot.child('cell-index').val();
-	var child_r = snapshot.child('row-index').val();
-
-	appendLog('child_removed: ' + child_r + ', ' + child_c);
-
-	// remove video from [row, col]
-	removeVideo(child_id);
-});
-
-rootRef.child('on-break').on('child_added', function(snapshot, prevkey) {
-	if (snapshot.child('room-id').val() == roomId) {
-		var r = snapshot.child('row-index').val();
-		var c = snapshot.child('cell-index').val();
-		appendLog('on-break added: ' + r + ',' + c);
-		addCoffee(r, c);
+		rootRef.child('on-break').on('child_removed', function(snapshot) {
+			if (snapshot.child('room-id').val() == roomId) {
+				// remove coffee from cell
+				var r = snapshot.child('row-index').val();
+				var c = snapshot.child('cell-index').val();
+				appendLog('on-break removed: ' + r + ',' + c);
+				removeCoffee(r, c);
+			}
+		})
+	} else {
+		window.location.href = "/";
 	}
 });
-
-rootRef.child('on-break').on('child_removed', function(snapshot) {
-	if (snapshot.child('room-id').val() == roomId) {
-		// remove coffee from cell
-		var r = snapshot.child('row-index').val();
-		var c = snapshot.child('cell-index').val();
-		appendLog('on-break removed: ' + r + ',' + c);
-		removeCoffee(r, c);
-	}
-})
 
 /** FUNCTIONS **/
 function appendLog(text) {
@@ -329,7 +323,7 @@ function removeCoffee(r, c) {
 	}
 }
 
-function removeVideo(id) {
+function removeVideo(id, peerId) {
 	appendLog('removeVideo');
 
 	var cell = $('#' + id);
@@ -341,14 +335,14 @@ function removeVideo(id) {
 		cell.children('.button-join').removeAttr('style');
 	}
 
-	if (id != peerId) {
+	if (id != peerId) { // id is needed for setStyleOnLeave
 		// remove id from cell
 		cell.removeAttr('id');
 	}
 }
 
 // handle SFURoom events
-function roomHandler() {
+function roomHandler(room) {
 	room.on('open', function() {
 		dummy();
 		// getUsersOnBreak();
@@ -361,13 +355,12 @@ function roomHandler() {
 
 	// get stream & create video
 	room.on('stream', function(stream) {
-		/**
 		var timer = setTimeout(function() {
 			appendLog('stream waiting...');
 			appendLog('stream from: ' + stream.peerId);
 			addVideo(stream.peerId, stream);
 		}, 1000);
-		**/
+
 	});
 }
 
@@ -386,10 +379,10 @@ function setStyleOnBack(r, c) {
 	});
 }
  
-function setStyleOnJoin() {
+function setStyleOnJoin(id) {
 	appendLog('setStyleOnJoin');
 
-	var cell = $('#' + peerId);
+	var cell = $('#' + id);
 
 	if($('#back') != null) { // back from break
 		// show all "join" buttons
@@ -414,10 +407,10 @@ function setStyleOnJoin() {
 	})
 }
 
-function setStyleOnLeave() {
+function setStyleOnLeave(id) {
 	appendLog('setStyleOnLeave');
-	var cell = $('#' + peerId);
-	appendLog(peerId);
+	var cell = $('#' + id);
+	appendLog(id);
 	// enable button
 	$("table").find('.button-join').removeAttr('disabled');
 	// hide bottom menu
