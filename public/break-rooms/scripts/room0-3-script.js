@@ -87,14 +87,7 @@ $('#leave').click(function() {
 });
 
 $('#send').click(function() {
-	// get message
-	var message = $('#textarea-chat').val();
-	// clear textarea
-	$('#textarea-chat').val('');
-	// SW: send message
-	room.send(message);
-	// chat log
-	appendChatLog('自分', message);
+	sendChat();
 })
 
 $('#study').click(function() {
@@ -110,8 +103,14 @@ $('#study').click(function() {
 		// go to studyroom
 		window.location.href = "/study-rooms/" + roomId + '.html';
 	})
+});
 
-})
+$('#textarea-chat').keypress(function(e) {
+	if (e.which == 13) {
+		sendChat();
+		return false; // equal to e.preventDefault(); prevents newline
+	}
+});
 
 /** DB LISTENERS **/
 roomRef.on('child_added', function(snapshot, prevkey) {
@@ -163,18 +162,6 @@ function peerHandler() {
 function removeFromOnBreak() {
 	var user = firebase.auth().currentUser;
 	rootRef.child('on-break/' + user.uid).remove();
-}
-
-// toggle join/leave buttons
-function toggleButton(currentButton) {
-	if(currentButton == 'join') {
-		$('#join').css('display', 'none');
-		$('#leave').css('display', 'inline');
-
-	} else if (currentButton == 'leave') {
-		$('#leave').css('display', 'none');
-		$('#join').css('display', 'inline');
-	}
 }
 
 function removeUser(id) {
@@ -238,6 +225,17 @@ function roomHandler() {
 	});
 }
 
+function sendChat() {
+	// get message
+	var message = $('#textarea-chat').val();
+	// clear textarea
+	$('#textarea-chat').val('');
+	// SW: send message
+	room.send(message);
+	// chat log
+	appendChatLog('自分', message);
+}
+
 function setBreakroomName() {
 	firebase.database().ref('/break-rooms/' + roomId + '/name').once('value')
 	.then(function(snapshot) {
@@ -256,4 +254,16 @@ function setStudyroomName(user) {
     }).then(function(text) {
         $('#studyroomName').text(text);
     });
+}
+
+// toggle join/leave buttons
+function toggleButton(currentButton) {
+	if(currentButton == 'join') {
+		$('#join').css('display', 'none');
+		$('#leave').css('display', 'inline');
+
+	} else if (currentButton == 'leave') {
+		$('#leave').css('display', 'none');
+		$('#join').css('display', 'inline');
+	}
 }
