@@ -22,6 +22,9 @@ const onBreakRef = rootRef.child('on-break');
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
+		// check if user came from a studyroom
+		checkUserEntry(user);
+
 		// set room names
 		setBreakroomName();
 		setStudyroomName(user);
@@ -119,6 +122,17 @@ function appendLog(text) {
 
 function appendChatLog(sender, message) {
 	$('#chat-log').append('<b>' + sender + ': </b>' + message + '<br>');
+}
+
+function checkUserEntry(user) {
+	onBreakRef.once('value').then(function(snapshot) {
+		if (snapshot.child(user.uid).exists()) { // user record exists under /on-break
+			return;
+		} else { // user came from URL
+			// redirect to study-rooms.html
+			window.location.href = "/study-rooms.html";
+		}
+	})
 }
 
 function peerHandler(peer) {

@@ -361,11 +361,13 @@ function roomHandler() {
 
 	// get stream & create video
 	room.on('stream', function(stream) {
+		/**
 		var timer = setTimeout(function() {
 			appendLog('stream waiting...');
 			appendLog('stream from: ' + stream.peerId);
 			addVideo(stream.peerId, stream);
 		}, 1000);
+		**/
 	});
 }
 
