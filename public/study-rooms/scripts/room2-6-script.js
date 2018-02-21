@@ -42,7 +42,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			appendLog('my ID: ' + id);
 			// set peerId
 			peerId = id;
-			peerHandler(peer);
 
 			// DB: handle disconnections
 			roomRef.child(peerId).onDisconnect().remove();
@@ -124,14 +123,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		roomRef.on('child_removed', function(snapshot) {
+			appendLog('child_removed');
 			// get position
 			var child_id = snapshot.key;
-			var child_c = snapshot.child('cell-index').val();
-			var child_r = snapshot.child('row-index').val();
 
-			appendLog('child_removed: ' + child_r + ', ' + child_c);
-
-			// remove video from [row, col]
+			// remove video & id
 			removeVideo(child_id, peerId);
 		});
 
@@ -167,8 +163,6 @@ function appendLog(text) {
 function addCoffee(r, c) {
 	appendLog('addCoffee');
 	var cell = getCell(r, c);
-	// remove video (if any)
-	cell.children('video');
 	// hide "join" button
 	cell.children('.button-join').css('display', 'none');
 	// add coffee
@@ -192,17 +186,13 @@ function addVideo(id, stream) {
 			cell.children('video').get(0).srcObject = stream;
 		}
 	}, 10);
-
-	
 }
 
-// return: 
-// is back from break -> array (row, cell)
-// not back from break -> null
 function checkBreakStatus(user, pId) {
 	appendLog('checkBreakStatus');
+	var ref = rootRef.child('on-break/' + user.uid);
 
-	return rootRef.child('on-break/' + user.uid).once('value')
+	return ref.once('value')
 	.then(function(snapshot) {
 		if(!snapshot.child('done').exists()) { // no record in on-break
 			throw 'no break';
@@ -213,7 +203,11 @@ function checkBreakStatus(user, pId) {
 			return a;
 		}
 	}).then(function(array) {
-		 roomRef.child(pId).set({'row-index': array[0], 'cell-index': array[1]});
+		// DB: add record to roomRef
+		return roomRef.child(pId).set({'row-index': array[0], 'cell-index': array[1]});
+	}).then(function() {
+		// DB: remove record from on-break
+		ref.remove();
 	})
 }
 
@@ -261,13 +255,6 @@ function goToBreakroom() {
 			}
 		});
 	}
-}
-
-function peerHandler(peer) {
-	peer.on('disconnected', function(id) {
-		// remove from DB: peerId
-		roomRef.child(id).remove();
-	})
 }
 
 function removeCoffee(r, c) {
