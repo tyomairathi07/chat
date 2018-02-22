@@ -216,6 +216,16 @@ select:focus {
 	outline: 0
 }
 
+select {
+	background: url('data:image/svg+xml;utf8,<svg xmlns=!string!height=!string!viewBox=!string!width=!string!><path fill=!string!d=!string!/></svg>') center right no-repeat;
+	padding-right: 3.0rem
+}
+
+select:focus {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns=!string!height=!string!viewBox=!string!width=!string!><path fill=!string!d=!string!/></svg>')
+}
+
+
 textarea {
 	min-height: 6.5rem
 }

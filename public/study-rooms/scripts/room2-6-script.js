@@ -113,15 +113,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			});	
 		});
 
-		// click: "leave" button
-		$("#leave").click(function() {
-			// DB: remove record
-			roomRef.child(peerId).remove();
-
-			// set style
-			setStyleOnLeave(peerId);
-		});	
-
 		/** DB LISTENERS **/
 		roomRef.on('child_added', function(snapshot, prevKey) {
 			// get position
@@ -137,12 +128,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		roomRef.on('child_removed', function(snapshot) {
-			//appendLog('child_removed');
+			appendLog('child_removed: ' + snapshot);
 			// get position
 			var child_id = snapshot.key;
 
 			// remove video & id
 			removeVideo(child_id, peerId);
+			// remove id from cell
+			var cell = $('#' + child_id);
+			cell.removeAttr('id');
 		});
 
 		rootRef.child('on-break').on('child_added', function(snapshot, prevkey) {
@@ -305,11 +299,6 @@ function removeVideo(id, peerId) {
 	} else {
 		cell.children('.button-join').removeAttr('style');
 	}
-
-	if (id != peerId) { // id is needed for setStyleOnLeave
-		// remove id from cell
-		cell.removeAttr('id');
-	}
 }
 
 function sendStream(room, pId) {
@@ -369,13 +358,6 @@ function setStyleOnJoin(id) {
 
 	var cell = $('#' + id);
 
-	if($('#back') != null) { // back from break
-		// show all "join" buttons
-		$('table').find('.button-join').css('display', 'inline');
-		// remove "back" button
-		$('#back').remove();
-	}
-
 	// set border
 	cell.css('border', '0.3rem solid black');
 	// hide "join" button in cell
@@ -384,25 +366,4 @@ function setStyleOnJoin(id) {
 	$("table").find('.button-join').attr('disabled', 'disabled');
 	// show bottom menu
 	$(".menu").css('display', 'inline');
-	// hide "join" buttons for coffee cells
-	$("td").each(function(index) {
-		if ($(this).children().length > 1) { // has coffee & button
-			$(this).children('.button-join').css('display', 'none');
-		}
-	})
-}
-
-function setStyleOnLeave(id) {
-	//appendLog('setStyleOnLeave');
-	var cell = $('#' + id);
-	// enable button
-	$("table").find('.button-join').removeAttr('disabled');
-	// hide bottom menu
-	$(".menu").removeAttr('style');
-	// show "join" button
-	cell.children('.button-join').css('display', 'inline');
-	// remove border
-	cell.removeAttr('style');
-	// remove id from cell
-	cell.removeAttr('id');
 }
