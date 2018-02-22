@@ -15,13 +15,16 @@ firebase.auth().onAuthStateChanged(function(user) {
     } else {
         // click "sign in" button
         $('#sign-in').click(function() {
-            signIn();
+           signIn();
         });
 
         // press ENTER key
         $('#password').keypress(function(e) {
             if (e.which == 13) {
-              signIn();
+               // set focus to sign-in button
+               $('#sign-in').focus();
+
+                signIn();
             }  
         });
     }
@@ -31,7 +34,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 function onSuccessSignIn(user) {
     // DB: add login timestamp
-    firebase.database().ref('user-logs').child(user.uid).set({'login': new Date().getTime()})
+    var time = new Date().getTime();
+    firebase.database().ref('user-logs').child(user.uid).set({[time]: 'sign-in'})
     .then(function() {
         window.location.href = "/study-rooms.html";
     });
