@@ -11,25 +11,31 @@ firebase.initializeApp(config);
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      window.location.href = "/study-rooms.html";
+        onSuccessSignIn(user);
     } else {
- 
+        // click "sign in" button
+        $('#sign-in').click(function() {
+            signIn();
+        });
+
+        // press ENTER key
+        $('#password').keypress(function(e) {
+            if (e.which == 13) {
+              signIn();
+            }  
+        });
     }
+
+
 });
 
-// click "sign in" button
-$('#sign-in').click(function() {
-    signIn();
-});
-
-// press ENTER key
-$('#password').keypress(function(e) {
-    if (e.which == 13) {
-      signIn();
-    }  
-});
-
-
+function onSuccessSignIn(user) {
+    // DB: add login timestamp
+    firebase.database().ref('user-logs').child(user.uid).set({'login': new Date().getTime()})
+    .then(function() {
+        window.location.href = "/study-rooms.html";
+    });
+}
 
 function signIn() {
     // get email & password
@@ -39,9 +45,10 @@ function signIn() {
     // Firebase: user sign-up
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     .then(function() {
+          // sign-in
           return firebase.auth().signInWithEmailAndPassword(email, password);
-    }).then(function() {
-          window.location.href = 'study-rooms.html';
+    }).then(function(user) {
+          onSuccessSignIn(user);
     }).catch(function(error) {
         var errorCode = error.code;
 
@@ -56,5 +63,4 @@ function signIn() {
           $('#error-sign-in').html('※アカウントが停止されています<br><br>');
         }
       });
-
 }
