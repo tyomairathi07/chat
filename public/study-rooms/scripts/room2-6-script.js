@@ -47,13 +47,20 @@ firebase.auth().onAuthStateChanged(function(user) {
 			roomRef.child(peerId).onDisconnect().remove();
 			rootRef.child('on-break/' + user.uid).onDisconnect().remove(); // record deleted onDisconnect EXCEPT when going to breakroom
 
-			// SW: join room with no stream
-			room = peer.joinRoom(roomId, {mode: 'sfu'});
-			// start roomHandler
-			roomHandler(room);
-
-			// DB: check break status
-			checkBreakStatus(user, peerId)
+			// SW: join room with minimum stream
+			navigator.mediaDevices
+			.getUserMedia({
+				audio: false,
+				video: {width: 1, height: 1}
+			})
+			.then(function(stream) {
+				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
+				// start roomHandler
+				roomHandler(room);
+			}).then(function() {
+				// DB: check break status
+				return checkBreakStatus(user, peerId);
+			})
 			.then(function() {	
 				// SW: replace stream -> addVideo
 				sendStream(room, peerId);
@@ -74,7 +81,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 			roomRef.child(peerId).set({"row-index": r, "cell-index": c});
 
 			// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
-			sendStream(room, peerId);
+			var i = setInterval(function() {
+				var r = room;
+				if(r != null) {
+					clearInterval(i);
+					sendStream(r, peerId);
+				}
+			}, 10);
+			
 
 			// set style
 			setStyleOnJoin(peerId);
@@ -123,7 +137,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		roomRef.on('child_removed', function(snapshot) {
-			appendLog('child_removed');
+			//appendLog('child_removed');
 			// get position
 			var child_id = snapshot.key;
 
@@ -161,7 +175,7 @@ function appendLog(text) {
 
 // addCoffee -> addVideo
 function addCoffee(r, c) {
-	appendLog('addCoffee');
+	//appendLog('addCoffee:' + r + ', ' + c);
 	var cell = getCell(r, c);
 	// hide "join" button
 	cell.children('.button-join').css('display', 'none');
@@ -171,25 +185,34 @@ function addCoffee(r, c) {
 
 // addVideo -> removeCoffee
 function addVideo(id, stream) {
-	appendLog('addVideo');
+	appendLog('called addVideo');
+	roomRef.once('value')
+	.then(function(snapshot) {
+		if (!snapshot.child(id).exists()) { 
+			throw 'false alarm';
+		} else {
+			var iv = setInterval(function() {
+				var cell = $('#' + id);
+				if (cell.length) {
+					clearInterval(iv);
+					appendLog('addVideo with stream: '+ id);
 
-	var iv = setInterval(function() {
-		var cell = $('#' + id);
-		if (cell.length) {
-			clearInterval(iv);
-			appendLog('addVideo with stream');
-
-			// hide children
-			cell.children().css('display', 'none');
-			// set video
-			cell.append('<video autoplay="true" muted></video>');
-			cell.children('video').get(0).srcObject = stream;
+					// hide children
+					cell.children().css('display', 'none');
+					// set video
+					cell.append('<video autoplay="true" muted></video>');
+					cell.children('video').get(0).srcObject = stream;
+				}
+			}, 10);
 		}
-	}, 10);
+	}).catch(function(e) {
+		console.log(e);
+	})
+	
 }
 
 function checkBreakStatus(user, pId) {
-	appendLog('checkBreakStatus');
+	//appendLog('checkBreakStatus');
 	var ref = rootRef.child('on-break/' + user.uid);
 
 	return ref.once('value')
@@ -214,7 +237,7 @@ function checkBreakStatus(user, pId) {
 // fires peerJoin event with a dummy peer
 function dummy() {
 	appendLog('dummy');
-	let dummyPeer = new Peer("dummyPeer", {
+	let dummyPeer = new Peer("dummy", {
 		key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
 		debug: 3
 	});
@@ -224,7 +247,7 @@ function dummy() {
 
 		dummyRoom.on('open', function() {
 			dummyPeer.disconnect();
-		});			
+		});	
 	});
 }
 
@@ -234,7 +257,7 @@ function getCell(r, c) {
 
 // finds open break room and goes there
 function goToBreakroom() {
-	appendLog('goToBreakroom');
+	//appendLog('goToBreakroom');
 	var rootRef = firebase.database().ref();
 	var prefix = "room0-";
 	var array = [];
@@ -258,7 +281,7 @@ function goToBreakroom() {
 }
 
 function removeCoffee(r, c) {
-	appendLog('removeCoffee');
+	//appendLog('removeCoffee');
 	var cell = getCell(r, c);
 	// remove img
 	cell.children('img').remove();
@@ -272,7 +295,7 @@ function removeCoffee(r, c) {
 }
 
 function removeVideo(id, peerId) {
-	appendLog('removeVideo');
+	//appendLog('removeVideo');
 
 	var cell = $('#' + id);
 	// remove video
@@ -297,6 +320,7 @@ function sendStream(room, pId) {
 			stream = s
 			if(stream != null) {
 				clearInterval(iv);
+				appendLog('replace stream');
 				room.replaceStream(stream);
 				addVideo(pId, stream);
 			}
@@ -307,12 +331,27 @@ function sendStream(room, pId) {
 // handle SFURoom events
 function roomHandler(room) {
 	room.on('open', function() {
+		appendLog('joined room');
 		dummy();
-		// getUsersOnBreak();
+	})
+
+	room.on('peerJoin', function(id) {
+		var bool = id.startsWith('dummy');
+		if (!bool) {
+			appendLog('peerJoin: ' + id);
+			//dummy();
+		}
+	})
+
+	room.on('peerLeave', function(id) {
+		if(!(id.startsWith('dummy'))) {
+			appendLog('peerLeave: ' + id);
+		}
 	})
 
 	// get stream & add video
 	room.on('stream', function(stream) {
+		appendLog('stream from: ' + stream.peerId);
 		addVideo(stream.peerId, stream);
 
 	});
@@ -326,7 +365,7 @@ function setRoomName() {
 }
  
 function setStyleOnJoin(id) {
-	appendLog('setStyleOnJoin');
+	//appendLog('setStyleOnJoin');
 
 	var cell = $('#' + id);
 
@@ -354,9 +393,8 @@ function setStyleOnJoin(id) {
 }
 
 function setStyleOnLeave(id) {
-	appendLog('setStyleOnLeave');
+	//appendLog('setStyleOnLeave');
 	var cell = $('#' + id);
-	appendLog(id);
 	// enable button
 	$("table").find('.button-join').removeAttr('disabled');
 	// hide bottom menu
