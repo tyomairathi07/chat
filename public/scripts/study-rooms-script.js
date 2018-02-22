@@ -20,21 +20,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// set display name
 		initTopnav(user);
+		// sign out user
 	} else {
 		// redirect to login page
 		window.location.href = "/";
 	}
 })
 
-// sign out user
-$('#sign-out').click(function() {
-	firebase.auth().signOut().then(function() {
-		// redirect to login page
-		window.location.href = "/";
-	}).catch(function(error) {
-		console.log(error);
-	});
-});
+
 
 
 
@@ -79,11 +72,18 @@ function initTopnav(user) {
 
 	// sign out user
 	$('#sign-out').click(function() {
-		firebase.auth().signOut().then(function() {
-			// redirect to login page
+		logUserAction(user, 'sign-out')
+		.then(function() {
+			// sign out user
+			return firebase.auth().signOut();
+		}).then(function() {
+			// redirect user
 			window.location.href = "/";
-		}).catch(function(error) {
-			console.log(error);
-		});
+		})
 	});
+}
+
+function logUserAction(user, action) {
+	var time = new Date().getTime();
+	return firebase.database().ref('user-logs/' + user.uid).child(time).set(action);
 }

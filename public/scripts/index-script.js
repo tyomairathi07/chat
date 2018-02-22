@@ -28,14 +28,15 @@ firebase.auth().onAuthStateChanged(function(user) {
             }  
         });
     }
-
-
 });
 
+function logUserAction(user, action) {
+  var time = new Date().getTime();
+  return firebase.database().ref('user-logs/' + user.uid).child(time).set(action);
+}
+
 function onSuccessSignIn(user) {
-    // DB: add login timestamp
-    var time = new Date().getTime();
-    firebase.database().ref('user-logs').child(user.uid).set({[time]: 'sign-in'})
+    logUserAction(user, 'sign-in')
     .then(function() {
         window.location.href = "/study-rooms.html";
     });
