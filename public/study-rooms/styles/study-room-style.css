@@ -217,12 +217,14 @@ select:focus {
 }
 
 select {
-	background: url('data:image/svg+xml;utf8,<svg xmlns=!string!height=!string!viewBox=!string!width=!string!><path fill=!string!d=!string!/></svg>') center right no-repeat;
+	background: white url('/images/down-black.png') no-repeat right 0.5rem center;
+	background-size: 1rem;
 	padding-right: 3.0rem
 }
 
 select:focus {
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns=!string!height=!string!viewBox=!string!width=!string!><path fill=!string!d=!string!/></svg>')
+	background: white url('/images/down-purple.png') no-repeat right 0.5rem center;
+	background-size: 1rem;
 }
 
 
@@ -410,9 +412,21 @@ table img {
 	vertical-align: middle;
 }
 
+.topnav select {
+	display: inline; 
+	margin-right: 1rem;
+	width: 15rem; 
+	height: auto;
+}
+
 .topnav .menu {
 	display: none;
 	float: right;
+}
+
+.menu span {
+	font-size: 1.3rem;
+	margin-right: 0.1rem;
 }
 /** [END] TOPNAV **/
 
