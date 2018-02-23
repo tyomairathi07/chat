@@ -126,6 +126,7 @@ function appendLog(text) {
 
 function appendChatLog(sender, message) {
 	$('#chat-log').append('<b>' + sender + ': </b>' + message + '<br>');
+	updateScroll();
 }
 
 function checkUserEntry(user) {
@@ -148,17 +149,7 @@ function initChatLog() {
 			var message = childSnapshot.child('message').val();
 			appendChatLog(name, message);
 		})
-	});
-	/*
-	ref.orderByKey().limitToLast(10).on('child_added', function(snapshot) {
-		var message = snapshot.child('message').val();
-		var name = snapshot.child('name').val();
-		appendChatLog(name, message);
-		//console.log(snapshot.child('message').val());
-		ref.off('child_added');
-	});
-	*/
-	
+	});	
 }
 
 
@@ -284,4 +275,9 @@ function toggleButton(currentButton) {
 		$('#leave').css('display', 'none');
 		$('#join').css('display', 'inline');
 	}
+}
+
+function updateScroll() {
+	var element = $('#chat-log');
+	element.scrollTop(element.prop('scrollHeight'));
 }
