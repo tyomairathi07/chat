@@ -13,6 +13,8 @@ firebase.initializeApp(config);
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
 		initTopnav(user);
+    // sign out user after 30 minutes
+    checkTimeout(user);
 	} else { // no user is signed in
 		window.location.href = "/";
 	}

@@ -15,6 +15,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 		initTopnav(user);
 		initUserProfile(user);
 		updateUserProfile(user);
+		// sign out user after 30 minutes
+		checkTimeout(user);
 	} else { // no user is signed in
 		window.location.href = "/";
 	}

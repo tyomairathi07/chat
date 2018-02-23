@@ -14,6 +14,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
 		initTopnav(user);
 		initUserSettings(user);
+		// sign out user after 30 minutes
+		checkTimeout(user);
 	} else { // no user is signed in
 		alert('not signed in');
 	}
