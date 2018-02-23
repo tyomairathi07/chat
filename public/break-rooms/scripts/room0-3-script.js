@@ -23,7 +23,7 @@ const onBreakRef = rootRef.child('on-break');
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		checkUserEntry(user);
+		//checkUserEntry(user);
 
 		// set room names
 		setBreakroomName();
@@ -51,8 +51,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// SW: start peerHandler
 			peerHandler(peer);
 
-			// SW: join room
-			navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(function(stream) {
+			// DB: get past 10 chat log
+			initChatLog()
+			.then(function() {
+				return navigator.mediaDevices.getUserMedia({video: false, audio: true});
+			}).then(function(stream) {
+				// SW: join room
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start room handler
 				roomHandler(room, peer, user);
@@ -60,7 +64,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		$('#send').click(function() {
-			sendChat(room);
+			sendChat(room, user);
 		})
 
 		$('#study').click(function() {
@@ -82,7 +86,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 		$('#textarea-chat').keypress(function(e) {
 			if (e.which == 13) {
-				sendChat(room);
+				sendChat(room, user);
 				return false; // equal to e.preventDefault(); prevents newline
 			}
 		});
@@ -134,6 +138,29 @@ function checkUserEntry(user) {
 		}
 	})
 }
+
+function initChatLog() {
+	var ref = rootRef.child('log-chat/' + roomId);
+	var query = ref.orderByKey().limitToLast(10);
+	return query.once('value').then(function(snapshot) {
+		snapshot.forEach(function(childSnapshot) {
+			var name = childSnapshot.child('name').val();
+			var message = childSnapshot.child('message').val();
+			appendChatLog(name, message);
+		})
+	});
+	/*
+	ref.orderByKey().limitToLast(10).on('child_added', function(snapshot) {
+		var message = snapshot.child('message').val();
+		var name = snapshot.child('name').val();
+		appendChatLog(name, message);
+		//console.log(snapshot.child('message').val());
+		ref.off('child_added');
+	});
+	*/
+	
+}
+
 
 function peerHandler(peer) {
 	peer.on('disconnected', function() {
@@ -207,15 +234,24 @@ function roomHandler(room, peer, user) {
 	});
 }
 
-function sendChat(room) {
+function sendChat(room, user) {
+	// get current time in milliseconds
+	var time = new Date().getTime();
+
 	// get message
 	var message = $('#textarea-chat').val();
 	// clear textarea
 	$('#textarea-chat').val('');
-	// SW: send message
-	room.send(message);
-	// chat log
-	appendChatLog('自分', message);
+
+	// DB: add to log-chat/roomId/timestamp
+	var ref = rootRef.child('log-chat/' + roomId);
+	ref.child(time).set({'id': user.uid, 'name': user.displayName, 'message': message})
+	.then(function() {
+		// SW: send message
+		room.send(message);
+		// chat log
+		appendChatLog('自分', message);
+	});
 }
 
 function setBreakroomName() {
