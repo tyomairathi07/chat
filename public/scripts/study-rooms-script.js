@@ -20,7 +20,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// set display name
 		initTopnav(user);
-		// sign out user
+		// sign out user after 30 minutes
+		checkTimeout(user);
 	} else {
 		// redirect to login page
 		window.location.href = "/";
@@ -64,6 +65,28 @@ roomsRef.once('value')
 	} 
 })
 
+function checkTimeout(user) {
+	// get sign-in time
+	var ref = firebase.database().ref('sign-in/' + user.uid).once('value')
+	.then(function(snapshot) {
+		return snapshot.val();
+	}).then(function(ms) {
+		var signIn = new Date(parseInt(ms));
+		var timeout = new Date();
+		timeout.setMinutes(signIn.getMinutes() + 30); // 30 minutes after last sign-in
+
+		var i = setInterval(function() {
+			var now = new Date();
+			if (now > timeout) {
+				clearInterval(i);
+				firebase.auth().signOut().then(function() {
+					window.location.href = "/";
+				})
+			}
+		})
+	})
+}
+
 function initTopnav(user) {
 	var name = user.displayName;
 	if (name != null) {
@@ -72,18 +95,9 @@ function initTopnav(user) {
 
 	// sign out user
 	$('#sign-out').click(function() {
-		logUserAction(user, 'sign-out')
-		.then(function() {
-			// sign out user
-			return firebase.auth().signOut();
-		}).then(function() {
+		firebase.auth().signOut().then(function() {
 			// redirect user
 			window.location.href = "/";
 		})
 	});
-}
-
-function logUserAction(user, action) {
-	var time = new Date().getTime();
-	return firebase.database().ref('user-logs/' + user.uid).child(time).set(action);
 }

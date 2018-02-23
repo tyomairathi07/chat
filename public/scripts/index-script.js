@@ -23,20 +23,28 @@ firebase.auth().onAuthStateChanged(function(user) {
             if (e.which == 13) {
                // set focus to sign-in button
                $('#sign-in').focus();
-
                 signIn();
             }  
         });
     }
 });
 
-function logUserAction(user, action) {
+function logSignIn(user) {
   var time = new Date().getTime();
-  return firebase.database().ref('user-logs/' + user.uid).child(time).set(action);
+  var ref = firebase .database().ref('sign-in/')
+  return ref.child(user.uid).set(time);
 }
 
+/*
+function logUserAction(user, action) {
+  var time = new Date().getTime();
+  var ref = firebase .database().ref('user-logs/' + user.uid + '/' + action);
+  return ref.child(time).set(true);
+}
+*/
+
 function onSuccessSignIn(user) {
-    logUserAction(user, 'sign-in')
+    logSignIn(user)
     .then(function() {
         window.location.href = "/study-rooms.html";
     });
