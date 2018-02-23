@@ -35,14 +35,6 @@ function logSignIn(user) {
   return ref.child(user.uid).set(time);
 }
 
-/*
-function logUserAction(user, action) {
-  var time = new Date().getTime();
-  var ref = firebase .database().ref('user-logs/' + user.uid + '/' + action);
-  return ref.child(time).set(true);
-}
-*/
-
 function onSuccessSignIn(user) {
     logSignIn(user)
     .then(function() {

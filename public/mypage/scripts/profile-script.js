@@ -20,23 +20,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 	}
 });
 
-function initTopnav(user) {
-	var name = user.displayName;
-	if (name != null) {
-		$('#displayName').text(name);
-	}
-
-	// sign out user
-	$('#sign-out').click(function() {
-		firebase.auth().signOut().then(function() {
-			// redirect to login page
-			window.location.href = "/";
-		}).catch(function(error) {
-			console.log(error);
-		});
-	});
-}
-
 function initUserProfile(user) {
 	// get name & photo URL
 	var name = user.displayName;
