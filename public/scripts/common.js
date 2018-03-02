@@ -62,8 +62,11 @@ function logUserAction(user, action) {
 */
 
 function signOut(user) {
-	firebase.auth().signOut()
-	.then(function() {
+	// DB: remove sign-in record
+	var ref = firebase.database().ref('sign-in/' + user.uid);
+	ref.remove().then(function() {
+		return 	firebase.auth().signOut();
+	}).then(function() {
 		// go to survey page
 		window.location.href = "https://goo.gl/forms/N2cOus5dqRKj0Nxl1";
 	}).catch(function(error) {
@@ -72,8 +75,11 @@ function signOut(user) {
 }
 
 function signOutOnTimeOut(user) {
-	firebase.auth().signOut()
-	.then(function() {
+	// DB: remove sign-in record
+	var ref = firebase.database().ref('sign-in/' + user.uid);
+	ref.remove().then(function() {
+		return 	firebase.auth().signOut();
+	}).then(function() {
 		// redirect to login page
 		window.location.href = "/";
 	}).catch(function(error) {
