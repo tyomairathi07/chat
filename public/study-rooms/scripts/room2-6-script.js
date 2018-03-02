@@ -1,6 +1,8 @@
 /**
 TODO
-rewrite room#stream event with wrapper.length
+- change functions (removeVideo, etc.)
+- set constraints to MediaStream -> faster
+- use sendStream for all navigator... usages
 **/
 
 // Initialize Firebase

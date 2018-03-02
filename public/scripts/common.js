@@ -33,7 +33,8 @@ function checkTimeout(user) {
 			var now = new Date();
 			if (now > timeout) {
 				clearInterval(i);
-				signOut();
+				// sign out
+				signOutOnTimeOut(user);
 			}
 		})
 	})
@@ -47,7 +48,7 @@ function initTopnav(user) {
 
 	// sign out user
 	$('#sign-out').click(function() {
-		//signOut(user);
+		//sign out
 		signOut(user);
 	});
 }
@@ -61,18 +62,16 @@ function logUserAction(user, action) {
 */
 
 function signOut(user) {
-	/*
-	var ref = firebase.database().ref('sign-out');
-	// DB: remove record from /sign-out/user.uid
-	ref.child(user.uid).remove()
+	firebase.auth().signOut()
 	.then(function() {
-		// redirect to login page
-		window.location.href = "/";
+		// go to survey page
+		window.location.href = "https://goo.gl/forms/N2cOus5dqRKj0Nxl1";
 	}).catch(function(error) {
 		console.log(error);
 	});
-	*/
+}
 
+function signOutOnTimeOut(user) {
 	firebase.auth().signOut()
 	.then(function() {
 		// redirect to login page
