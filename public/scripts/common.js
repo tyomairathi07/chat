@@ -1,6 +1,27 @@
+/*
+function autoSignOut(user) {
+	// get sign-out time
+	var time = new Date().getTime();
+
+	// DB: add record to /sign-out/user.uid
+	var ref = firebase.database().ref('sign-out');
+	ref.child(user.uid).set(time)
+	.then(function() {
+		// sign-out
+		return firebase.auth().signOut();
+	}).then(function() {
+		// redirect to login page
+		window.location.href = "/";
+	}).catch(function(error) {
+		console.log(error);
+	});
+}
+*/
+
 function checkTimeout(user) {
 	// get sign-in time
-	var ref = firebase.database().ref('sign-in/' + user.uid).once('value')
+	var ref = firebase.database().ref('sign-in/' + user.uid);
+	ref.once('value')
 	.then(function(snapshot) {
 		return snapshot.val();
 	}).then(function(ms) {
@@ -26,7 +47,8 @@ function initTopnav(user) {
 
 	// sign out user
 	$('#sign-out').click(function() {
-		signOut();
+		//signOut(user);
+		signOut(user);
 	});
 }
 
@@ -38,8 +60,21 @@ function logUserAction(user, action) {
 }
 */
 
-function signOut() {
-	firebase.auth().signOut().then(function() {
+function signOut(user) {
+	/*
+	var ref = firebase.database().ref('sign-out');
+	// DB: remove record from /sign-out/user.uid
+	ref.child(user.uid).remove()
+	.then(function() {
+		// redirect to login page
+		window.location.href = "/";
+	}).catch(function(error) {
+		console.log(error);
+	});
+	*/
+
+	firebase.auth().signOut()
+	.then(function() {
 		// redirect to login page
 		window.location.href = "/";
 	}).catch(function(error) {

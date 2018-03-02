@@ -86,10 +86,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 				if(r != null) {
 					clearInterval(i);
 					sendStream(r, peerId);
+					mediaSetup(r, peerId);
 				}
 			}, 10);
 			
-
 			// set style
 			setStyleOnJoin(peerId);
 		});
@@ -120,7 +120,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			var child_c = snapshot.child('cell-index').val();
 			var child_r = snapshot.child('row-index').val();
 
-			appendLog('child_added: ' + child_r + ', ' + child_c);
+			//appendLog('child_added: ' + child_r + ', ' + child_c);
 
 			// set id to cell
 			var cell = getCell(child_r, child_c);
@@ -128,12 +128,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		roomRef.on('child_removed', function(snapshot) {
-			appendLog('child_removed: ' + snapshot);
+			//appendLog('child_removed: ' + snapshot);
 			// get position
 			var child_id = snapshot.key;
 
 			// remove video & id
-			removeVideo(child_id, peerId);
+			removeVideo(child_id);
 			// remove id from cell
 			var cell = $('#' + child_id);
 			cell.removeAttr('id');
@@ -143,7 +143,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			if (snapshot.child('room-id').val() == roomId) {
 				var r = snapshot.child('row-index').val();
 				var c = snapshot.child('cell-index').val();
-				appendLog('on-break added: ' + r + ',' + c);
+				//appendLog('on-break added: ' + r + ',' + c);
 				addCoffee(r, c);
 			}
 		});
@@ -153,7 +153,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// remove coffee from cell
 				var r = snapshot.child('row-index').val();
 				var c = snapshot.child('cell-index').val();
-				appendLog('on-break removed: ' + r + ',' + c);
+				//appendLog('on-break removed: ' + r + ',' + c);
 				removeCoffee(r, c);
 			}
 		})
@@ -202,7 +202,6 @@ function addVideo(id, stream) {
 	}).catch(function(e) {
 		console.log(e);
 	})
-	
 }
 
 function checkBreakStatus(user, pId) {
@@ -230,7 +229,7 @@ function checkBreakStatus(user, pId) {
 
 // fires peerJoin event with a dummy peer
 function dummy() {
-	appendLog('dummy');
+	//appendLog('dummy');
 	let dummyPeer = new Peer("dummy", {
 		key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
 		debug: 3
@@ -274,6 +273,41 @@ function goToBreakroom() {
 	}
 }
 
+// allows user to choose cameras
+function mediaSetup(room, pId) {
+	var selectCamera = $('#select-camera');
+	navigator.mediaDevices.enumerateDevices()
+	.then(function(deviceInfos) {
+		for (var i = 0; i < deviceInfos.length; i++) {
+			var info = deviceInfos[i];
+			if (info.kind == 'videoinput') {
+				var option = $('<option>');
+				option.val(info.deviceId);
+				option.text(info.label);
+				selectCamera.append(option);
+			}
+		}
+
+		// add listener to <select>
+		selectCamera.on('change', function() {
+			var source = selectCamera.val();
+			appendLog(source);
+
+			// remove video
+			var cell = $('#' + pId);
+			navigator.mediaDevices.getUserMedia({
+				audio: false,
+				video: {deviceId: {exact: source}}
+			}).then(function(stream) {
+				// replace local video
+				cell.children('video').get(0).srcObject = stream;
+				// SW: send stream to room
+				room.replaceStream(stream);
+			})
+		});
+	});
+}
+
 function removeCoffee(r, c) {
 	//appendLog('removeCoffee');
 	var cell = getCell(r, c);
@@ -288,8 +322,8 @@ function removeCoffee(r, c) {
 	}
 }
 
-function removeVideo(id, peerId) {
-	//appendLog('removeVideo');
+function removeVideo(id) {
+	appendLog('removeVideo');
 
 	var cell = $('#' + id);
 	// remove video
@@ -302,7 +336,7 @@ function removeVideo(id, peerId) {
 }
 
 function sendStream(room, pId) {
-	navigator.mediaDevices.getUserMedia({video: true, audio: false})
+	navigator.mediaDevices.getUserMedia({audio: false, video: true})
 	.then(function(s) {
 		var stream = null;
 		var iv = setInterval(function() {
@@ -314,7 +348,7 @@ function sendStream(room, pId) {
 				addVideo(pId, stream);
 			}
 		}, 10);
-	})
+	});
 }
 
 // handle SFURoom events
@@ -336,6 +370,13 @@ function roomHandler(room) {
 		if(!(id.startsWith('dummy'))) {
 			appendLog('peerLeave: ' + id);
 		}
+	})
+
+
+	room.on('removeStream', function(stream) {
+		appendLog('removeStream from: ' + stream.peerId);
+		// remove video
+		removeVideo(stream.peerId);
 	})
 
 	// get stream & add video

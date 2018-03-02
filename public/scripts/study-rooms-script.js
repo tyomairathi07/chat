@@ -28,10 +28,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 	}
 })
 
-
-
-
-
 let rootRef = firebase.database().ref();
 let roomsRef = firebase.database().ref('/study-rooms/');
 
