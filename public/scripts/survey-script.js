@@ -34,16 +34,24 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 			// check if required fields are set
 			var required_ok = checkRequired(q);
-			if(!required_ok) {
+			toCsv(q);
+			/*
+			if(required_ok) {
+				toCsv(q);
+			} else {
 				alert('必須事項を入力してください');
 			}
+			*/
 
+
+			/*
 			// print results
 			for(var i = 0; i < q.length; i++) {
 				for(var j = 0; j < q[i].length; j++) {
 					console.log(i + ',' + j + ': ' + q[i][j]);
 				}
 			}
+			*/
 		})
 	} else {
 		// redirect to login page
@@ -77,6 +85,10 @@ function checkRequired(array) {
 	return res;
 }
 
+function escapeCommas(str) {
+	return str.replace(/,/g, '、');
+}
+
 function getRadioVal(name) {
 	var res = $("input:radio:checked[name='" + name + "']").val();
 	if (!res) {
@@ -90,5 +102,22 @@ function getTextareaVal(name) {
 	if (!res) {
 		res = 'n/a'
 	}
+	// convert ','s
+	res = escapeCommas(res);
 	return res;
+}
+
+function toCsv(array) {
+	var csv = '';
+	for (var i = 0; i < array.length; i++) {
+		csv += array[i].join(',');
+		csv += '\n';
+	}
+	console.log(csv);
+
+	var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'export.csv';
+    hiddenElement.click();
 }
