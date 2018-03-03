@@ -34,7 +34,7 @@ function checkTimeout(user) {
 			if (now > timeout) {
 				clearInterval(i);
 				// sign out
-				signOutOnTimeOut(user);
+				signOut(user);
 			}
 		})
 	})
@@ -48,8 +48,8 @@ function initTopnav(user) {
 
 	// sign out user
 	$('#sign-out').click(function() {
-		//sign out
-		signOut(user);
+		// go to survey page
+		window.location.href = "survey.html";
 	});
 }
 
@@ -61,34 +61,12 @@ function logUserAction(user, action) {
 }
 */
 
+
 function signOut(user) {
 	// DB: remove sign-in record
 	var ref = firebase.database().ref('sign-in/' + user.uid);
 	ref.remove().then(function() {
-		// go to survey *not signed out yet
-		window.location.href = "survey.html";
-	})
-}
-
-/*
-function signOut(user) {
-	// DB: remove sign-in record
-	var ref = firebase.database().ref('sign-in/' + user.uid);
-	ref.remove().then(function() {
-		return 	firebase.auth().signOut();
-	}).then(function() {
-		// go to survey page
-		window.location.href = "/";
-	}).catch(function(error) {
-		console.log(error);
-	});
-}
-*/
-
-function signOutOnTimeOut(user) {
-	// DB: remove sign-in record
-	var ref = firebase.database().ref('sign-in/' + user.uid);
-	ref.remove().then(function() {
+		// sign out
 		return 	firebase.auth().signOut();
 	}).then(function() {
 		// redirect to login page

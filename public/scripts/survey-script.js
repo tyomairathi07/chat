@@ -35,36 +35,24 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// check if required fields are set
 			var required_ok = checkRequired(q);
 
-			// get csv as string
-			var str = toCsv(q);
-			// get time
-			var time = new Date().getTime();
-			// ST: upload csv
-			var ref = firebase.storage().ref('survey/' + user.uid + '/' + time + '.csv');
-			var metadata = {
-				contentType: 'text/csv',
-			};
-			ref.putString(str, 'raw', metadata).then(function(snapshot) {
-				alert('回答を送信しました');
-			})
-
-			/*
 			if(required_ok) {
-				toCsv(q);
+				// get csv as string
+				var str = toCsv(q);
+				// get time
+				var time = new Date().getTime();
+				// ST: upload csv
+				var ref = firebase.storage().ref('survey/' + user.uid + '/' + time + '.csv');
+				var metadata = {
+					contentType: 'text/csv',
+				};
+				ref.putString(str, 'raw', metadata).then(function(snapshot) {
+					// TODO go to survey_complete.html
+					alert('回答を送信しました。ご協力ありがとうございました');
+					signOut(user);
+				})
 			} else {
 				alert('必須事項を入力してください');
 			}
-			*/
-
-
-			/*
-			// print results
-			for(var i = 0; i < q.length; i++) {
-				for(var j = 0; j < q[i].length; j++) {
-					console.log(i + ',' + j + ': ' + q[i][j]);
-				}
-			}
-			*/
 		})
 	} else {
 		// redirect to login page
