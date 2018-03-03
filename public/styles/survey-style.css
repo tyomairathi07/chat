@@ -660,11 +660,12 @@ img {
 /* [START] sidenav */
 .sidenav {
 	background-color: #f4f5f7;
+	display: inline-block;
 	left: 0rem;
 	position: fixed;
 	margin: 0;
 	top: 7rem;
-	width: 25rem;
+	width: auto;
 }
 
 .sidenav a {
@@ -672,7 +673,9 @@ img {
 	margin: 1rem 2rem;
 }
 .main {
+	display: inline-block;
 	margin-left: 30rem;
+	width: auto;
 }
 /* [END] sidenav */
 

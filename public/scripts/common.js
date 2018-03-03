@@ -65,14 +65,25 @@ function signOut(user) {
 	// DB: remove sign-in record
 	var ref = firebase.database().ref('sign-in/' + user.uid);
 	ref.remove().then(function() {
+		// go to survey *not signed out yet
+		window.location.href = "survey.html";
+	})
+}
+
+/*
+function signOut(user) {
+	// DB: remove sign-in record
+	var ref = firebase.database().ref('sign-in/' + user.uid);
+	ref.remove().then(function() {
 		return 	firebase.auth().signOut();
 	}).then(function() {
 		// go to survey page
-		window.location.href = "https://goo.gl/forms/N2cOus5dqRKj0Nxl1";
+		window.location.href = "/";
 	}).catch(function(error) {
 		console.log(error);
 	});
 }
+*/
 
 function signOutOnTimeOut(user) {
 	// DB: remove sign-in record

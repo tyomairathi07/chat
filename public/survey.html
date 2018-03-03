@@ -46,14 +46,14 @@
         <div id="study-rooms" name="study-rooms">
             <h3>自習室について</h3>
 
-            <label>自習室は勉強の励みになりましたか？<span>*</span></label>
-            <input type="radio" value="1" required>ならなかった<br>
-            <input type="radio" value="2">あまりならなかった<br>
-            <input type="radio" value="3">少しなった<br>
-            <input type="radio" value="4">なった<br><br>
+            <label id="l0_0">自習室は勉強の励みになりましたか？<span>*</span></label>
+            <input name="q0_0" type="radio" value="1">ならなかった<br>
+            <input name="q0_0" type="radio" value="2">あまりならなかった<br>
+            <input name="q0_0" type="radio" value="3">少しなった<br>
+            <input name="q0_0" type="radio" value="4">なった<br><br>
 
-            <label>自習室へのご意見・ご要望等ありましたらご記入ください</label>
-            <textarea></textarea>
+            <label id="l0_1">自習室へのご意見・ご要望等ありましたらご記入ください</label>
+            <textarea name="q0_1"></textarea>
 
         </div>
 
@@ -62,18 +62,18 @@
         <div id="break-rooms" name="break-rooms">
             <h3>休憩室について</h3>
 
-            <label>休憩室は有用でしたか？<span>*</span></label>
-            <input type="radio" value="0" required>休憩室を利用しなかった<br>
-            <input type="radio" value="1">有用でなかった<br>
-            <input type="radio" value="2">あまり有用でなかった<br>
-            <input type="radio" value="3">少し有用だった<br>
-            <input type="radio" value="4">有用だった<br><br>
+            <label id="l1_0">休憩室は有用でしたか？<span>*</span></label>
+            <input name ="q1_0" type="radio" value="0">休憩室を利用しなかった<br>
+            <input name ="q1_0" type="radio" value="1">有用でなかった<br>
+            <input name ="q1_0" type="radio" value="2">あまり有用でなかった<br>
+            <input name ="q1_0" type="radio" value="3">少し有用だった<br>
+            <input name ="q1_0" type="radio" value="4">有用だった<br><br>
 
-            <label>休憩室で不快なことがあった場合、ご記入ください</label>
-            <textarea></textarea><br>
+            <label id="l1_1">休憩室で不快なことがあった場合、ご記入ください</label>
+            <textarea name="q1_1"></textarea><br>
 
-            <label>休憩室へのご意見・ご要望等ありましたらご記入ください</label>
-            <textarea></textarea><br>
+            <label id="l1_2">休憩室へのご意見・ご要望等ありましたらご記入ください</label>
+            <textarea name="q1_2"></textarea><br>
         </div>
 
         <hr>
@@ -82,32 +82,30 @@
             <h3>システム全般について</h3>
             ※「システム」とは「OUJバーチャル自習室」のウェブサイト全体を指します<br><br>
 
-            <label>システムを使用していないときと比べて、勉強のしやすさは変わりましたか？<span>*</span></label>
-            <input type="radio" value="1" required>勉強しやすくならなかった<br>
-            <input type="radio" value="2">あまり勉強しやすくならなかった<br>
-            <input type="radio" value="3">少し勉強しやすくなった<br>
-            <input type="radio" value="4">勉強しやすくなった<br><br>
+            <label id="l2_0">システムを使用していないときと比べて、勉強のしやすさは変わりましたか？<span>*</span></label>
+            <input name="q2_0" type="radio" value="1">勉強しやすくならなかった<br>
+            <input name="q2_0" type="radio" value="2">あまり勉強しやすくならなかった<br>
+            <input name="q2_0" type="radio" value="3">少し勉強しやすくなった<br>
+            <input name="q2_0" type="radio" value="4">勉強しやすくなった<br><br>
 
-            <label>システムを他の人にもすすめたいと思いましたか？<span>*</span></label>
-            <input type="radio" value="1" required>はい<br>
-            <input type="radio" value="0">いいえ<br>
-            <textarea placeholder="その他..." style="height: 5rem;"></textarea><br>
+            <label id="l2_1">システムを他の人にもすすめたいと思いましたか？<span>*</span></label>
+            <input name="q2_1" type="radio" value="1">はい<br>
+            <input name="q2_1" type="radio" value="0">いいえ<br><br>
 
-            <label>操作方法がわかりづらいところはあった場合、ご記入ください</label>
-            <textarea></textarea><br>
+            <label id="l2_2">操作方法がわかりづらいところはあった場合、ご記入ください</label>
+            <textarea name="q2_2"></textarea><br>
 
-            <label>システム全体へのご意見・ご要望等ありましたらご記入ください</label>
-            <textarea></textarea>
+            <label id="l2_3">システム全体へのご意見・ご要望等ありましたらご記入ください</label>
+            <textarea name="q2_3"></textarea>
         </div>
 
-        <button>送信</button>
+        <button id="send">送信</button>
     </div>
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
-<!--
-    <script src="scripts/room2-6-script.js"></script>
--->
+    <!-- my scripts -->
+    <script src="scripts/survey-script.js"></script>
   </body>
 </html>
