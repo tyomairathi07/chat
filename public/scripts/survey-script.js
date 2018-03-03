@@ -34,6 +34,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 			// check if required fields are set
 			var required_ok = checkRequired(q);
+
 			toCsv(q);
 			/*
 			if(required_ok) {
@@ -85,8 +86,32 @@ function checkRequired(array) {
 	return res;
 }
 
-function escapeCommas(str) {
-	return str.replace(/,/g, '、');
+function exportCsv(csv) {
+	var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'export.csv';
+    hiddenElement.click();
+}
+
+function getQuestions() {
+	var res = '';
+	var length = $('label').length;
+
+	$('label').each(function(index) {
+		// get question
+		var question = $(this).text();
+		// surround with double quotes
+		question = '\"' + question + '\"';
+
+		res += question;
+		// append commas except for last element
+		if (index <= (length - 2)) {
+			res += ',';
+		}
+	});
+
+	return res;
 }
 
 function getRadioVal(name) {
@@ -102,22 +127,22 @@ function getTextareaVal(name) {
 	if (!res) {
 		res = 'n/a'
 	}
-	// convert ','s
-	res = escapeCommas(res);
+	// append double quotes -> preserve commas & newlines
+	res = '\"' + res + '\"';
 	return res;
 }
 
 function toCsv(array) {
 	var csv = '';
+
+	// append questions
+	csv += getQuestions();
+	csv += '\n';
+
 	for (var i = 0; i < array.length; i++) {
 		csv += array[i].join(',');
-		csv += '\n';
+		csv += ',';
 	}
-	console.log(csv);
 
-	var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = 'export.csv';
-    hiddenElement.click();
+	exportCsv(csv);
 }
