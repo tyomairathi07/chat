@@ -35,7 +35,19 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// check if required fields are set
 			var required_ok = checkRequired(q);
 
-			toCsv(q);
+			// get csv as string
+			var str = toCsv(q);
+			// get time
+			var time = new Date().getTime();
+			// ST: upload csv
+			var ref = firebase.storage().ref('survey/' + user.uid + '/' + time + '.csv');
+			var metadata = {
+				contentType: 'text/csv',
+			};
+			ref.putString(str, 'raw', metadata).then(function(snapshot) {
+				alert('回答を送信しました');
+			})
+
 			/*
 			if(required_ok) {
 				toCsv(q);
@@ -144,5 +156,6 @@ function toCsv(array) {
 		csv += ',';
 	}
 
-	exportCsv(csv);
+	//exportCsv(csv);
+	return csv;
 }
