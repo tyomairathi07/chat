@@ -158,10 +158,14 @@ function mediaSetup(room) {
 	.then(function(deviceInfos) {
 		for (var i = 0; i < deviceInfos.length; i++) {
 			var info = deviceInfos[i];
-			if (info.kind == 'audioinput') {
+			if (info.kind == 'audioinput' && info.deviceId != 'communications') {
+				console.log(info);
 				var option = $('<option>');
 				option.val(info.deviceId);
-				option.text(info.label);
+				// remove "配列"
+				var label = info.label;
+				label = label.replace('配列', '');
+				option.text(label);
 				selectMic.append(option);
 			}
 		}
