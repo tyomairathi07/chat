@@ -152,6 +152,35 @@ function initChatLog() {
 	});	
 }
 
+function mediaSetup(room) {
+	var selectMic = $('#select-mic');
+	navigator.mediaDevices.enumerateDevices()
+	.then(function(deviceInfos) {
+		for (var i = 0; i < deviceInfos.length; i++) {
+			var info = deviceInfos[i];
+			if (info.kind == 'audioinput') {
+				var option = $('<option>');
+				option.val(info.deviceId);
+				option.text(info.label);
+				selectMic.append(option);
+			}
+		}
+
+		// add listener to <select>
+		selectMic.on('change', function() {
+			// get device id
+			var source = $('#select-mic').val();
+			// get media
+			navigator.mediaDevices.getUserMedia({
+				audio: {deviceId: {exact: source}},
+				video: false
+			}).then(function(stream) {
+				// SW: send stream to room
+				room.replaceStream(stream);
+			})
+		})
+	})
+}
 
 function peerHandler(peer) {
 	peer.on('disconnected', function() {
@@ -199,8 +228,12 @@ function roomHandler(room, peer, user) {
 			"name": name,
 			"url": url
 		})
+
 		// show chat input
 		$('.container-input').css('display', 'block');
+
+		// list available mics
+		mediaSetup(room);
 	});
 
 	room .on('peerLeave', function(id) {
@@ -218,7 +251,10 @@ function roomHandler(room, peer, user) {
 			if (wrapper.length) {
 				clearInterval(iv);
 				appendLog('<b>end interval</b>');
-				wrapper.append('<audio autoplay></audio>');
+				// append <audio> if it doesn't exist
+				if (!wrapper.children('audio').length) {
+					wrapper.append('<audio autoplay></audio>');
+				}
 				wrapper.children('audio').get(0).srcObject = stream;
 			}
 		}, 10);
