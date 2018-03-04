@@ -86,6 +86,7 @@ function checkRequired(array) {
 	return res;
 }
 
+/*
 function exportCsv(csv) {
 	var hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
@@ -93,6 +94,7 @@ function exportCsv(csv) {
     hiddenElement.download = 'export.csv';
     hiddenElement.click();
 }
+*/
 
 function getQuestions() {
 	var res = '';
@@ -127,6 +129,8 @@ function getTextareaVal(name) {
 	if (!res) {
 		res = 'n/a'
 	}
+	// escape double quotes
+	res = res.replace(/"/g, '""');
 	// append double quotes -> preserve commas & newlines
 	res = '\"' + res + '\"';
 	return res;
