@@ -48,19 +48,41 @@ function initTopnav(user) {
 
 	// sign out user
 	$('#sign-out').click(function() {
+		// log
+		logUserAction(user, 'sign-out');
 		// go to survey page
 		window.location.href = "survey.html";
 	});
 }
 
 /*
-function logUserAction(user, action) {
-  var time = new Date().getTime();
-  var ref = firebase.database().ref('user-logs/' + user.uid);
-  return ref.child(time).set(action);
-}
+1回ログインした人のうち、何％が再度利用しているか。
+利用回数の頻度分布は
+1回の平均利用時間は
+休憩室への平均滞在時間は
+休憩室のリピーター率は
+
+sign-in
+sign-in (count)
+sign-out
+join study-room
+leave study-room
+join break-room
+leave break-room
+
+ログイン (sign-in): 
+自習室 入室 (join study-room): ページを開いたとき(×「入室」ボタンを押したとき)
+自習室 退室 (leave study-room): ページ遷移ORページ更新をしたとき(window.beforeunloadイベントで検知)
+休憩室 入室 (join break-room): 同上
+休憩室 退室 (leave break-room): 同上
+ログアウト (sign-out): ログアウトボタンを押したとき (タイムアウトでログアウトした場合は記録されない; アンケート終了後ではない)
 */
 
+function logUserAction(user, action) {
+  var time = new Date().getTime();
+  var ref = firebase.database().ref('log-users/' + user.uid);
+  return ref.child(time).set(action);
+}
 
 function signOut(user) {
 	// DB: remove sign-in record

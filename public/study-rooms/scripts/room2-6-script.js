@@ -46,8 +46,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			peerId = id;
 
 			// DB: handle disconnections
-			roomRef.child(peerId).onDisconnect().remove();
-			rootRef.child('on-break/' + user.uid).onDisconnect().remove(); // record deleted onDisconnect EXCEPT when going to breakroom
+			disconnectionHandler(peerId, user);
 
 			// SW: join room with minimum stream
 			navigator.mediaDevices
@@ -58,7 +57,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			.then(function(stream) {
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start roomHandler
-				roomHandler(room);
+				roomHandler(room, user);
 			}).then(function() {
 				// DB: check break status
 				return checkBreakStatus(user, peerId);
@@ -68,6 +67,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 				sendStream(room, peerId);
 				// set style
 				setStyleOnJoin(peerId);
+				mediaSetup(room, peerId);
 			}).catch(function(e) { // error: 'no break'
 				return;
 			});
@@ -229,6 +229,17 @@ function checkBreakStatus(user, pId) {
 	})
 }
 
+function disconnectionHandler(peerId, user) {
+	$(window).on('beforeunload', function() {
+		logUserAction(user, 'leave study-room')
+		return undefined;
+	})
+
+	roomRef.child(peerId).onDisconnect().remove();
+	// record deleted onDisconnect EXCEPT when going to breakroom
+	rootRef.child('on-break/' + user.uid).onDisconnect().remove(); 
+}
+
 // fires peerJoin event with a dummy peer
 function dummy() {
 	//appendLog('dummy');
@@ -354,8 +365,10 @@ function sendStream(room, pId) {
 }
 
 // handle SFURoom events
-function roomHandler(room) {
+function roomHandler(room, user) {
 	room.on('open', function() {
+		// log
+		logUserAction(user, 'join study-room');
 		appendLog('joined room');
 		dummy();
 	})
@@ -373,7 +386,6 @@ function roomHandler(room) {
 			appendLog('peerLeave: ' + id);
 		}
 	})
-
 
 	room.on('removeStream', function(stream) {
 		appendLog('removeStream from: ' + stream.peerId);

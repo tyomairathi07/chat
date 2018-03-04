@@ -45,8 +45,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 			appendLog('my ID: ' + peerId);
 
 			// DB: handle disconnections;
-			roomRef.child(peerId).onDisconnect().remove();
-			onBreakRef.child(user.uid).onDisconnect().remove();
+			disconnectionHandler(peerId, user);
+			
 			
 			// SW: start peerHandler
 			peerHandler(peer);
@@ -140,12 +140,26 @@ function checkUserEntry(user) {
 	})
 }
 
+function disconnectionHandler(peerId, user) {
+	// log
+	$(window).on('beforeunload', function() {
+		logUserAction(user, 'leave break-room');
+		return undefined;
+	})
+
+	roomRef.child(peerId).onDisconnect().remove();
+	onBreakRef.child(user.uid).onDisconnect().remove();
+}
+
 function initChatLog() {
 	var ref = rootRef.child('log-chat/' + roomId);
 	var query = ref.orderByKey().limitToLast(10);
 	return query.once('value').then(function(snapshot) {
 		snapshot.forEach(function(childSnapshot) {
 			var name = childSnapshot.child('name').val();
+			if (!name) {
+				name = 'ユーザー';
+			}
 			var message = childSnapshot.child('message').val();
 			appendChatLog(name, message);
 		})
@@ -159,13 +173,15 @@ function mediaSetup(room) {
 		for (var i = 0; i < deviceInfos.length; i++) {
 			var info = deviceInfos[i];
 			if (info.kind == 'audioinput' && info.deviceId != 'communications') {
-				console.log(info);
 				var option = $('<option>');
+				// set value
 				option.val(info.deviceId);
 				// remove "配列"
 				var label = info.label;
 				label = label.replace('配列', '');
+				// set label
 				option.text(label);
+				// append to <select>
 				selectMic.append(option);
 			}
 		}
@@ -219,6 +235,9 @@ function roomHandler(room, peer, user) {
 	});
 
 	room.on('open', function() {
+		// log
+		logUserAction(user, 'join break-room');
+
 		// DB: add peer
 		var name = user.displayName;
 		var url = user.photoURL;
