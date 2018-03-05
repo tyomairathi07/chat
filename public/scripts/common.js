@@ -33,6 +33,8 @@ function checkTimeout(user) {
 			var now = new Date();
 			if (now > timeout) {
 				clearInterval(i);
+				// log
+				logUserAction(user, 'signout-TO')
 				// sign out
 				signOut(user);
 			}
@@ -49,7 +51,7 @@ function initTopnav(user) {
 	// sign out user
 	$('#sign-out').click(function() {
 		// log
-		logUserAction(user, 'sign-out');
+		logUserAction(user, 'signout');
 		// go to survey page
 		window.location.href = "survey.html";
 	});
@@ -70,12 +72,13 @@ leave study-room
 join break-room
 leave break-room
 
-ログイン (sign-in): 
-自習室 入室 (join study-room): ページを開いたとき(×「入室」ボタンを押したとき)
-自習室 退室 (leave study-room): ページ遷移ORページ更新をしたとき(window.beforeunloadイベントで検知)
-休憩室 入室 (join break-room): 同上
-休憩室 退室 (leave break-room): 同上
-ログアウト (sign-out): ログアウトボタンを押したとき (タイムアウトでログアウトした場合は記録されない; アンケート終了後ではない)
+ログイン (signin): 
+自習室 入室 (SR-in): ページを開いたとき(×「入室」ボタンを押したとき)
+自習室 退室 (SR-out): ページ遷移ORページ更新をしたとき(window.beforeunloadイベントで検知)
+休憩室 入室 (BR-in): 同上
+休憩室 退室 (BR-out): 同上
+ログアウト (signout): ログアウトボタンを押したとき (タイムアウトでログアウトした場合は記録されない; アンケート終了後ではない)
+強制ログアウト (signout-TO)
 */
 
 function logUserAction(user, action) {

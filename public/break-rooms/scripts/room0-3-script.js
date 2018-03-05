@@ -143,7 +143,7 @@ function checkUserEntry(user) {
 function disconnectionHandler(peerId, user) {
 	// log
 	$(window).on('beforeunload', function() {
-		logUserAction(user, 'leave break-room');
+		logUserAction(user, 'BR-out');
 		return undefined;
 	})
 
@@ -236,7 +236,7 @@ function roomHandler(room, peer, user) {
 
 	room.on('open', function() {
 		// log
-		logUserAction(user, 'join break-room');
+		logUserAction(user, 'BR-in');
 
 		// DB: add peer
 		var name = user.displayName;

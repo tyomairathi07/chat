@@ -231,7 +231,7 @@ function checkBreakStatus(user, pId) {
 
 function disconnectionHandler(peerId, user) {
 	$(window).on('beforeunload', function() {
-		logUserAction(user, 'leave study-room')
+		logUserAction(user, 'SR-out')
 		return undefined;
 	})
 
@@ -368,7 +368,7 @@ function sendStream(room, pId) {
 function roomHandler(room, user) {
 	room.on('open', function() {
 		// log
-		logUserAction(user, 'join study-room');
+		logUserAction(user, 'SR-in');
 		appendLog('joined room');
 		dummy();
 	})

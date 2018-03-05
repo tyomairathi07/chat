@@ -37,8 +37,8 @@ function logSignIn(user) {
 
 function onSuccessSignIn(user) {
     // log
-    logUserAction(user, 'sign-in');
-    
+    logUserAction(user, 'signin');
+
     logSignIn(user)
     .then(function() {
         window.location.href = "/study-rooms.html";
