@@ -231,10 +231,12 @@ function checkBreakStatus(user, pId) {
 
 function disconnectionHandler(peerId, user) {
 	$(window).on('beforeunload', function() {
-		logUserAction(user, 'SR-out')
+		// log
+		logUserAction(user, 'SR-out');
 		return undefined;
 	})
 
+	// DB: remove records
 	roomRef.child(peerId).onDisconnect().remove();
 	// record deleted onDisconnect EXCEPT when going to breakroom
 	rootRef.child('on-break/' + user.uid).onDisconnect().remove(); 
@@ -422,3 +424,28 @@ function setStyleOnJoin(id) {
 	// show bottom menu
 	$(".menu").css('display', 'inline');
 }
+
+/*
+function windowHandler(user) {
+	$(window).on('unload', function() {
+		// log
+		logUserAction(user, 'SR-out');
+		return undefined;
+	})
+
+	if (window.performance.navigation.type == 1) { // page refreshed
+		// remove listener
+		$(window).off('unload');
+		// reset listener
+		$(window).on('unload', function() {
+			// log
+			logUserAction(user, 'SR-out');
+			return undefined;
+		});
+	} else { // page not refreshed
+		// log
+		logUserAction(user, 'SR-in');
+
+	}
+}
+*/

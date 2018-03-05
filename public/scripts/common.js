@@ -64,14 +64,6 @@ function initTopnav(user) {
 休憩室への平均滞在時間は
 休憩室のリピーター率は
 
-sign-in
-sign-in (count)
-sign-out
-join study-room
-leave study-room
-join break-room
-leave break-room
-
 ログイン (signin): 
 自習室 入室 (SR-in): ページを開いたとき(×「入室」ボタンを押したとき)
 自習室 退室 (SR-out): ページ遷移ORページ更新をしたとき(window.beforeunloadイベントで検知)
