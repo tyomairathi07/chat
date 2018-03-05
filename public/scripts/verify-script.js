@@ -15,6 +15,7 @@ firebase.auth().onAuthStateChanged(function(user) {
       // send verification email
       user.sendEmailVerification().then(function() {
         alert('アカウント認証メールを送信しました');
+        console.log(user.email);
       })
     });
   } else {

@@ -45,7 +45,16 @@ function onSuccessSignIn(user) {
     });
 }
 
+function showLoading() {
+  // show loading image
+  var btn = $('#sign-in');
+  $('<img src="images/loading.gif"></img>').insertAfter(btn).height(btn.height()).css('margin-left', '1rem');
+}
+
 function signIn() {
+    // show loading image
+    showLoading();
+
     // get email & password
     var email = $('#email').val();
     var password = $('#password').val();
