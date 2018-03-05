@@ -10,29 +10,39 @@ messagingSenderId: "86072280692"
 firebase.initializeApp(config);
 
 $('#sign-up').click(function() {
+	// show loading icon
+	showLoading();
+
 	var email = $('#email').val();
 	var password = $('#password').val();
 	var passwordConfirm = $('#password-confirm').val();
 	var pattern = /.+@campus.ouj.ac.jp$/;
 
 	// clear previous errors
-	$('#error-sign-up').text();
+	$('#error-sign-up').text('');
 
 	if (!pattern.test(email)) {
 		// check email domain
 		$('#error-sign-up').html('※学生用メールアドレスを入力してください<br><br>');
+		// hide loading icon
+		hideLoading();
 	} else if (password !== passwordConfirm) {
 		// check password match
 		$('#error-sign-up').html('※パスワードが一致しません<br><br>');
+		// hide loading icon
+		hideLoading();
 	} else {
 		// create new user
 		firebase.auth().createUserWithEmailAndPassword(email, password)
-		.then(function() {
-			// success
+		.then(function() { // success
+			// show loading
+			//showLoading();
 			// send e-mail verification
 			firebase.auth().currentUser.sendEmailVerification().then(function() {
 				// show message
-				$('#message-verification').css('display', 'inline-block');;
+				$('#message-verification').css('display', 'inline-block');
+				// hide loading icon
+				hideLoading();
 			});
 		})
 		.catch(function(error) {
@@ -41,10 +51,25 @@ $('#sign-up').click(function() {
 
 			if(errorCode == 'auth/email-already-in-use') {
 				$('#error-sign-up').html('※メールアドレスはすでに登録されています<br><br>');
+				// hide loading icon
+				hideLoading();
 			} else if (errorCode == 'auth/weak-password') {
 				$('#error-sign-up').html('※パスワードは6文字以上で設定してください<br><br>');
+				// hide loading icon
+				hideLoading();
 			}
 		})
 	}
 });
 
+function showLoading() {
+  // show loading image
+  var btn = $('#sign-up');
+  btn.css('vertical-align', 'top');
+  $('<img id="loading" src="images/loading.gif"></img>').insertAfter(btn).height(btn.outerHeight())
+  .css('margin-left', '1rem');
+}
+
+function hideLoading() {
+	$('#loading').css('display', 'none');
+}
