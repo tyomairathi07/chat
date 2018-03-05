@@ -32,7 +32,7 @@ $('#sign-up').click(function() {
 			// send e-mail verification
 			firebase.auth().currentUser.sendEmailVerification().then(function() {
 				// show message
-				$('#message-verification').html('確認メールを送信しました<br>メール内のリンクからアカウントを認証してください<br><br>');
+				$('#message-verification').css('display', 'inline-block');;
 			});
 		})
 		.catch(function(error) {

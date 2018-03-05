@@ -17,12 +17,23 @@
 
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="styles/milligram.min.css">
+    <link rel="stylesheet" href="styles/sign-up-style.css">
 
   </head>
   <body>
+    <div class="message">
+      【重要】<br>
+      当サイトを利用される際のデータは記録され、研究のために使用されます。<br>
+      データは統計的に処理され、個人の名前は特定されません。<br>
+      同意いただける場合のみ、新規登録を行ってください。
+    </div>
+
     <div>
-      <span id="message-verification"></span>
+      <div class="message" id="message-verification" style="display: none;">
+        確認メールを送信しました。<br>
+        メール内のリンクからアカウントを認証してください。<br>
+        ※アカウントを認証しないと、本システムは利用できません。
+      </div>
       <span id="error-sign-up"></span>
 
       <label for="email">メールアドレス(学生用メールアドレスを使用してください)</label>
@@ -33,11 +44,6 @@
 
       <label for="password-confirm">確認用パスワード</label>
       <input type="password" id="password-confirm"><br>
-
-      【重要】<br>
-      当サイトを利用される際のデータは記録され、研究のために使用されます。<br>
-      データは統計的に処理され、個人の名前は特定されません。<br>
-      同意いただける場合のみ、下の「新規登録」ボタンをクリックしてください。<br><br>
 
       <button id="sign-up">新規登録</button><br>
     </div>
