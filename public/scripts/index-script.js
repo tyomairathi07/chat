@@ -41,7 +41,7 @@ function onSuccessSignIn(user) {
 
     logSignIn(user)
     .then(function() {
-        window.location.href = "/study-rooms.html";
+      window.location.href = "/study-rooms.html";        
     });
 }
 

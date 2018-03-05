@@ -18,6 +18,8 @@ firebase.initializeApp(config);
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
+		// check email verification
+		checkEmailVerification(user);
 		// set display name
 		initTopnav(user);
 		// sign out user after 30 minutes

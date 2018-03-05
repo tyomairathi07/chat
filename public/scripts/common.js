@@ -18,6 +18,12 @@ function autoSignOut(user) {
 }
 */
 
+function checkEmailVerification(user) {
+	if (!user.emailVerified) {
+		window.location.href = "/verify.html";
+	}
+}
+
 function checkTimeout(user) {
 	// get sign-in time
 	var ref = firebase.database().ref('sign-in/' + user.uid);

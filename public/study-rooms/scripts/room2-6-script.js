@@ -26,6 +26,9 @@ const NUM_BREAKROOMS = 4;
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if(user) {
+		// check email verification
+		checkEmailVerification(user);
+		
 		let peerId = null;
 		let room = null;
 
