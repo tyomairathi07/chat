@@ -58,8 +58,10 @@ function initTopnav(user) {
 	$('#sign-out').click(function() {
 		// log
 		logUserAction(user, 'signout');
+		// cancel logging for page
+		$(window).off('beforeunload');
 		// go to survey page
-		window.location.href = "survey.html";
+		window.location.href = "/survey.html";
 	});
 }
 
