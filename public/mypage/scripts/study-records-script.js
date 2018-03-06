@@ -15,6 +15,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 		initTopnav(user);
     // sign out user after 30 minutes
     checkTimeout(user);
+
+    // log on disconnection
+    $(window).on('beforeunload', function() {
+      // log
+      logUserAction(user, 'MP-records-out');
+      return undefined;
+    })    
+
 	} else { // no user is signed in
 		window.location.href = "/";
 	}

@@ -13,6 +13,13 @@ firebase.initializeApp(config);
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
+		// log on disconnection
+		$(window).on('beforeunload', function() {
+			// log
+			logUserAction(user, 'survey-out');
+			return undefined;
+		})		
+
 		$('#send').click(function() {
 			var q = [];
 

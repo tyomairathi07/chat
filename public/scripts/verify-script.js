@@ -11,6 +11,13 @@ firebase.initializeApp(config);
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+    // log on disconnection
+    $(window).on('beforeunload', function() {
+      // log
+      logUserAction(user, 'verify-out');
+      return undefined;
+    })    
+
     $('#send').click(function() {
       // send verification email
       user.sendEmailVerification().then(function() {
