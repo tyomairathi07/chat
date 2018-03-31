@@ -120,12 +120,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 		/** DB LISTENERS **/
 		roomRef.on('child_added', function(snapshot, prevKey) {
+			appendLog('child_added: ' + snapshot.key);
+
 			// get position
 			var child_id = snapshot.key;
 			var child_c = snapshot.child('cell-index').val();
 			var child_r = snapshot.child('row-index').val();
-
-			//appendLog('child_added: ' + child_r + ', ' + child_c);
 
 			// set id to cell
 			var cell = getCell(child_r, child_c);
@@ -185,11 +185,14 @@ function addCoffee(r, c) {
 // addVideo -> removeCoffee
 function addVideo(id, stream) {
 	appendLog('called addVideo');
-	roomRef.once('value')
-	.then(function(snapshot) {
-		if (!snapshot.child(id).exists()) { 
-			throw 'false alarm';
-		} else {
+	roomRef.child(id).on('value', function(snapshot) {
+		var r = snapshot.child('row-index').val();
+		var c = snapshot.child('cell-index').val();
+		appendLog('addVideo: ' + r + ',' + c);
+		if (r != null && c != null) {
+			appendLog('proceed');
+			var cell = $('#' + id);
+
 			var iv = setInterval(function() {
 				var cell = $('#' + id);
 				if (cell.length) {
@@ -204,9 +207,8 @@ function addVideo(id, stream) {
 				}
 			}, 10);
 		}
-	}).catch(function(e) {
-		console.log(e);
 	})
+
 }
 
 function checkBreakStatus(user, pId) {
@@ -354,7 +356,10 @@ function removeVideo(id) {
 }
 
 function sendStream(room, pId) {
-	navigator.mediaDevices.getUserMedia({audio: false, video: true})
+	navigator.mediaDevices.getUserMedia({
+		audio: false, 
+		video: true
+	})
 	.then(function(s) {
 		var stream = null;
 		var iv = setInterval(function() {
