@@ -47,11 +47,11 @@ input[type='submit'] {
 	color: #fff;
 	cursor: pointer;
 	display: inline-block;
-	font-size: 1.1rem;
+	font-size: 1.3rem;
 	font-weight: 700;
 	letter-spacing: .1rem;
-	line-height: 3.8rem;
-	padding: 0 3.0rem;
+	line-height: 3.0rem;
+	padding: 0 1.5rem;
 	text-align: center;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -355,6 +355,11 @@ h6 {
 	padding: 0.5rem 1rem;
 	margin-bottom: 3.0rem;
 	width: auto;
+}
+
+div {
+	overflow: visible;
+	width: 30rem;
 }
 
 /* Custom color */

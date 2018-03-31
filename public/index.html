@@ -25,7 +25,7 @@
     <h1>OUJバーチャル自習室</h1>
 
     <div class="message">
-      ※ログアウト後にアンケートが表示されます。お時間に余裕があれば、ご協力いただければ幸いです<br>
+      ※ログアウト後に<b>アンケート</b>が表示されます。お時間に余裕があれば、ご協力いただければ幸いです<br>
       ※30分間操作がない場合、自動的にログアウトされます(自習室・休憩室の利用中は除く)
     </div>
 
@@ -35,13 +35,17 @@
       <label for="email">メールアドレス</label>
       <input type="email" id="email"><br>
 
-      <label for="password">パスワード</label>
-      <input type="password" id="password"><br>
+      <label for="password">パスワード
+        <br><span style="font-size:1.3rem; margin-left:.5rem;">
+          <a href="reset-password.html">※パスワードを忘れた方はここをクリック</a>
+        </span>
+      </label>
+      <input type="password" id="password">
+      <br>
 
-      <button id="sign-in" style="vertical-align: top;">ログイン</button><br>
-      <a href="reset-password.html">※パスワードを忘れた方はここをクリック</a><br><br>
+      <button id="sign-in" style="vertical-align: top;">ログイン</button>
 
-      <a href="sign-up.html"><button id="sign-up">新規登録</button></a>
+      <a href="sign-up.html"><button class="button-black" id="sign-up" style="float: right; position: relative;">新規登録はここから</button></a>
 
     </div>
 

@@ -34,9 +34,17 @@
         メール内のリンクからアカウントを認証してください。<br>
         ※アカウントを認証しないと、本システムは利用できません。
       </div>
-      <span id="error-sign-up"></span>
 
-      <label for="email">メールアドレス(学生用メールアドレスを使用してください)</label>
+      <div id="error-sign-up" style="display: none;"></div>
+
+      <label for="email">
+        メールアドレス<br>
+        <span>
+          【注意】
+          <u>放送大学Gmailのメールアドレス</u>を使用してください<br>
+          メールアドレスがわからない方は<a href="help.html">このページ</a>をご確認ください
+        </span>
+      </label>
       <input type="email" id="email"><br>
 
       <label for="password">パスワード(6文字以上)</label>

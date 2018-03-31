@@ -49,7 +49,6 @@ input[type='submit'] {
 	display: inline-block;
 	font-size: 1.1rem;
 	font-weight: 700;
-	/*height: 3.8rem;*/
 	letter-spacing: .1rem;
 	line-height: 3.8rem;
 	padding: 0 3.0rem;
@@ -104,7 +103,9 @@ input[type='button'].button-outline,
 input[type='reset'].button-outline,
 input[type='submit'].button-outline {
 	background-color: transparent;
-	color: #9b4dca
+	color: #9b4dca;
+	font-size: 1.6rem;
+	font-weight: 600;
 }
 
 .button.button-outline:focus,

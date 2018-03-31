@@ -1,14 +1,9 @@
-<!--
-    Firebase storage is disabled; enable if needed
-    change script name for "my script"
--->
-
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    <title>使い方ガイド</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
@@ -16,13 +11,13 @@
     <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
     <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <!--<script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>-->
+    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="/styles/mypage-style.css">
+    <link rel="stylesheet" href="styles/help.css">
 
   </head>
   <body>
@@ -30,7 +25,7 @@
     <div class="topnav">
         <div class="breadcrumb">
             <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
-            マイページ > プロフィール
+            使い方ガイド
         </div>
 
         <div class="topnav-wrapper">
@@ -43,28 +38,10 @@
     </div>
     <!-- END TOPNAV -->
 
-    <!-- START SIDENAV -->
-    <div class="sidenav">
-        <a href="profile.html">プロフィール</a>
-        <a href="study-records.html">勉強記録</a>
-        <a href="settings.html">アカウント設定</a>
-    </div>
-    <!-- END SIDENAV -->
-    
-    <div class="main">
-        <h1>工事中</h1>
-    </div>
-
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
-    <!-- my scripts -->
-    <script src="/scripts/common.js"></script>
-    <script src="scripts/study-records-script.js"></script>
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <script src="scripts/help-script.js"></script>
   </body>
 </html>
-<!--
-    Firebase storage is disabled; enable if needed
-    change script name for "my script"
--->
-

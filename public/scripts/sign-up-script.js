@@ -19,16 +19,16 @@ $('#sign-up').click(function() {
 	var pattern = /.+@campus.ouj.ac.jp$/;
 
 	// clear previous errors
-	$('#error-sign-up').text('');
+	$('#error-sign-up').empty('').css('display', 'none');;
 
 	if (!pattern.test(email)) {
 		// check email domain
-		$('#error-sign-up').html('※学生用メールアドレスを入力してください<br><br>');
+		$('#error-sign-up').append('※放送大学Gmailのメールアドレスを入力してください<br><br>').css('display', 'inline-block');
 		// hide loading icon
 		hideLoading();
 	} else if (password !== passwordConfirm) {
 		// check password match
-		$('#error-sign-up').html('※パスワードが一致しません<br><br>');
+		$('#error-sign-up').append('※パスワードが一致しません<br><br>').css('display', 'inline-block');
 		// hide loading icon
 		hideLoading();
 	} else {
@@ -50,11 +50,11 @@ $('#sign-up').click(function() {
 			var errorCode = error.code;
 
 			if(errorCode == 'auth/email-already-in-use') {
-				$('#error-sign-up').html('※メールアドレスはすでに登録されています<br><br>');
+				$('#error-sign-up').append('※メールアドレスはすでに登録されています<br><br>').css('display', 'inline-block');
 				// hide loading icon
 				hideLoading();
 			} else if (errorCode == 'auth/weak-password') {
-				$('#error-sign-up').html('※パスワードは6文字以上で設定してください<br><br>');
+				$('#error-sign-up').append('※パスワードは6文字以上で設定してください<br><br>').css('display', 'inline-block');
 				// hide loading icon
 				hideLoading();
 			}

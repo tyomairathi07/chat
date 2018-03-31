@@ -57,7 +57,7 @@ roomsRef.once('value')
 		
 		// create button
 		$('#rooms').append('<a href="/study-rooms/' + roomId + '.html"><button class="button button-outline" id="' 
-			+ roomId + '" style="margin: 1.0rem;">' + roomName + '</button></a>');
+			+ roomId + '" style="margin: 1.5rem;">' + roomName + '</button></a>');
 		$('#' + roomId).append('<br><span></span>');
 	})
 }).then(function() {
@@ -65,7 +65,7 @@ roomsRef.once('value')
 	for(i = 0; i < roomIds.length; i++) {
 		var roomId = roomIds[i];
 		rootRef.child(roomId).on('value', function(snapshot) {
-			$('#' + snapshot.key).children('span').text(snapshot.numChildren() + '人');
+			$('#' + snapshot.key).children('span').css('font-weight', '300').text(snapshot.numChildren() + '人');
 
 		})
 	} 

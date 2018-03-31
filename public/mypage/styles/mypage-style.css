@@ -47,7 +47,7 @@ input[type='submit'] {
 	color: #fff;
 	cursor: pointer;
 	display: inline-block;
-	font-size: 1.3rem;
+	font-size: 1.1rem;
 	font-weight: 700;
 	letter-spacing: .1rem;
 	line-height: 3.0rem;
@@ -173,6 +173,7 @@ input[type='submit'].button-clear[disabled]:hover {
 	color: #9b4dca
 }
 
+
 hr {
 	border: 0;
 	border-top: 0.1rem solid #f4f5f6;
@@ -198,7 +199,7 @@ select {
 	box-sizing: inherit;
 	height: 3.8rem;
 	padding: .6rem 1.0rem;
-	width: 30rem;
+	width: 100%;
 }
 
 input[type='email']:focus,
@@ -214,28 +215,8 @@ select:focus {
 	outline: 0
 }
 
-label,
-legend {
-	display: block;
-	font-size: 1.6rem;
-	font-weight: 700;
-	margin-bottom: .5rem
-}
-
-fieldset {
-	border-width: 0;
-	padding: 0
-}
-
-input[type="http://www.w3.org/2000/svg"],
-input[type="14"] {
-	display: inline
-}
-
-.label-inline {
-	display: inline-block;
-	font-weight: normal;
-	margin-left: .5rem
+textarea {
+	min-height: 6.5rem
 }
 
 a {
@@ -248,19 +229,48 @@ a:hover {
 	color: #606c76
 }
 
+dl,
+ol,
+ul {
+	list-style: none;
+	margin-top: 0;
+	padding-left: 0
+}
+
+dl dl,
+dl ol,
+dl ul,
+ol dl,
+ol ol,
+ol ul,
+ul dl,
+ul ol,
+ul ul {
+	font-size: 90%;
+	margin: 1.5rem 0 1.5rem 3.0rem
+}
+
+ol {
+	list-style: decimal inside
+}
+
+ul {
+	list-style: circle inside
+}
+
 .button,
 button,
 dd,
 dt,
 li {
-	margin-bottom: 1.0rem;
+	/*margin-bottom: 1.0rem;*/
 }
 
 fieldset,
 input,
 select,
 textarea {
-	margin-bottom: 1.5rem
+	/*margin-bottom: 1.5rem*/
 }
 
 blockquote,
@@ -276,21 +286,31 @@ ul {
 }
 
 table {
-	border: 0.1rem solid #e1e1e1;
+	border: none;
 	border-collapse: collapse;
 	/*border-spacing: 0;*/
-	width: 100%
+	/*width: 100%*/
 }
 
 td,
 th {
-	border: 0.1rem solid #e1e1e1;
-	padding: 0 0;
-	text-align: center;
-	width: 30rem;
-	height: 20rem;
+	border-bottom: 0.1rem solid #e1e1e1;
+	padding: 1.2rem 2.0rem;
+	text-align: left;
+	vertical-align: top;
 }
 
+/*
+td:first-child,
+th:first-child {
+	padding-left: 0
+}
+
+td:last-child,
+th:last-child {
+	padding-right: 0
+}
+*/
 
 b,
 strong {
@@ -346,16 +366,107 @@ h6 {
 	line-height: 1.4
 }
 
+img {
+	max-width: 100%
+}
+
+.clearfix:after {
+	clear: both;
+	content: "0 0 29 14";
+	display: table
+}
+
+.float-left {
+	float: left
+}
+
+.float-right {
+	float: right
+}
+
 /*# sourceMappingURL=milligram.min.css.map */
+
+/** [START] TOPNAV **/
+.breadcrumb {
+	min-height: 100%;
+	font-size: 1.6rem;
+	font-weight: bold;
+}
+
+
+.topnav {
+	background-color: #f4f5f6;
+	height: 5rem;
+	line-height: 100%;
+	padding: 1rem 0;
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.topnav a {
+	font-size: 1.4rem;
+	font-weight: 700;
+	letter-spacing: 0;
+}
+
+.topnav button {
+	display: inline;
+	line-height: 100%;
+	margin: 0 1rem;
+	padding: 1rem;
+}
+
+.topnav div {
+	display: inline;
+	vertical-align: middle;
+}
+
+.topnav img {
+	margin: 0 1rem;
+	max-height: 3rem;
+	vertical-align: middle;
+}
+
+.topnav-wrapper {
+	float: right;
+}
+
+/** [END] TOPNAV **/
 
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
-	display: inline-block;
+	display: none;
+	margin: 1rem 0rem;
 	padding: 0.5rem 1rem;
-	margin-bottom: 3.0rem;
-	width: 100%;
 }
+
+.user-pic {
+	border: 0.1rem solid #d1d1d1;
+	border-radius: 50%;
+	max-width: 15rem;
+}
+
+/** MYPAGE STYLES [START] **/
+.sidenav {
+	background-color: #f4f5f7;
+	left: 0rem;
+	position: fixed;
+	margin: 0;
+	top: 7rem;
+	width: 20rem;
+}
+
+.sidenav a {
+	display: block;
+	margin: 1rem 2rem;
+}
+.main {
+	margin-left: 30rem;
+}
+/** MYPAGE STYLES [END] **/
 
 /* Custom color */
 .button-black {
