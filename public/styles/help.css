@@ -273,18 +273,6 @@ textarea {
 	/*margin-bottom: 1.5rem*/
 }
 
-blockquote,
-dl,
-figure,
-form,
-ol,
-p,
-pre,
-table,
-ul {
-	margin-bottom: 2.5rem
-}
-
 table {
 	border: none;
 	border-collapse: collapse;
@@ -300,17 +288,6 @@ th {
 	vertical-align: top;
 }
 
-/*
-td:first-child,
-th:first-child {
-	padding-left: 0
-}
-
-td:last-child,
-th:last-child {
-	padding-right: 0
-}
-*/
 
 b,
 strong {
@@ -434,39 +411,24 @@ img {
 }
 
 /** [END] TOPNAV **/
+.content img {
+	border: 0.1rem solid #d1d1d1;
+	width: 50rem;
+}
 
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
-	display: none;
+	display: inline-block;
 	margin: 1rem 0rem;
 	padding: 0.5rem 1rem;
+	width: 100%;
 }
 
-.user-pic {
-	border: 0.1rem solid #d1d1d1;
-	border-radius: 50%;
-	max-width: 15rem;
-}
-
-/** MYPAGE STYLES [START] **/
-.sidenav {
-	background-color: #f4f5f7;
-	left: 0rem;
-	position: fixed;
+ul {
 	margin: 0;
-	top: 7rem;
-	width: 20rem;
+	padding: 0;
 }
-
-.sidenav a {
-	display: block;
-	margin: 1rem 2rem;
-}
-.main {
-	margin-left: 30rem;
-}
-/** MYPAGE STYLES [END] **/
 
 /* Custom color */
 .button-black {
