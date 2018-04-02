@@ -9,7 +9,21 @@ messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
-$('#sign-up').click(function() {
+$('#sign-up').click(signUp);
+
+$('#password-confirm').keypress(function(event) {
+	if (event.which == 13) {
+		// set focus to button
+		$('#sign-up').focus();
+		signUp();
+	}
+});
+
+function hideLoading() {
+	$('#loading').css('display', 'none');
+}
+
+function signUp() {
 	// show loading icon
 	showLoading();
 
@@ -39,10 +53,13 @@ $('#sign-up').click(function() {
 			//showLoading();
 			// send e-mail verification
 			firebase.auth().currentUser.sendEmailVerification().then(function() {
+				window.location.href = "/sign-up-complete.html";
+				/*
 				// show message
 				$('#message-verification').css('display', 'inline-block');
 				// hide loading icon
 				hideLoading();
+				*/
 			});
 		})
 		.catch(function(error) {
@@ -60,7 +77,7 @@ $('#sign-up').click(function() {
 			}
 		})
 	}
-});
+}
 
 function showLoading() {
   // show loading image
@@ -68,8 +85,4 @@ function showLoading() {
   btn.css('vertical-align', 'top');
   $('<img id="loading" src="images/loading.gif"></img>').insertAfter(btn).height(btn.outerHeight())
   .css('margin-left', '1rem');
-}
-
-function hideLoading() {
-	$('#loading').css('display', 'none');
 }
