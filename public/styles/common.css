@@ -263,7 +263,7 @@ button,
 dd,
 dt,
 li {
-	/*margin-bottom: 1.0rem;*/
+	margin-bottom: 1.0rem;
 }
 
 fieldset,
@@ -388,6 +388,12 @@ img {
 
 /** [START] TOPNAV **/
 .breadcrumb {
+	min-height: 100%;
+	font-size: 1.6rem;
+	font-weight: bold;
+}
+
+.breadcrumb span {
 	min-height: 100%;
 	font-size: 1.6rem;
 	font-weight: bold;

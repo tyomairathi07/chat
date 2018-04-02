@@ -30,7 +30,7 @@
     <div class="topnav">
         <div class="breadcrumb">
             <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
-            アカウント認証完了
+            <span id="verify_result">アカウント認証完了</span>
         </div>
 
         <div class="topnav-wrapper">
@@ -42,11 +42,23 @@
     <!-- END TOPNAV -->
 
     <!-- contents -->
-    <div class="message">
+    <div class="message" id="success">
         アカウント認証が完了しました。<br>
-        システムをご利用いただくには、下の「トップページ」ボタンからログインをお願いします。<br>
+        システムをご利用いただくには、下の「トップページ」ボタンからログインをお願いします。<br><br>
         <span>※ログインには、ご登録いただいた<b>メールアドレス・パスワード</b>が必要です</span><br><br>
         <a href="/"><button>トップページ</button></a>
+    </div>
+
+    <div class="message" id="fail" style="display: none;">
+        アカウント認証に失敗しました。<br>
+        下のボタンからアカウント認証メールを再送し、新しいメールのリンクから再度アカウント認証をお願いします。<br><br>
+        <span>
+            ※一番新しいメールのリンクのみ認証に有効です。(古いメールのリンクは無効になります)<br>
+            ※メールが届かない場合は、トップページからログインし、「認証メールを再送」ボタンを押してください
+        </span><br><br>
+
+        <button id="resend">認証メールを再送</button>
+        <a href="/"><button class="button-black" style="float: right;">トップページ</button></a>
     </div>
 
     <!-- scripts -->
@@ -54,6 +66,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="/scripts/common.js"></script>
+    <script src="scripts/email-verified-script.js"></script>
   </body>
 </html>
 

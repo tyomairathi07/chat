@@ -48,6 +48,20 @@ function checkTimeout(user) {
 	})
 }
 
+function getParameterByName(name) {
+	var query = window.location.search.substring(1);
+	var variables = query.split('&');
+
+	for (var i=0; i < variables.length; i++) {
+		var param = variables[i].split('=');
+		var paramName = param[0];
+		var paramVal = param[1];
+		if (paramName == name) {
+			return paramVal;
+		}
+	}
+}
+
 function hideLoading() {
 	$('#loading').css('display', 'none');
 }
