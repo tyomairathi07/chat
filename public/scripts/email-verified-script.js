@@ -42,6 +42,13 @@ function verifyEmailError() {
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+      // log on disconnection
+      $(window).on('beforeunload', function() {
+        // log
+        logUserAction(user, 'email-verified-out');
+        return undefined;
+      })  
+
       // resend verification email
       $('#resend').click(function() {
         user.sendEmailVerification().then(function() {
