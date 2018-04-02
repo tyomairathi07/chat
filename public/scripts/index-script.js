@@ -9,24 +9,18 @@ var config = {
 };
 firebase.initializeApp(config);
 
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        onSuccessSignIn(user);
-    } else {
-        // click "sign in" button
-        $('#sign-in').click(function() {
-           signIn();
-        });
+// click "sign in" button
+$('#sign-in').click(function() {
+   signIn();
+});
 
-        // press ENTER key
-        $('#password').keypress(function(e) {
-            if (e.which == 13) {
-               // set focus to sign-in button
-               $('#sign-in').focus();
-                signIn();
-            }  
-        });
-    }
+// press ENTER key
+$('#password').keypress(function(e) {
+    if (e.which == 13) {
+       // set focus to sign-in button
+       $('#sign-in').focus();
+        signIn();
+    }  
 });
 
 function logSignIn(user) {
