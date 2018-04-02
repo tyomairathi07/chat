@@ -49,8 +49,6 @@ function signUp() {
 		// create new user
 		firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then(function() { // success
-			// show loading
-			showLoading('sign-up');
 			// send e-mail verification
 			firebase.auth().currentUser.sendEmailVerification().then(function() {
 				window.location.href = "/sign-up-complete.html";
