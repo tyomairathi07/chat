@@ -48,6 +48,10 @@ function checkTimeout(user) {
 	})
 }
 
+function hideLoading() {
+	$('#loading').css('display', 'none');
+}
+
 function initTopnav(user) {
 	var name = user.displayName;
 	if (name != null) {
@@ -85,6 +89,14 @@ function logUserAction(user, action) {
   var time = new Date().getTime();
   var ref = firebase.database().ref('log-users/' + user.uid);
   return ref.child(time).set(action);
+}
+
+function showLoading(btn_id) {
+   // show loading image
+  var btn = $('#' + btn_id);
+  btn.css('vertical-align', 'top');
+  $('<img id="loading" src="/images/loading.gif"></img>').insertAfter(btn).height(btn.outerHeight())
+  .css('margin-left', '1rem');
 }
 
 function signOut(user) {

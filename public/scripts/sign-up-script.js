@@ -25,7 +25,7 @@ function hideLoading() {
 
 function signUp() {
 	// show loading icon
-	showLoading();
+	showLoading('sign-up');
 
 	var email = $('#email').val();
 	var password = $('#password').val();
@@ -50,16 +50,10 @@ function signUp() {
 		firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then(function() { // success
 			// show loading
-			//showLoading();
+			showLoading('sign-up');
 			// send e-mail verification
 			firebase.auth().currentUser.sendEmailVerification().then(function() {
 				window.location.href = "/sign-up-complete.html";
-				/*
-				// show message
-				$('#message-verification').css('display', 'inline-block');
-				// hide loading icon
-				hideLoading();
-				*/
 			});
 		})
 		.catch(function(error) {
@@ -77,12 +71,4 @@ function signUp() {
 			}
 		})
 	}
-}
-
-function showLoading() {
-  // show loading image
-  var btn = $('#sign-up');
-  btn.css('vertical-align', 'top');
-  $('<img id="loading" src="images/loading.gif"></img>').insertAfter(btn).height(btn.outerHeight())
-  .css('margin-left', '1rem');
 }

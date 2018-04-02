@@ -75,19 +75,29 @@ function updateUserProfile(user) {
 
 	// click "save changes" button
 	$('#update').click(function() {
+		// show loading
+		showLoading('update');
+
 		// clear message div
 		$('.message').empty();
+		$('.message').css('display', 'none');
+
+		var newName = $('#user-name').val();
+		if ((newName == user.displayName) && (file == null)) {
+			hideLoading();
+		}
 
 		// get new displayName
-		var newName = $('#user-name').val();
 		if (newName != user.displayName) {
 			// update displayName
 			user.updateProfile({
 				displayName: newName
 			}).then(function() { // success
-				showMessage('ユーザー名を変更しました');				
+				showMessage('ユーザー名を変更しました');
+				hideLoading();
 			}).catch(function(error) { // error
 				showMessage('エラー: ユーザー名の変更に失敗しました');
+				hideLoading();
 			});
 		}
 		
@@ -95,29 +105,27 @@ function updateUserProfile(user) {
 		if (file != null) {
 			// get Storage ref to user > user-pic
 			var fileRef = firebase.storage().ref().child(user.uid + '/photo/' + file.name);
-			// TODO delete existing child under photo
-			// upload new photo
-			fileRef.put(file).then(function() { // success
-				// get download URL for new photo
-				fileRef.getDownloadURL().then(function(url) {
-					// set image source
-					$('.user-pic').attr('src', url);
 
-					// update photo
-					user.updateProfile({
-						photoURL: url
-					}).then(function() {
-						// success
-						showMessage('プロフィール画像を変更しました');
-					}).catch(function(error) {
-						showMessage('エラー: プロフィール画像の変更に失敗しました');
-					})
-				}).catch(function(error) {
-					showMessage('エラー: プロフィール画像の変更に失敗しました');
-				});
+			// TODO delete existing child under photo
+
+			// upload new photo
+			fileRef.put(file)
+			.then(function() { // file upload success
+				// get download URL
+				return fileRef.getDownloadURL();
+			}).then(function(url) {
+				// set image source
+				$('.user-pic').attr('src', url);
+
+				// update profile
+				return user.updateProfile({photoURL: url});
+			}).then(function() { // profile update success
+				showMessage('プロフィール画像を変更しました');
+				hideLoading();
 			}).catch(function(error) {
-				showMessage('エラー: プロフィール画像の変更に失敗しました');
-			})
+				showMessage('プロフィール画像の変更に失敗しました');
+				hideLoading();
+			});
 		}
 
 				
