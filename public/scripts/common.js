@@ -20,7 +20,7 @@ function autoSignOut(user) {
 
 function checkEmailVerification(user) {
 	if (!user.emailVerified) {
-		window.location.href = "/verify.html";
+		//window.location.href = "/verify.html";
 	}
 }
 

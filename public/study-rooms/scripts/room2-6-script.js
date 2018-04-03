@@ -313,11 +313,18 @@ function mediaSetup(room, pId) {
 			var source = selectCamera.val();
 			appendLog(source);
 
-			// remove video
+			// get new stream
 			var cell = $('#' + pId);
+			var w = cell.width();
+			var h = cell.height();
+
 			navigator.mediaDevices.getUserMedia({
 				audio: false,
-				video: {deviceId: {exact: source}}
+				video: {
+					deviceId: {exact: source},
+					height: h,
+					width: w
+				}
 			}).then(function(stream) {
 				// replace local video
 				cell.children('video').get(0).srcObject = stream;
@@ -356,11 +363,23 @@ function removeVideo(id) {
 }
 
 function sendStream(room, pId) {
+	/*
 	navigator.mediaDevices.getUserMedia({
 		audio: false, 
 		video: true
 	})
-	.then(function(s) {
+	*/
+	var w = $('#' + pId).width();
+	var h = $('#' + pId).height();
+	console.log(w + ', ' + h);
+
+	navigator.mediaDevices.getUserMedia({
+		audio: false,
+		video: {
+			width: w,
+			height: h
+		}
+	}).then(function(s) {
 		var stream = null;
 		var iv = setInterval(function() {
 			stream = s

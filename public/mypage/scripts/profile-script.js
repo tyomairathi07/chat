@@ -42,13 +42,6 @@ function initUserProfile(user) {
 		$('#user-name').val(name);		
 	}
 	if (!photoUrl) { // no photo is set
-		/**
-		// get robot.png from Storage
-		var robotRef = firebase.storage().ref().child('robot.png');
-		robotRef.getDownloadURL().then(function(url) {
-			$('.user-pic').attr('src', url);
-		});
-		**/
 		$('.user-pic').attr('src', '/images/monster.png');
 	} else { // photo is set
 		$('.user-pic').attr('src', photoUrl);
@@ -63,6 +56,53 @@ function showMessage(text) {
 	$('.message').append(text + '<br>');
 	// show message div
 	$('.message').css('display', 'inline-block');
+}
+
+function updateName(user, newName, isHide) {
+	// update displayName
+	user.updateProfile({
+		displayName: newName
+	}).then(function() { // success
+		showMessage('ユーザー名を変更しました');
+		if (isHide) {
+			hideLoading();
+		}
+	}).catch(function(error) { // error
+		showMessage('エラー: ユーザー名の変更に失敗しました');
+		if (isHide) {
+			hideLoading();
+		}
+	});
+}
+
+function updatePhoto(user, file) {
+	// get Storage ref to user > user-pic
+	var fileRef = firebase.storage().ref().child(user.uid + '/photo/' + file.name);
+
+	// TODO delete existing child under photo
+
+	// upload new photo
+	fileRef.put(file)
+	.then(function() { // file upload success
+		// get download URL
+		return fileRef.getDownloadURL();
+	}).then(function(url) {
+		// set image source
+		$('.user-pic').attr('src', url);
+
+		// update profile
+		return user.updateProfile({photoURL: url});
+	}).then(function() { // profile update success
+		showMessage('プロフィール画像を変更しました');
+		// clear file
+		$('#fileInput').val('');
+		hideLoading();
+	}).catch(function(error) {
+		showMessage('プロフィール画像の変更に失敗しました');
+		// clear file
+		$('#fileInput').val('');
+		hideLoading();
+	});
 }
 
 function updateUserProfile(user) {
@@ -83,51 +123,15 @@ function updateUserProfile(user) {
 		$('.message').css('display', 'none');
 
 		var newName = $('#user-name').val();
-		if ((newName == user.displayName) && (file == null)) {
+		if ((newName == user.displayName) && (file == null)) { // no update
 			hideLoading();
-		}
-
-		// get new displayName
-		if (newName != user.displayName) {
-			// update displayName
-			user.updateProfile({
-				displayName: newName
-			}).then(function() { // success
-				showMessage('ユーザー名を変更しました');
-				hideLoading();
-			}).catch(function(error) { // error
-				showMessage('エラー: ユーザー名の変更に失敗しました');
-				hideLoading();
-			});
-		}
-		
-		// get new photo 
-		if (file != null) {
-			// get Storage ref to user > user-pic
-			var fileRef = firebase.storage().ref().child(user.uid + '/photo/' + file.name);
-
-			// TODO delete existing child under photo
-
-			// upload new photo
-			fileRef.put(file)
-			.then(function() { // file upload success
-				// get download URL
-				return fileRef.getDownloadURL();
-			}).then(function(url) {
-				// set image source
-				$('.user-pic').attr('src', url);
-
-				// update profile
-				return user.updateProfile({photoURL: url});
-			}).then(function() { // profile update success
-				showMessage('プロフィール画像を変更しました');
-				hideLoading();
-			}).catch(function(error) {
-				showMessage('プロフィール画像の変更に失敗しました');
-				hideLoading();
-			});
-		}
-
-				
+		} else if ((newName != user.displayName) && file == null) { // update displayName
+			updateName(user, newName, true);
+		} else if ((newName == user.displayName) && file != null) {// update photo
+			updatePhoto(user, file);
+		} else { // update name & photo
+			updateName(user, newName, false);
+			updatePhoto(user, file);
+		}				
 	});
 }
