@@ -69,7 +69,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// SW: replace stream -> addVideo
 				sendStream(room, peerId);
 				// set style
-				setStyleOnJoin(peerId);
+				// TODO
+				setStyleOnJoin(peerId, 'yes');
 				mediaSetup(room, peerId);
 			}).catch(function(error) { // error: 'no break'
 				if (error.name) {
@@ -92,21 +93,27 @@ firebase.auth().onAuthStateChanged(function(user) {
 			c = $(this).parent().index();
 			r = $(this).parent().parent().index();
 
-			// DB: peerId, cellIndex, rowIndex -> fires Firebase#child_added
-			roomRef.child(peerId).set({"row-index": r, "cell-index": c});
-
 			// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
-			var i = setInterval(function() {
-				var r = room;
-				if(r != null) {
-					clearInterval(i);
-					sendStream(r, peerId);
-					mediaSetup(r, peerId);
-				}
-			}, 10);
+			if (useCamera == 'yes') {
+				// DB: add child
+				roomRef.child(peerId).set({"row-index": r, "cell-index": c});
+
+				var i = setInterval(function() {
+					var r = room;
+					if(r != null) {
+						clearInterval(i);
+						sendStream(r, peerId);
+						mediaSetup(r, peerId);
+					}
+				}, 10);
+			} else {
+				var url = user.photoURL;
+				// DB: add child w/ phoro url
+				roomRef.child(peerId).set({"row-index": r, "cell-index": c, "photo-url": url});
+			}
 			
 			// set style
-			setStyleOnJoin(peerId);
+			setStyleOnJoin(peerId, useCamera);
 		});
 
 
@@ -128,47 +135,54 @@ firebase.auth().onAuthStateChanged(function(user) {
 			});	
 		});
 
-		/** DB LISTENERS **/
-		roomRef.on('child_added', function(snapshot, prevKey) {
-			appendLog('child_added: ' + snapshot.key);
 
+		/** DB LISTENERS **/
+
+		// set id to cell + photo if no video
+		roomRef.on('child_added', function(snapshot, prevKey) {
 			// get position
 			var child_id = snapshot.key;
 			var child_c = snapshot.child('cell-index').val();
 			var child_r = snapshot.child('row-index').val();
 
-			// set id to cell
 			var cell = getCell(child_r, child_c);
 			cell.attr('id', child_id);
+
+			// add photo if exists
+			if (snapshot.child('photo-url').exists()) {
+				var url = snapshot.child('photo-url').val();
+				addPhoto(child_r, child_c, url);
+			}
 		});
 
+		// remove video, id from cell + photo if no video
 		roomRef.on('child_removed', function(snapshot) {
-			//appendLog('child_removed: ' + snapshot);
 			// get position
 			var child_id = snapshot.key;
 
-			// remove video & id
-			removeVideo(child_id);
-			// remove id from cell
+			if (!snapshot.child('photo-url').exists()) { // video
+				removeVideo(child_id);
+			} else { // photo
+				removePhoto(child_id);
+			}
 			var cell = $('#' + child_id);
 			cell.removeAttr('id');
 		});
 
+		// add coffee to cells on break
 		rootRef.child('on-break').on('child_added', function(snapshot, prevkey) {
 			if (snapshot.child('room-id').val() == roomId) {
 				var r = snapshot.child('row-index').val();
 				var c = snapshot.child('cell-index').val();
-				//appendLog('on-break added: ' + r + ',' + c);
 				addCoffee(r, c);
 			}
 		});
 
+		// remove coffee to cells back from break
 		rootRef.child('on-break').on('child_removed', function(snapshot) {
 			if (snapshot.child('room-id').val() == roomId) {
-				// remove coffee from cell
 				var r = snapshot.child('row-index').val();
 				var c = snapshot.child('cell-index').val();
-				//appendLog('on-break removed: ' + r + ',' + c);
 				removeCoffee(r, c);
 			}
 		})
@@ -192,30 +206,38 @@ function addCoffee(r, c) {
 	cell.append('<img src="/images/coffee.png">');
 }
 
+function addPhoto(r, c, url) {
+	var cell = getCell(r, c);
+	cell.children('.button-join').css('display', 'none');
+	cell.append('<img class="user-pic" src="' + url + '">');
+}
+
 // addVideo -> removeCoffee
 function addVideo(id, stream) {
-	appendLog('called addVideo');
+	//console.log('called addVideo');
 	roomRef.child(id).on('value', function(snapshot) {
-		var r = snapshot.child('row-index').val();
-		var c = snapshot.child('cell-index').val();
-		appendLog('addVideo: ' + r + ',' + c);
-		if (r != null && c != null) {
-			appendLog('proceed');
-			var cell = $('#' + id);
-
-			var iv = setInterval(function() {
+		if (!snapshot.child('photo-url').exists()) { // no photo
+			var r = snapshot.child('row-index').val();
+			var c = snapshot.child('cell-index').val();
+			appendLog('addVideo: ' + r + ',' + c);
+			if (r != null && c != null ) {
 				var cell = $('#' + id);
-				if (cell.length) {
-					clearInterval(iv);
-					appendLog('addVideo with stream: '+ id);
 
-					// hide children
-					cell.children().css('display', 'none');
-					// set video
-					cell.append('<video autoplay="true" muted></video>');
-					cell.children('video').get(0).srcObject = stream;
-				}
-			}, 10);
+				var iv = setInterval(function() {
+					var cell = $('#' + id);
+					if (cell.length) {
+						clearInterval(iv);
+
+						// hide children
+						cell.children().css('display', 'none');
+					
+						// set video
+						cell.append('<video autoplay="true" muted></video>');
+						cell.children('video').get(0).srcObject = stream;
+					
+					}
+				}, 10);
+			}
 		}
 	})
 
@@ -306,10 +328,11 @@ function goToBreakroom() {
 // handles MediaDevices error
 function mediaErrorHander(errorName, peerId) {
 	console.log(errorName);
-	console.log(peerId);
+
+	// disable join buttons
+	$('.button-join').attr('disabled', 'disabled');
 
 	var errorMsg = $('.error-msg');
-
 	// show error message
 	if (errorName == 'NotAllowedError') { // access to camera denied from browser
 		errorMsg.append('※カメラが使用できません。<br>');
@@ -323,7 +346,18 @@ function mediaErrorHander(errorName, peerId) {
 		errorMsg.append('※カメラが使用できません。<br>');
 		errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	}
-	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。')
+	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+
+	// radio button listener
+	$("input[name='use-camera']").change(function() {
+		var val = $(this).val();
+		if (val == 'no') {
+			// remove message
+			errorMsg.empty();
+			// enable join buttons
+			$('.button-join').removeAttr('disabled');
+		}
+	})
 }
 
 // allows user to choose cameras
@@ -388,9 +422,18 @@ function removeCoffee(r, c) {
 	}
 }
 
-function removeVideo(id) {
-	appendLog('removeVideo');
+function removePhoto(id) {
+	var cell = $('#' + id);
+	// remove video
+	cell.children('.user-pic').remove();
+	if (cell.children().length > 1) { // has coffee
+		cell.children('button').css('display', 'none');
+	} else {
+		cell.children('.button-join').removeAttr('style');
+	}
+}
 
+function removeVideo(id) {
 	var cell = $('#' + id);
 	// remove video
 	cell.children('video').remove();
@@ -403,6 +446,13 @@ function removeVideo(id) {
 
 // handle SFURoom events
 function roomHandler(room, user) {
+	/*
+	room.on('data', function(data) {
+		var obj = data.data;
+		console.log(obj['cell']);
+	})
+	*/
+
 	room.on('open', function() {
 		// log
 		logUserAction(user, 'SR-in');
@@ -475,7 +525,7 @@ function setRoomName() {
 	});
 }
  
-function setStyleOnJoin(id) {
+function setStyleOnJoin(id, useCamera) {
 	var cell = $('#' + id);
 
 	// set border
@@ -484,7 +534,14 @@ function setStyleOnJoin(id) {
 	cell.children('.button-join').css('display', 'none');
 	// disable button
 	$("table").find('.button-join').attr('disabled', 'disabled');
+	
 	// switch menu
 	$('.menu-camera').css('display', 'none');
-	$(".menu").css('display', 'inline');
+	$(".menu").css('display', 'inline-block');
+
+	if (useCamera == 'no') { // no camera
+		$('.menu > span').css('display', 'none');
+		$('#select-camera').css('display', 'none');
+	}
+
 }
