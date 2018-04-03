@@ -66,9 +66,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 			}).catch(function(error) { // error: 'no break'
 				if (error.name) {
 					initMediaErrorHandler(error.name, peerId, user);
-				} else {
-					console.log(error);
-				}
+				} else if (error == 'no camera') {
+					breakMediaErrorHandler(peerId, user);
+				} 
+				console.log(error);
 				return;
 			});
 		})
@@ -99,6 +100,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 				}, 10);
 			} else {
 				var url = user.photoURL;
+				if (url == null) {
+					url = '/images/monster.png';
+				}
 				// DB: add child w/ phoro url
 				roomRef.child(peerId).set({"row-index": r, "cell-index": c, "photo-url": url});
 			}
@@ -158,6 +162,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// add photo if exists
 			if (snapshot.child('photo-url').exists()) {
 				var url = snapshot.child('photo-url').val();
+				console.log('child added with photo:' + url);
 				addPhoto(child_r, child_c, url);
 			}
 		});
@@ -210,10 +215,11 @@ function addCoffee(r, c) {
 	// hide "join" button
 	cell.children('.button-join').css('display', 'none');
 	// add coffee
-	cell.append('<img src="/images/coffee.png">');
+	cell.append('<img class="coffee" src="/images/coffee.png">');
 }
 
 function addPhoto(r, c, url) {
+	console.log('add photo at: ' + r + ',' + c);
 	var cell = getCell(r, c);
 	cell.children('.button-join').css('display', 'none');
 	cell.children('img').remove(); // remove coffee if exists
@@ -248,7 +254,26 @@ function addVideo(id, stream) {
 			}
 		}
 	})
+}
 
+function breakMediaErrorHandler(peerId, user) {
+	var ref = rootRef.child('on-break/' + user.uid);
+
+	ref.once('value').then(function(snapshot) {
+		var r = snapshot.child('row-index').val();
+		var c = snapshot.child('cell-index').val();
+		var url = snapshot.child('photo-url').val();
+
+		// DB: add child to room
+		return roomRef.child(peerId).set({
+			'row-index': r,
+			'cell-index': c,
+			'photo-url': url 
+		});
+	}).then(function() {
+		setStyleOnJoin(peerId, 'no');
+		ref.remove();
+	})
 }
 
 function checkBreakStatus(user, pId) {
@@ -259,6 +284,8 @@ function checkBreakStatus(user, pId) {
 	.then(function(snapshot) {
 		if(!snapshot.child('done').exists()) { // no record in on-break
 			throw 'no break';
+		} else if (snapshot.child('photo-url').exists()) {
+			throw 'no camera';
 		} else {
 			var r = snapshot.child('row-index').val();
 			var c = snapshot.child('cell-index').val();
@@ -454,7 +481,7 @@ function mediaSetup(room, pId) {
 function removeCoffee(r, c) {
 	var cell = getCell(r, c);
 	// remove img
-	cell.children('img').remove();
+	cell.children('.coffee').remove();
 	if (cell.children().length > 1) { // video & button
 		// hide "join" button
 		cell.children('.button-join').css('display', 'none');
