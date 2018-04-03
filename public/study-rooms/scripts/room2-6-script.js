@@ -376,6 +376,9 @@ function initMediaErrorHandler(errorName, peerId, user) {
 
 			// set style
 			setStyleOnJoin(peerId, 'no');
+
+			// remove from on-break
+			ref.remove();
 		} else { // not back from break
 			// disable join buttons
 			$('.button-join').attr('disabled', 'disabled');
@@ -515,13 +518,6 @@ function removeVideo(id) {
 
 // handle SFURoom events
 function roomHandler(room, user) {
-	/*
-	room.on('data', function(data) {
-		var obj = data.data;
-		console.log(obj['cell']);
-	})
-	*/
-
 	room.on('open', function() {
 		// log
 		logUserAction(user, 'SR-in');
