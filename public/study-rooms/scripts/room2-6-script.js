@@ -71,7 +71,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// set style
 				setStyleOnJoin(peerId);
 				mediaSetup(room, peerId);
-			}).catch(function(e) { // error: 'no break'
+			}).catch(function(error) { // error: 'no break'
+				if (error.name) {
+					mediaErrorHander(error.name);
+				} else {
+					console.log(error);
+				}
 				return;
 			});
 		})
@@ -293,6 +298,19 @@ function goToBreakroom() {
 	}
 }
 
+// handles MediaDevices error
+function mediaErrorHander(errorName) {
+	console.log(errorName);
+	if (errorName == 'NotAllowedError') {
+		$('.error-msg').append('※ブラウザからカメラへのアクセスを許可してください');
+	} else if (errorName == 'NotReadableError') {
+		$('.error-msg').html('※カメラが使用できません。詳しくは<a href="/help.html">こちらのページ</a>をお読みください。')
+		//$('.error-msg').append('※カメラが使用できません。他のアプリケーションでカメラを使用している場合は、そのアプリケーションを閉じてください');
+	} else {
+		$('.error-msg').html('※カメラが使用できません。詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	}
+}
+
 // allows user to choose cameras
 function mediaSetup(room, pId) {
 	var selectCamera = $('#select-camera');
@@ -330,6 +348,12 @@ function mediaSetup(room, pId) {
 				cell.children('video').get(0).srcObject = stream;
 				// SW: send stream to room
 				room.replaceStream(stream);
+			}).catch(function(error) {
+				if (error.name) {
+					mediaErrorHander(error.name);
+				} else {
+					console.log(error);
+				}
 			})
 		});
 	});
@@ -363,15 +387,8 @@ function removeVideo(id) {
 }
 
 function sendStream(room, pId) {
-	/*
-	navigator.mediaDevices.getUserMedia({
-		audio: false, 
-		video: true
-	})
-	*/
 	var w = $('#' + pId).width();
 	var h = $('#' + pId).height();
-	console.log(w + ', ' + h);
 
 	navigator.mediaDevices.getUserMedia({
 		audio: false,
@@ -390,6 +407,12 @@ function sendStream(room, pId) {
 				addVideo(pId, stream);
 			}
 		}, 10);
+	}).catch(function(error) {
+		if (error.name) {
+			mediaErrorHander(error.name);
+		} else {
+			console.log(error);
+		}
 	});
 }
 
@@ -451,28 +474,3 @@ function setStyleOnJoin(id) {
 	// show bottom menu
 	$(".menu").css('display', 'inline');
 }
-
-/*
-function windowHandler(user) {
-	$(window).on('unload', function() {
-		// log
-		logUserAction(user, 'SR-out');
-		return undefined;
-	})
-
-	if (window.performance.navigation.type == 1) { // page refreshed
-		// remove listener
-		$(window).off('unload');
-		// reset listener
-		$(window).on('unload', function() {
-			// log
-			logUserAction(user, 'SR-out');
-			return undefined;
-		});
-	} else { // page not refreshed
-		// log
-		logUserAction(user, 'SR-in');
-
-	}
-}
-*/

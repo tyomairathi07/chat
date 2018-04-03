@@ -431,8 +431,12 @@ table img {
 }
 /** [END] TOPNAV **/
 
-
-
+.error-msg {
+	color: red;
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin: 1rem;	
+}
 
 /* Custom color */
 .button-black {

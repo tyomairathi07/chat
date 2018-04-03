@@ -10,24 +10,27 @@ var config = {
 firebase.initializeApp(config);
 
 $('#reset-password').click(function() {
+  showLoading('reset-password');
+  // clear message box
+  $('.message').empty();
+
   var email = $('#email').val();
 
   // localize
   firebase.auth().languageCode = 'jp';
 
   // send password reset email
-  firebase.auth().sendPasswordResetEmail(email).then(function() {
-    // success
-    $('#message').html('パスワード再設定メールを送信しました<br><br>');
+  firebase.auth().sendPasswordResetEmail(email)
+  .then(function() { // success
+    $('.message').append('パスワード再設定メールを送信しました');
+    $('.message').css('display', 'inline-block');
+    hideLoading();
   }).catch(function(error) {
-    // error
-    var errorCode = error.code;
-
-    if (errorCode == 'auth/user-not-found') {
-      $('#message').html('※メールアドレスが登録されていません<br><br>');
+      $('.message').append('※メールアドレスが登録されていません');
+      $('.message').css('display', 'inline-block');
       $('#email').text();
-    }
-
+      console.log(error.code);
+      hideLoading();
   });
 
 }); 
