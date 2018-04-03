@@ -1,10 +1,3 @@
-/**
-TODO
-- change functions (removeVideo, etc.)
-- set constraints to MediaStream -> faster
-- use sendStream for all navigator... usages
-**/
-
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
@@ -56,16 +49,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 			.getUserMedia({
 				audio: false,
 				video: {width: 1, height: 1}
-			})
-			.then(function(stream) {
+			}).then(function(stream) {
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start roomHandler
 				roomHandler(room, user);
 			}).then(function() {
 				// DB: check break status
 				return checkBreakStatus(user, peerId);
-			})
-			.then(function() {	
+			}).then(function() {	
 				// SW: replace stream -> addVideo
 				sendStream(room, peerId);
 				// set style
@@ -74,7 +65,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 				mediaSetup(room, peerId);
 			}).catch(function(error) { // error: 'no break'
 				if (error.name) {
-					mediaErrorHander(error.name, peerId);
+					initMediaErrorHandler(error.name, peerId, user);
 				} else {
 					console.log(error);
 				}
@@ -125,14 +116,30 @@ firebase.auth().onAuthStateChanged(function(user) {
 			var r = cell.parent().index();
 			var c = cell.index();
 			// DB: add record to on-break
-			rootRef.child('on-break/' + user.uid).set({
-				'row-index': r,
-				'cell-index': c,
-				'room-id': roomId
-			}).then(function() {
-				// go to break room
-				goToBreakroom();
-			});	
+			if (!cell.children('.user-pic').length) { // no camera
+				rootRef.child('on-break/' + user.uid).set({
+					'row-index': r,
+					'cell-index': c,
+					'room-id': roomId
+				}).then(function() {
+					// go to break room
+					goToBreakroom();
+				});	
+			} else {
+				var url = cell.children('.user-pic').attr('src');
+				console.log(url);
+
+				rootRef.child('on-break/' + user.uid).set({
+					'row-index': r,
+					'cell-index': c,
+					'room-id': roomId,
+					'photo-url': url
+				}).then(function() {
+					// go to break room
+					goToBreakroom();
+				});	
+			}
+			
 		});
 
 
@@ -209,6 +216,7 @@ function addCoffee(r, c) {
 function addPhoto(r, c, url) {
 	var cell = getCell(r, c);
 	cell.children('.button-join').css('display', 'none');
+	cell.children('img').remove(); // remove coffee if exists
 	cell.append('<img class="user-pic" src="' + url + '">');
 }
 
@@ -325,39 +333,74 @@ function goToBreakroom() {
 	}
 }
 
-// handles MediaDevices error
-function mediaErrorHander(errorName, peerId) {
+// handles MediaDevices error on pageload
+function initMediaErrorHandler(errorName, peerId, user) {
 	console.log(errorName);
 
-	// disable join buttons
-	$('.button-join').attr('disabled', 'disabled');
+	var ref = rootRef.child('on-break/' + user.uid);
+	ref.once('value').then(function(snapshot) {
+		if (snapshot.exists()) { // back from break
+			var r = snapshot.child('row-index').val();
+			var c = snapshot.child('cell-index').val();
+			var url = snapshot.child('photo-url').val();
 
+			// DB: add child to room
+			roomRef.child(peerId).set({"row-index": r, "cell-index": c, "photo-url": url});
+
+			// set style
+			setStyleOnJoin(peerId, 'no');
+		} else { // not back from break
+			// disable join buttons
+			$('.button-join').attr('disabled', 'disabled');
+
+			var errorMsg = $('.error-msg');
+			// show error message
+			if (errorName == 'NotAllowedError') { // access to camera denied from browser
+				errorMsg.append('※カメラが使用できません。<br>');
+				errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
+				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+			} else if (errorName == 'NotReadableError') { // camera used in another app 
+				errorMsg.append('※カメラが使用できません。<br>');
+				errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
+				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+			} else { // other errors
+				errorMsg.append('※カメラが使用できません。<br>');
+				errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+			}
+			errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+
+			// radio button listener
+			$("input[name='use-camera']").change(function() {
+				var val = $(this).val();
+				if (val == 'no') {
+					// remove message
+					errorMsg.empty();
+					// enable join buttons
+					$('.button-join').removeAttr('disabled');
+				}
+			})
+		}
+	})
+}
+
+// handles MediaDevices error
+function mediaErrorHandler(errorName, peerId) {
 	var errorMsg = $('.error-msg');
+
 	// show error message
 	if (errorName == 'NotAllowedError') { // access to camera denied from browser
 		errorMsg.append('※カメラが使用できません。<br>');
 		errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
-		errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	} else if (errorName == 'NotReadableError') { // camera used in another app 
 		errorMsg.append('※カメラが使用できません。<br>');
 		errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
-		errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	} else { // other errors
 		errorMsg.append('※カメラが使用できません。<br>');
-		errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策: ページを更新 → 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	}
 	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
-
-	// radio button listener
-	$("input[name='use-camera']").change(function() {
-		var val = $(this).val();
-		if (val == 'no') {
-			// remove message
-			errorMsg.empty();
-			// enable join buttons
-			$('.button-join').removeAttr('disabled');
-		}
-	})
 }
 
 // allows user to choose cameras
@@ -399,7 +442,7 @@ function mediaSetup(room, pId) {
 				room.replaceStream(stream);
 			}).catch(function(error) {
 				if (error.name) {
-					mediaErrorHander(error.name, pId);
+					mediaErrorHandler(error.name, pId);
 				} else {
 					console.log(error);
 				}
@@ -409,7 +452,6 @@ function mediaSetup(room, pId) {
 }
 
 function removeCoffee(r, c) {
-	//appendLog('removeCoffee');
 	var cell = getCell(r, c);
 	// remove img
 	cell.children('img').remove();
@@ -489,6 +531,7 @@ function roomHandler(room, user) {
 }
 
 function sendStream(room, pId) {
+	console.log('sendStream called');
 	var w = $('#' + pId).width();
 	var h = $('#' + pId).height();
 
@@ -511,7 +554,7 @@ function sendStream(room, pId) {
 		}, 10);
 	}).catch(function(error) {
 		if (error.name) {
-			mediaErrorHander(error.name, pId);
+			mediaErrorHandler(error.name, pId);
 		} else {
 			console.log(error);
 		}
