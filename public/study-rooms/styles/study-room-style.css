@@ -429,6 +429,17 @@ table img {
 	font-size: 1.3rem;
 	margin-right: 0.1rem;
 }
+
+.menu-camera {
+	float: right;
+	font-size: 1.4rem;
+	margin-right: 1rem;
+	margin-top: 0.2rem;
+}
+
+.menu-camera > input[type='radio'] {
+	margin-left: 2rem;
+}
 /** [END] TOPNAV **/
 
 .error-msg {

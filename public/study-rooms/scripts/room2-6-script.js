@@ -73,7 +73,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 				mediaSetup(room, peerId);
 			}).catch(function(error) { // error: 'no break'
 				if (error.name) {
-					mediaErrorHander(error.name);
+					mediaErrorHander(error.name, peerId);
 				} else {
 					console.log(error);
 				}
@@ -83,6 +83,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 		// click: "join" button
 		$(".button-join").click(function() {
+			// get radio button value
+			var useCamera = $('input[name=use-camera]:checked').val();
+			console.log(useCamera);
+
+
 			// get cellIndex, rowIndex
 			c = $(this).parent().index();
 			r = $(this).parent().parent().index();
@@ -299,16 +304,26 @@ function goToBreakroom() {
 }
 
 // handles MediaDevices error
-function mediaErrorHander(errorName) {
+function mediaErrorHander(errorName, peerId) {
 	console.log(errorName);
-	if (errorName == 'NotAllowedError') {
-		$('.error-msg').append('※ブラウザからカメラへのアクセスを許可してください');
-	} else if (errorName == 'NotReadableError') {
-		$('.error-msg').html('※カメラが使用できません。詳しくは<a href="/help.html">こちらのページ</a>をお読みください。')
-		//$('.error-msg').append('※カメラが使用できません。他のアプリケーションでカメラを使用している場合は、そのアプリケーションを閉じてください');
-	} else {
-		$('.error-msg').html('※カメラが使用できません。詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	console.log(peerId);
+
+	var errorMsg = $('.error-msg');
+
+	// show error message
+	if (errorName == 'NotAllowedError') { // access to camera denied from browser
+		errorMsg.append('※カメラが使用できません。<br>');
+		errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
+		errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+	} else if (errorName == 'NotReadableError') { // camera used in another app 
+		errorMsg.append('※カメラが使用できません。<br>');
+		errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
+		errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+	} else { // other errors
+		errorMsg.append('※カメラが使用できません。<br>');
+		errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	}
+	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。')
 }
 
 // allows user to choose cameras
@@ -350,7 +365,7 @@ function mediaSetup(room, pId) {
 				room.replaceStream(stream);
 			}).catch(function(error) {
 				if (error.name) {
-					mediaErrorHander(error.name);
+					mediaErrorHander(error.name, pId);
 				} else {
 					console.log(error);
 				}
@@ -384,36 +399,6 @@ function removeVideo(id) {
 	} else {
 		cell.children('.button-join').removeAttr('style');
 	}
-}
-
-function sendStream(room, pId) {
-	var w = $('#' + pId).width();
-	var h = $('#' + pId).height();
-
-	navigator.mediaDevices.getUserMedia({
-		audio: false,
-		video: {
-			width: w,
-			height: h
-		}
-	}).then(function(s) {
-		var stream = null;
-		var iv = setInterval(function() {
-			stream = s
-			if(stream != null) {
-				clearInterval(iv);
-				appendLog('replace stream');
-				room.replaceStream(stream);
-				addVideo(pId, stream);
-			}
-		}, 10);
-	}).catch(function(error) {
-		if (error.name) {
-			mediaErrorHander(error.name);
-		} else {
-			console.log(error);
-		}
-	});
 }
 
 // handle SFURoom events
@@ -453,6 +438,36 @@ function roomHandler(room, user) {
 	});
 }
 
+function sendStream(room, pId) {
+	var w = $('#' + pId).width();
+	var h = $('#' + pId).height();
+
+	navigator.mediaDevices.getUserMedia({
+		audio: false,
+		video: {
+			width: w,
+			height: h
+		}
+	}).then(function(s) {
+		var stream = null;
+		var iv = setInterval(function() {
+			stream = s
+			if(stream != null) {
+				clearInterval(iv);
+				appendLog('replace stream');
+				room.replaceStream(stream);
+				addVideo(pId, stream);
+			}
+		}, 10);
+	}).catch(function(error) {
+		if (error.name) {
+			mediaErrorHander(error.name, pId);
+		} else {
+			console.log(error);
+		}
+	});
+}
+
 function setRoomName() {
 	rootRef.child('study-rooms/' + roomId + '/name').once('value')
 	.then(function(snapshot) {
@@ -461,8 +476,6 @@ function setRoomName() {
 }
  
 function setStyleOnJoin(id) {
-	//appendLog('setStyleOnJoin');
-
 	var cell = $('#' + id);
 
 	// set border
@@ -471,6 +484,7 @@ function setStyleOnJoin(id) {
 	cell.children('.button-join').css('display', 'none');
 	// disable button
 	$("table").find('.button-join').attr('disabled', 'disabled');
-	// show bottom menu
+	// switch menu
+	$('.menu-camera').css('display', 'none');
 	$(".menu").css('display', 'inline');
 }
