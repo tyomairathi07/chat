@@ -389,14 +389,14 @@ function initMediaErrorHandler(errorName, peerId, user) {
 			if (errorName == 'NotAllowedError') { // access to camera denied from browser
 				errorMsg.append('※カメラが使用できません。<br>');
 				errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
-				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 			} else if (errorName == 'NotReadableError') { // camera used in another app 
 				errorMsg.append('※カメラが使用できません。<br>');
 				errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
-				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 			} else { // other errors
 				errorMsg.append('※カメラが使用できません。<br>');
-				errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+				errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 			}
 			errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
 
@@ -422,14 +422,14 @@ function mediaErrorHandler(errorName, peerId) {
 	if (errorName == 'NotAllowedError') { // access to camera denied from browser
 		errorMsg.append('※カメラが使用できません。<br>');
 		errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
-		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	} else if (errorName == 'NotReadableError') { // camera used in another app 
 		errorMsg.append('※カメラが使用できません。<br>');
 		errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
-		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	} else { // other errors
 		errorMsg.append('※カメラが使用できません。<br>');
-		errorMsg.append('対策: ページを更新 → 右上の「カメラを使用しない」を選択 → 「入室」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策: ページを更新 → 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
 	}
 	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
 }
