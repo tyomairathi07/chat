@@ -32,7 +32,7 @@ function resetPassword() {
   // send password reset email
   firebase.auth().sendPasswordResetEmail(email)
   .then(function() { // success
-    $('.message').append('パスワード再設定メールを送信しました');
+    $('.message').append('パスワード再設定メールを送信しました。');
     $('.message').css('display', 'inline-block');
     hideLoading();
   }).catch(function(error) {

@@ -217,7 +217,7 @@ select:focus {
 
 label,
 legend {
-	display: inline-block;
+	display: block;
 	font-size: 1.6rem;
 	font-weight: 700;
 	margin-bottom: .5rem

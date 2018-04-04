@@ -58,16 +58,28 @@ function signIn() {
         hideLoading();
         
         var errorCode = error.code;
-
         // clear previous errors
-        $('#error-sign-in').text();
-
-        if (errorCode == 'auth/invalid-email' || errorCode == 'auth/wrong-password') {
-          $('#error-sign-in').html('※ログインに失敗しました<br><br>');
-        } else if (errorCode == 'auth/user-not-found') {
-          $('#error-sign-in').html('※アカウントが存在しません<br>「新規登録」ボタンからアカウントを作成してください<br><br>');
-        } else if (errorCode == 'auth/user-disabled') {
-          $('#error-sign-in').html('※アカウントが停止されています<br><br>');
+        var errorMsg = $('#error-sign-in');
+        errorMsg.empty();
+        // append error message
+        var msg;
+        switch(errorCode) {
+            case 'auth/invalid-email':
+              msg = '※メールアドレスが正しくありません';
+              break;
+            case 'auth/user-disabled':
+              msg = '※アカウントが停止されています';
+              break;
+            case 'auth/user-not-found':
+              msg = '※アカウントが存在しません<br>「新規登録」ボタンからアカウントを作成してください';
+              break;
+            case 'auth/wrong-password':
+              msg = '※パスワードが正しくありません'
+              break;
+            default:
+              msg = '※ログインに失敗しました';
         }
+        errorMsg.append(msg);
+        errorMsg.css('display', 'inline-block');
       });
 }

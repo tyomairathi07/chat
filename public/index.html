@@ -9,43 +9,60 @@
     <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
+<!---
     <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
     <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
     <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+-->
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="styles/index-style.css">
+    <link rel="stylesheet" href="styles/common.css">
 
   </head>
   <body>
+    <!-- START TOPNAV -->
+    <div class="topnav">
+        <div class="breadcrumb">
+            <a href="/"><img id="home" src="/images/home.png"></a>トップページ
+        </div>
 
-    <h1>OUJバーチャル自習室</h1>
+        <div class="topnav-wrapper">
+            <a href="/help.html"><img src="/images/help.png"></a>
+        </div>
+            
+    </div>
+    <!-- END TOPNAV -->
 
-    <div class="message">
+    <h1 style="margin-bottom: 0.5rem;">OUJバーチャル自習室</h1>
+
+    <div class="message" style="display: inline-block;">
       ※ログアウト後に<b>アンケート</b>が表示されます。お時間に余裕があれば、ご協力いただければ幸いです<br>
       ※30分間操作がない場合、自動的にログアウトされます(自習室・休憩室の利用中は除く)
     </div>
-
-    <div>
-      <span id="error-sign-in"></span>
+    <br>
+    <div style="display: inline-block;">
+      <div id="error-sign-in" class="error-msg" style="margin-bottom: 1.0rem;"></div>
 
       <label for="email">メールアドレス</label>
       <input type="email" id="email"><br>
 
-      <label for="password">パスワード
-        <br><span style="font-size:1.3rem; margin-left:.5rem;">
-          <a href="send-password-reset.html">※パスワードを忘れた方はここをクリック</a>
-        </span>
+      <label for="password">
+        パスワード<br>
+        <a href="send-password-reset.html">
+          <span style="font-size: 1.3rem; font-weight: 700; margin-left: .5rem;">※パスワードを忘れた方はここをクリック</span>
+        </a>
       </label>
       <input type="password" id="password">
       <br>
 
       <button id="sign-in" style="vertical-align: top;">ログイン</button>
 
-      <a href="sign-up.html"><button class="button-black" id="sign-up" style="float: right; position: relative;">新規登録はここから</button></a>
+      <a href="sign-up.html">
+        <button class="button-black" id="sign-up" style="float: right;">新規登録はここから</button>
+      </a>
 
     </div>
 
