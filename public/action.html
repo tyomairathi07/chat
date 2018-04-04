@@ -3,14 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>アカウント認証</title>
+    <title>OUJバーチャル自習室</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
     <!--
+    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
+    
     <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
     <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
     -->
@@ -20,6 +21,7 @@
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/action.css">
 
   </head>
   <body>
@@ -27,7 +29,7 @@
     <div class="topnav">
         <div class="breadcrumb">
             <a href="/"><img id="home" src="/images/home.png"></a> > 
-            <span id="verify_result">アカウント認証完了</span>
+            <span id="action-result"></span>
         </div>
 
         <div class="topnav-wrapper">
@@ -38,23 +40,40 @@
     <!-- END TOPNAV -->
 
     <!-- contents -->
-    <div class="message" id="success">
+    <div class="error-msg"></div>
+
+     <div id="invalid-link" class="message">
+        無効なリンクです。<br>
+        マイページから再度手続きをお願いします。<br><br>
+
+        <span>
+            ※一番新しいメールのリンクのみ有効です。(古いメールのリンクは無効になります)<br>
+            ※ログインしていない場合は、トップページでログイン → マイページにアクセスしてください。<br><br>
+        </span>
+
+        <a href="/mypage/settings.html"><button>マイページ</button></a>
+        <a href="/"><button class="button-black" style="float: right;">トップページ</button></a>
+    </div>
+
+    <!-- email verification-->
+    <div id="verify-success" class="message">
         アカウント認証が完了しました。<br>
         システムをご利用いただくには、下の「トップページ」ボタンからログインをお願いします。<br><br>
         <span>※ログインには、ご登録いただいた<b>メールアドレス・パスワード</b>が必要です</span><br><br>
         <a href="/"><button>トップページ</button></a>
     </div>
 
-    <div class="message" id="fail" style="display: none;">
-        アカウント認証に失敗しました。<br>
-        下のボタンからアカウント認証メールを再送し、新しいメールのリンクから再度アカウント認証をお願いします。<br><br>
-        <span>
-            ※一番新しいメールのリンクのみ認証に有効です。(古いメールのリンクは無効になります)<br>
-            ※メールが届かない場合は、トップページからログインし、「認証メールを再送」ボタンを押してください
-        </span><br><br>
+    <!-- password reset -->
+    <div id="reset-password">
+        <label for="new-password">新しいパスワード(6文字以上)</label><br>
+        <input type="password" id="new-password"><br>
 
-        <button id="resend">認証メールを再送</button>
-        <a href="/"><button class="button-black" style="float: right;">トップページ</button></a>
+        <button id="reset">変更</button>
+    </div>
+
+    <div id="reset-success" class="message">
+        パスワードが変更されました。<br>トップページに戻り、新しいパスワードでログインしてください。<br><br>
+        <a href="/"><button class="button-black">トップページ</button></a><br>
     </div>
 
     <!-- scripts -->
@@ -62,7 +81,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="/scripts/common.js"></script>
-    <script src="scripts/email-verified-script.js"></script>
+    <script src="scripts/action-script.js"></script>
   </body>
 </html>
 

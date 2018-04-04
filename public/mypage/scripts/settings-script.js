@@ -25,7 +25,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		})		
 
 	} else { // no user is signed in
-		alert('not signed in');
+		window.location.href = "/";
 	}
 })
 
@@ -41,21 +41,43 @@ function initUserSettings(user) {
 	var email = user.email;
 	// set email
 	$('#user-email').html(email);
-	// reset password
+
+	// password reset
 	$('#reset-password').click(function() {
+		showLoading($(this).attr('id'));
 		firebase.auth().sendPasswordResetEmail(email)
 		.then(function() {
-			showMessage('パスワード再設定用メールを送信しました');
+			hideLoading();
+			showMessage('パスワード再設定用メールを送信しました。');
 		}).catch(function(error) {
-			showMessage('パスワード再設定用メールを送信できませんでした')
-		})
+			hideLoading();
+			showMessage('パスワード再設定用メールを送信できませんでした。');
+		});
 	})
 
+	// email verification
+	if (user.emailVerified) {
+		$('#verified').text('認証済');
+		$('#wrapper-verify').css('display', 'none');
+	} else {
+		$('#send-verify').click(function() {
+			showLoading($(this).attr('id'));
+			user.sendEmailVerification().then(function() {
+				console.log('verification success');
+				hideLoading();
+				showMessage('アカウント認証メールを送信しました。');
+			}).catch(function(error) {
+				hideLoading();
+				showMessage('アカウント認証メールを送信できませんでした。')
+			});
+		})
+	}
 }
 
 function showMessage(text) {
+	$('.message').empty();
 	// append message
-	$('.message').append(text + '<br>');
+	$('.message').append(text);
 	// show message div
 	$('.message').css('display', 'inline-block');
 }

@@ -63,12 +63,12 @@ function updateName(user, newName, isHide) {
 	user.updateProfile({
 		displayName: newName
 	}).then(function() { // success
-		showMessage('ユーザー名を変更しました');
+		showMessage('ユーザー名を変更しました。');
 		if (isHide) {
 			hideLoading();
 		}
 	}).catch(function(error) { // error
-		showMessage('エラー: ユーザー名の変更に失敗しました');
+		showMessage('エラー: ユーザー名の変更に失敗しました。');
 		if (isHide) {
 			hideLoading();
 		}
@@ -93,12 +93,12 @@ function updatePhoto(user, file) {
 		// update profile
 		return user.updateProfile({photoURL: url});
 	}).then(function() { // profile update success
-		showMessage('プロフィール画像を変更しました');
+		showMessage('プロフィール画像を変更しました。');
 		// clear file
 		$('#fileInput').val('');
 		hideLoading();
 	}).catch(function(error) {
-		showMessage('プロフィール画像の変更に失敗しました');
+		showMessage('プロフィール画像の変更に失敗しました。');
 		// clear file
 		$('#fileInput').val('');
 		hideLoading();

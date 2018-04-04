@@ -199,7 +199,7 @@ select {
 	box-sizing: inherit;
 	height: 3.8rem;
 	padding: .6rem 1.0rem;
-	width: 100%;
+	width: 30rem;
 }
 
 input[type='email']:focus,
@@ -215,6 +215,14 @@ select:focus {
 	outline: 0
 }
 
+label,
+legend {
+	display: inline-block;
+	font-size: 1.6rem;
+	font-weight: 700;
+	margin-bottom: .5rem
+}
+
 textarea {
 	min-height: 6.5rem
 }
@@ -227,6 +235,10 @@ a {
 a:focus,
 a:hover {
 	color: #606c76
+}
+
+input {
+	margin-bottom: 1.5rem;
 }
 
 dl,
@@ -370,6 +382,15 @@ img {
 	max-width: 100%
 }
 
+input:last-of-type {
+	margin-bottom: 3rem;
+}
+
+span {
+	font-size: 1.4rem; 
+	font-weight: 300;
+}
+
 .clearfix:after {
 	clear: both;
 	content: "0 0 29 14";
@@ -394,6 +415,7 @@ img {
 }
 
 .breadcrumb span {
+	display: inline;
 	min-height: 100%;
 	font-size: 1.6rem;
 	font-weight: bold;
@@ -404,6 +426,7 @@ img {
 	background-color: #f4f5f6;
 	height: 5rem;
 	line-height: 100%;
+	margin-bottom: 1rem;
 	padding: 1rem 0;
 	position: relative;
 	top: 0;
@@ -442,19 +465,20 @@ img {
 
 /** [END] TOPNAV **/
 
+.error-msg{
+	color: red;
+	display: none;
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+}
+
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
-	display: inline-block;
-	margin: 1rem 0rem;
 	padding: 0.5rem 1rem;
+	margin-bottom: 3rem;
 	width: auto;
-}
-
-span {
-	display: inline-block;
-	font-size: 1.4rem; 
-	font-weight: 300;
 }
 
 .user-pic {

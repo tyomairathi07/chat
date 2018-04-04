@@ -65,6 +65,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 				mediaSetup(room, peerId);
 			}).catch(function(error) { // error: 'no break'
 				if (error.name) {
+					// join room w/o stream
+					room = peer.joinRoom(roomId, {mode: 'sfu'});
+					roomHandler(room, user);
 					initMediaErrorHandler(error.name, peerId, user);
 				} else if (error == 'no camera') {
 					breakMediaErrorHandler(peerId, user);
@@ -78,8 +81,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 		$(".button-join").click(function() {
 			// get radio button value
 			var useCamera = $('input[name=use-camera]:checked').val();
-			console.log(useCamera);
-
 
 			// get cellIndex, rowIndex
 			c = $(this).parent().index();
@@ -131,8 +132,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 				});	
 			} else {
 				var url = cell.children('.user-pic').attr('src');
-				console.log(url);
 
+				// DB: add child to on break
 				rootRef.child('on-break/' + user.uid).set({
 					'row-index': r,
 					'cell-index': c,
@@ -162,7 +163,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// add photo if exists
 			if (snapshot.child('photo-url').exists()) {
 				var url = snapshot.child('photo-url').val();
-				console.log('child added with photo:' + url);
 				addPhoto(child_r, child_c, url);
 			}
 		});
@@ -219,7 +219,6 @@ function addCoffee(r, c) {
 }
 
 function addPhoto(r, c, url) {
-	console.log('add photo at: ' + r + ',' + c);
 	var cell = getCell(r, c);
 	cell.children('.button-join').css('display', 'none');
 	cell.children('img').remove(); // remove coffee if exists
@@ -228,12 +227,11 @@ function addPhoto(r, c, url) {
 
 // addVideo -> removeCoffee
 function addVideo(id, stream) {
-	//console.log('called addVideo');
+	console.log('addVideo');
 	roomRef.child(id).on('value', function(snapshot) {
 		if (!snapshot.child('photo-url').exists()) { // no photo
 			var r = snapshot.child('row-index').val();
 			var c = snapshot.child('cell-index').val();
-			appendLog('addVideo: ' + r + ',' + c);
 			if (r != null && c != null ) {
 				var cell = $('#' + id);
 
@@ -259,7 +257,8 @@ function addVideo(id, stream) {
 function breakMediaErrorHandler(peerId, user) {
 	var ref = rootRef.child('on-break/' + user.uid);
 
-	ref.once('value').then(function(snapshot) {
+	ref.once('value')
+	.then(function(snapshot) {
 		var r = snapshot.child('row-index').val();
 		var c = snapshot.child('cell-index').val();
 		var url = snapshot.child('photo-url').val();
@@ -316,7 +315,6 @@ function disconnectionHandler(peerId, user) {
 
 // fires peerJoin event with a dummy peer
 function dummy() {
-	//appendLog('dummy');
 	let dummyPeer = new Peer("dummy", {
 		key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
 		debug: 3
@@ -382,6 +380,9 @@ function initMediaErrorHandler(errorName, peerId, user) {
 		} else { // not back from break
 			// disable join buttons
 			$('.button-join').attr('disabled', 'disabled');
+
+			// disable use camera radio
+			$("input[name='use-camera']:first").attr('disabled', 'disabled');
 
 			var errorMsg = $('.error-msg');
 			// show error message
@@ -521,40 +522,28 @@ function roomHandler(room, user) {
 	room.on('open', function() {
 		// log
 		logUserAction(user, 'SR-in');
-		appendLog('joined room');
+		console.log('joined room');
 		dummy();
 	})
 
 	room.on('peerJoin', function(id) {
-		var bool = id.startsWith('dummy');
-		if (!bool) {
-			appendLog('peerJoin: ' + id);
-			//dummy();
-		}
-	})
-
-	room.on('peerLeave', function(id) {
-		if(!(id.startsWith('dummy'))) {
-			appendLog('peerLeave: ' + id);
-		}
+		console.log('peer joined: ' + id);
 	})
 
 	room.on('removeStream', function(stream) {
-		appendLog('removeStream from: ' + stream.peerId);
 		// remove video
 		removeVideo(stream.peerId);
 	})
 
 	// get stream & add video
 	room.on('stream', function(stream) {
-		appendLog('stream from: ' + stream.peerId);
+		console.log('stream from: ' + stream.peerId);
 		addVideo(stream.peerId, stream);
 
 	});
 }
 
 function sendStream(room, pId) {
-	console.log('sendStream called');
 	var w = $('#' + pId).width();
 	var h = $('#' + pId).height();
 
