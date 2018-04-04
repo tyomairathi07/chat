@@ -37,7 +37,8 @@ function signUp() {
 
 	if (!pattern.test(email)) {
 		// check email domain
-		$('#error-sign-up').append('※放送大学Gmailのメールアドレスを入力してください<br><br>').css('display', 'inline-block');
+		$('#error-sign-up').append('※放送大学の～@campus.ouj.ac.jpというメールアドレスを入力してください<br><br>')
+		.css('display', 'inline-block');
 		// hide loading icon
 		hideLoading();
 	} else if (password !== passwordConfirm) {

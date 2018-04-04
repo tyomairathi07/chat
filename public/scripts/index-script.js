@@ -56,6 +56,7 @@ function signIn() {
           onSuccessSignIn(user);
     }).catch(function(error) {
         hideLoading();
+        console.log(error);
         
         var errorCode = error.code;
         // clear previous errors
