@@ -13,5 +13,8 @@ $("input[name='agree']").on('change', function() {
 	if ($(this).val() == 'yes') {
 		// enable button
 		$('#proceed').removeAttr('disabled');
+	} else {
+		// disable button
+		$('#proceed').attr('disabled', 'disabled');
 	}
 })
