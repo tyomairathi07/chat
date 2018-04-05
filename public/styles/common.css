@@ -267,7 +267,7 @@ ol {
 }
 
 ul {
-	list-style: circle inside
+	list-style: disc inside
 }
 
 .button,
@@ -476,10 +476,21 @@ span {
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
+	display: inline-block;
 	padding: 0.5rem 1rem;
 	margin-bottom: 3rem;
 	width: auto;
 }
+
+.terms-ol,
+.terms-ul {
+	margin-left: 3rem;
+}
+
+.terms-ul > li {
+	margin-bottom: 0;
+}
+
 
 .user-pic {
 	border: 0.1rem solid #d1d1d1;
