@@ -1,0 +1,16 @@
+.ol-terms {
+	margin-left: 3rem;
+	margin-top: 0.2rem;
+}
+
+.ul-terms {
+	margin-left: 3rem;
+}
+
+.ol-terms > li {
+	margin-bottom: 0.2rem;
+}
+
+.ul-terms > li {
+	margin-bottom: 0;
+}
