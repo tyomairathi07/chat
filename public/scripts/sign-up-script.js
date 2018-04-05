@@ -19,8 +19,45 @@ $('#password-confirm').keypress(function(event) {
 	}
 });
 
-function hideLoading() {
-	$('#loading').css('display', 'none');
+$('#student-type').change(function() {
+	showMajor($(this).val());
+})
+
+function showErrorMsg(msg) {
+	var errorMsg = $('#error-sign-up');
+	errorMsg.append(msg).css('display', 'inline-block');
+}
+
+function showMajor(studentType) {
+	var ba = $('#ba-major');
+	var ma = $('#ma-major');
+	var phd = $('#phd-major');
+	var tr = $('#tr-student-type');
+	switch (studentType) {
+		case '全科履修生': 
+			ba.css('display', 'table-row');
+			ma.css('display', 'none');
+			phd.css('display', 'none');
+			tr.css('border-bottom', 'none');
+			break;
+		case '修士全科生':
+			ba.css('display', 'none');
+			ma.css('display', 'table-row');
+			phd.css('display', 'none');
+			tr.css('border-bottom', 'none');
+			break;
+		case '博士全科生':
+			ba.css('display', 'none');
+			ma.css('display', 'none');
+			phd.css('display', 'table-row');
+			tr.css('border-bottom', 'none');
+			break;
+		default: 
+			ba.css('display', 'none');
+			ma.css('display', 'none');
+			phd.css('display', 'none');
+			tr.css('border-bottom', '0.1rem solid #e1e1e1');
+	}
 }
 
 function signUp() {
@@ -32,18 +69,19 @@ function signUp() {
 	var passwordConfirm = $('#password-confirm').val();
 	var pattern = /.+@campus.ouj.ac.jp$/;
 
+	var errorMsg = $('#error-sign-up');
+
 	// clear previous errors
-	$('#error-sign-up').empty('').css('display', 'none');;
+	errorMsg.empty('').css('display', 'none');;
 
 	if (!pattern.test(email)) {
 		// check email domain
-		$('#error-sign-up').append('※放送大学の～@campus.ouj.ac.jpというメールアドレスを入力してください<br><br>')
-		.css('display', 'inline-block');
+		showErrorMsg('※放送大学の「@campus.ouj.ac.jp」で終わるメールアドレスを入力してください');
 		// hide loading icon
 		hideLoading();
 	} else if (password !== passwordConfirm) {
 		// check password match
-		$('#error-sign-up').append('※パスワードが一致しません<br><br>').css('display', 'inline-block');
+		showErrorMsg('※パスワードが一致しません');
 		// hide loading icon
 		hideLoading();
 	} else {
@@ -60,14 +98,14 @@ function signUp() {
 			var errorCode = error.code;
 
 			if(errorCode == 'auth/email-already-in-use') {
-				$('#error-sign-up').append('※メールアドレスはすでに登録されています<br><br>').css('display', 'inline-block');
-				// hide loading icon
-				hideLoading();
+				showErrorMsg('※メールアドレスはすでに登録されています');
 			} else if (errorCode == 'auth/weak-password') {
-				$('#error-sign-up').append('※パスワードは6文字以上で設定してください<br><br>').css('display', 'inline-block');
-				// hide loading icon
-				hideLoading();
+				showErrorMsg('※パスワードは6文字以上で設定してください');
+			} else {
+				showErrorMsg('※新規登録ができませんでした')
 			}
+			// hide loading icon
+			hideLoading();
 		})
 	}
 }

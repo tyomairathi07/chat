@@ -35,39 +35,126 @@
     </div>
     <!-- END TOPNAV -->
 
-    <div class="message">
-      【重要】<br>
-      当サイトを利用される際のデータは記録され、研究のために使用されます。<br>
-      データは統計的に処理され、個人の名前は特定されません。<br>
-      同意いただける場合のみ、新規登録を行ってください。
-    </div>
+    <div style="display: inline-block;">
+      <div id="error-sign-up" class="error-msg"></div>
 
-    <div>
-      <div class="message" id="message-verification" style="display: none;">
-        確認メールを送信しました。<br>
-        メール内のリンクからアカウントを認証してください。<br>
-        ※アカウントを認証しないと、本システムは利用できません。
-      </div>
+      <table>
+        <tr>
+          <td>
+            <label for="email">メールアドレス</label><br>
+            <span style="display: block;">
+              【注意】
+              <u>放送大学Gmailのメールアドレス</u>を使用してください<br>
+              メールアドレスがわからない方は<a href="/help.html#find_email"><b>このページ</b></a>をご確認ください
+            </span>
+          </td>
+          <td>
+            <input type="email" id="email" style="margin-bottom: 0">
+          </td>
+        </tr>
 
-      <div id="error-sign-up" style="display: none;"></div>
+        <tr>
+          <td><label for="password">パスワード(6文字以上)</label></td>
+          <td><input type="password" id="password"></td>
+        </tr>
 
-      <label for="email">
-        メールアドレス<br>
-        <span>
-          【注意】
-          <u>放送大学Gmailのメールアドレス</u>を使用してください<br>
-          メールアドレスがわからない方は<a href="/help.html#find_email"><b>このページ</b></a>をご確認ください
-        </span>
-      </label>
-      <input type="email" id="email"><br>
+        <tr>
+          <td><label for="password-confirm">確認用パスワード</label></td>
+          <td><input type="password" id="password-confirm"></td>
+        </tr>
 
-      <label for="password">パスワード(6文字以上)</label>
-      <input type="password" id="password"><br>
+        <tr>
+          <td><label for="gender">性別</label></td>
+          <td>
+            <input type="radio" name="gender" value="female">女性
+            <input type="radio" name="gender" value="male">男性
+            <input type="radio" name="gender" value="none">無回答
+          </td>
+        </tr>
 
-      <label for="password-confirm">確認用パスワード</label>
-      <input type="password" id="password-confirm"><br>
+        <tr>
+          <td><label for="age-group">年代</label></td>
+          <td>
+            <select name="age-group">
+              <option>10代</option>
+              <option>20代</option>
+              <option>30代</option>
+              <option>40代</option>
+              <option>50代</option>
+              <option>60代</option>
+              <option>70代</option>
+              <option>80代</option>
+              <option>90代以上</option>
+            </select>
+          </td>
+        </tr>
 
-      <button id="sign-up">新規登録</button><br>
+        <tr id="tr-student-type">
+          <td><label for="student-type">学生種別</label></td>
+          <td>
+            <select name="student-type" id="student-type">
+              <optgroup label="大学(教養学部)">
+                <option>全科履修生</option>
+                <option>選科/科目/集中科目履修生</option>
+              </optgroup>
+              <optgroup label="大学院">
+                <option>修士全科生</option>
+                <option>修士選科生/修士科目生</option>
+                <option>博士全科生</option>
+              </optgroup>
+              <optgroup label="その他">
+                <option>教職員</option>
+                <option>その他</option>
+              </optgroup>
+            </select>
+          </td>
+        </tr>
+
+        <tr id="ba-major" style="border-bottom: 0.1rem solid #e1e1e1;">
+          <td><label for="ba-major">所属コース</label></td>
+          <td>
+            <select name="ba-major">
+              <option>生活と福祉コース</option>
+              <option>心理と教育コース</option>
+              <option>社会と産業コース</option>
+              <option>人間と文化コース</option>
+              <option>情報コース</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr id="ma-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
+          <td><label for="ma-major">所属プログラム</label></td>
+          <td>
+            <select name="ma-major">
+              <option>生活健康科学プログラム</option>
+              <option>人間発達科学プログラム</option>
+              <option>臨床心理学プログラム</option>
+              <option>社会経営科学プログラム</option>
+              <option>人文学プログラム</option>
+              <option>情報学プログラム</option>
+              <option>自然環境科学プログラム</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr id="phd-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
+          <td><label for="phd-major">所属プログラム</label></td>
+          <td>
+            <select name="phd-major">
+              <option>生活健康科学プログラム</option>
+              <option>人間科学プログラム</option>
+              <option>社会経営学プログラム</option>
+              <option>人文学プログラム</option>
+              <option>自然科学プログラム</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding-top: 3rem;"><button id="sign-up">新規登録を完了する</button></td>
+        </tr>
+      </table>
     </div>
 
     <!-- scripts -->

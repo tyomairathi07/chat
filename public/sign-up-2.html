@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>新規登録</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="styles/common.css">
+
+  </head>
+  <body>
+     <!-- START TOPNAV -->
+    <div class="topnav">
+        <div class="breadcrumb">
+            <a href="/"><img id="home" src="/images/home.png"></a> > 
+            新規登録 2/2
+        </div>
+
+        <div class="topnav-wrapper">
+            <a href="/help.html"><img src="/images/help.png"></a>
+        </div>
+            
+    </div>
+    <!-- END TOPNAV -->
+
+    <div>
+      <div class="message" id="message-verification" style="display: none;">
+        確認メールを送信しました。<br>
+        メール内のリンクからアカウントを認証してください。<br>
+        ※アカウントを認証しないと、本システムは利用できません。
+      </div>
+
+      <div id="error-sign-up" class="error-msg"></div>
+
+      <label for="gender">性別</label>
+      <input type="radio" name="gender" value="female">女性
+      <input type="radio" name="gender" value="male">男性
+      <input type="radio" name="gender" value="none">無回答
+
+      <label for="age-group">年代</label>
+      <select name="age-group">
+        <option>10代</option>
+        <option>20代</option>
+        <option>30代</option>
+        <option>40代</option>
+        <option>50代</option>
+        <option>60代</option>
+        <option>70代</option>
+        <option>80代</option>
+        <option>90代以上</option>
+      </select>
+
+      <label for="student-type">学生種別</label>
+      <select name="student-type" id="student-type">
+        <optgroup label="大学(教養学部)">
+          <option>全科履修生</option>
+          <option>選科/科目/集中科目履修生</option>
+        </optgroup>
+        <optgroup label="大学院">
+          <option>修士全科生</option>
+          <option>修士選科生/修士科目生</option>
+          <option>博士全科生</option>
+        </optgroup>
+        <optgroup label="その他">
+          <option>教職員</option>
+          <option>その他</option>
+        </optgroup>
+      </select>
+
+      <div id="undergrad-major">
+        <label for="undergrad-major">所属コース</label>
+        <select name="undergrad-major">
+          <option>生活と福祉コース</option>
+          <option>心理と教育コース</option>
+          <option>社会と産業コース</option>
+          <option>人間と文化コース</option>
+          <option>情報コース</option>
+        </select>
+      </div>
+
+      <div id="grad-major" style="display: none;">
+        <label for="grad-major">所属プログラム</label>
+        <select name="grad-major">
+          <option>生活健康科学プログラム</option>
+          <option>人間発達科学プログラム</option>
+          <option>臨床心理学プログラム</option>
+          <option>社会経営科学プログラム</option>
+          <option>人文学プログラム</option>
+          <option>情報学プログラム</option>
+          <option>自然環境科学プログラム</option>
+        </select>
+      </div>
+
+      <div id="postgrad-major" style="display: none;">
+        <label for="postgrad-major">所属プログラム</label>
+        <select name="postgrad-major">
+          <option>生活健康科学プログラム</option>
+          <option>人間科学プログラム</option>
+          <option>社会経営学プログラム</option>
+          <option>人文学プログラム</option>
+          <option>自然科学プログラム</option>
+        </select>
+      </div>
+      
+
+      <button id="sign-up">新規登録を完了する</button><br>
+    </div>
+
+    <!-- scripts -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <script src="scripts/sign-up-2-script.js"></script>
+  </body>
+</html>

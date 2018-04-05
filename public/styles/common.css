@@ -237,9 +237,11 @@ a:hover {
 	color: #606c76
 }
 
+/*
 input {
 	margin-bottom: 1.5rem;
 }
+*/
 
 dl,
 ol,
@@ -282,7 +284,7 @@ fieldset,
 input,
 select,
 textarea {
-	/*margin-bottom: 1.5rem*/
+	margin-bottom: 2.5rem;
 }
 
 blockquote,
@@ -382,7 +384,8 @@ img {
 	max-width: 100%
 }
 
-input:last-of-type {
+input:last-of-type,
+select:last-of-type {
 	margin-bottom: 3rem;
 }
 
