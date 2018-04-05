@@ -216,6 +216,16 @@ select:focus {
 	outline: 0
 }
 
+select {
+	background: white url('/images/down-black.png') no-repeat right 1rem center;
+	background-size: 1rem;
+}
+
+select:focus {
+	background: white url('/images/down-purple.png') no-repeat right 1rem center;
+	background-size: 1rem;
+}
+
 label,
 legend {
 	display: inline;

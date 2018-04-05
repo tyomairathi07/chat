@@ -9,19 +9,52 @@ messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
-$('#sign-up').click(signUp);
-
-$('#password-confirm').keypress(function(event) {
-	if (event.which == 13) {
-		// set focus to button
-		$('#sign-up').focus();
-		signUp();
-	}
+/*
+$('#sign-up').click(function() {
+	var data = getProfile();
+	setProfile('fakeId', data);
 });
+*/
+$('#sign-up').click(signUp);
 
 $('#student-type').change(function() {
 	showMajor($(this).val());
-})
+});
+
+function getProfile() {
+	var gender = $("input[name='gender']:checked").val();
+	var ageGroup = $("select[name='age-group']").val();
+	var sType = $("select[name='student-type']").val();
+	var major;
+
+	switch (sType) {
+		case '全科履修生': 
+			major = $("select[name='ba-major']").val();
+			break;
+		case '修士全科生':
+			major = $("select[name='ma-major']").val();
+			break;
+		case '博士全科生':
+			major = $("select[name='phd-major']").val();
+			break;
+		default: 
+			major = null;
+	}
+
+	var data = [gender, ageGroup, sType, major];
+	return data;
+}
+
+function setProfile(uid, data) {
+	var dbRef = firebase.database().ref('user-profile/' + uid);
+	return dbRef.set({
+		"性別": data[0],
+		"年代": data[1],
+		"学生種別": data[2],
+		"所属コース・プログラム": data[3]
+	});
+
+}
 
 function showErrorMsg(msg) {
 	var errorMsg = $('#error-sign-up');
@@ -84,16 +117,25 @@ function signUp() {
 		showErrorMsg('※パスワードが一致しません');
 		// hide loading icon
 		hideLoading();
+	} else if ($("input[name='gender']:checked").length == 0) {
+		showErrorMsg('※「性別」を選択してください');
+		// hide loading icon
+		hideLoading();
 	} else {
 		// create new user
 		firebase.auth().createUserWithEmailAndPassword(email, password)
 		.then(function() { // success
-			// send e-mail verification
-			firebase.auth().currentUser.sendEmailVerification().then(function() {
-				window.location.href = "/sign-up-complete.html";
-			});
+			var user = firebase.auth().currentUser;
+			// add to database
+			var data = getProfile();
+			setProfile(user.uid, data).then(function() {
+				// send e-mail verification
+				user.sendEmailVerification().then(function() {
+					window.location.href = "/sign-up-complete.html";
+				});
+			})
 		})
-		.catch(function(error) {
+		.catch(function(error) { // error
 			// error
 			var errorCode = error.code;
 
@@ -102,7 +144,8 @@ function signUp() {
 			} else if (errorCode == 'auth/weak-password') {
 				showErrorMsg('※パスワードは6文字以上で設定してください');
 			} else {
-				showErrorMsg('※新規登録ができませんでした')
+				showErrorMsg('※新規登録ができませんでした');
+				console.log(error);
 			}
 			// hide loading icon
 			hideLoading();
