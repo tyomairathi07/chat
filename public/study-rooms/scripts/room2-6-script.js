@@ -373,7 +373,6 @@ function initMediaErrorHandler(errorName, peerId, user) {
 
 	// disable join buttons
 	$('.button-join').attr('disabled', 'disabled');
-
 	// hide radio buttons
 	$(".menu-camera").css('display', 'none');
 

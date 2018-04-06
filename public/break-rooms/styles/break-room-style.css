@@ -47,12 +47,11 @@ input[type='submit'] {
 	color: #fff;
 	cursor: pointer;
 	display: inline-block;
-	font-size: 1.1rem;
+	font-size: 1.3rem;
 	font-weight: 700;
-	/*height: 3.8rem;*/
 	letter-spacing: .1rem;
-	line-height: 3.8rem;
-	padding: 0 3.0rem;
+	line-height: 3.0rem;
+	padding: 0 1.5rem;
 	text-align: center;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -340,6 +339,15 @@ h6 {
 	line-height: 1.4
 }
 
+
+.error-msg{
+	color: red;
+	display: none;
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+}
+
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
@@ -348,6 +356,13 @@ h6 {
 	width: 100%;
 }
 
+.user-pic {
+	border: 0.1rem solid #d1d1d1;
+	border-radius: 50%;
+	max-width: 15rem;
+}
+
+/** [START] BREAK ROOM STYLES **/
 .users {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
@@ -387,11 +402,8 @@ h6 {
 	display: inline-block;
 	margin: 1rem;
 }
-.user-pic {
-	border: 0.1rem solid #d1d1d1;
-	border-radius: 50%;
-	max-width: 15rem;
-}
+
+/** [END] BREAK ROOM STYLES **/
 
 /** [START] TOPNAV **/
 .breadcrumb {

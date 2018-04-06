@@ -23,7 +23,7 @@ const onBreakRef = rootRef.child('on-break');
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		checkUserEntry(user);
+		//checkUserEntry(user);
 
 		// set room names
 		setBreakroomName();
@@ -59,7 +59,17 @@ firebase.auth().onAuthStateChanged(function(user) {
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start room handler
 				roomHandler(room, peer, user);
-			});
+			}).catch(function(error) { // no mic
+				console.log(error);
+				if (error.name) {
+					console.log(error.name);
+					// SW: join room w/o stream
+					room = peer.joinRoom(roomId, {mode: 'sfu'});
+					roomHandler(room, peer, user);
+					mediaErrorHandler(error.name, user);
+				}
+				
+			})
 		});
 
 		$('#send').click(function() {
@@ -165,7 +175,37 @@ function initChatLog() {
 	});	
 }
 
-function mediaSetup(room) {
+function mediaErrorHandler(errorName, user) {
+	var btn = $('#reload');
+	// show error message
+	btn.before('※マイクが使用できません。チャットの送受信はできますが、音声は受信できません。<br>');
+	switch(errorName) {
+		case 'NotAllowedError': 
+			btn.before('対策: ブラウザからマイクのアクセスを許可');
+			break;
+		case 'NotReadableError':
+			btn.before('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる');
+			break;
+		default:
+			btn.before('対策: PC側でカメラの設定をする');
+	}
+	btn.before(' → 下のボタンをクリック<br>(ブラウザの更新ボタンは押さないでください)<br><br>');
+	btn.before('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。<br>');
+	// hide message
+	$('.message').css('display', 'none');
+	$('.error-msg').css('display', 'inline-block');
+
+	btn.click(function() {
+		// DB: cancel disconnection
+		onBreakRef.child(user.uid).onDisconnect().cancel()
+		.then(function() {
+			// reload page
+			location.reload();
+		})
+	})
+}
+
+function mediaSetup(room, user) {
 	var selectMic = $('#select-mic');
 	navigator.mediaDevices.enumerateDevices()
 	.then(function(deviceInfos) {
@@ -196,6 +236,9 @@ function mediaSetup(room) {
 			}).then(function(stream) {
 				// SW: send stream to room
 				room.replaceStream(stream);
+			}).catch(function(error) {
+				console.log(error);
+				mediaErrorHandler(error.name, user);
 			})
 		})
 	})
@@ -255,7 +298,7 @@ function roomHandler(room, peer, user) {
 		$('.container-input').css('display', 'block');
 
 		// list available mics
-		mediaSetup(room);
+		mediaSetup(room, user);
 	});
 
 	room .on('peerLeave', function(id) {
@@ -264,15 +307,13 @@ function roomHandler(room, peer, user) {
 	});
 
 	room.on('stream', function(stream) {
-		appendLog('stream from: ' + stream.peerId);
+		console.log('stream from: ' + stream.peerId);
 		var id = stream.peerId;
 		// play stream
-		appendLog('<b>start interval</b>');
 		var iv = setInterval(function() {
 			var wrapper = $('#' + id);
 			if (wrapper.length) {
 				clearInterval(iv);
-				appendLog('<b>end interval</b>');
 				// append <audio> if it doesn't exist
 				if (!wrapper.children('audio').length) {
 					wrapper.append('<audio autoplay></audio>');

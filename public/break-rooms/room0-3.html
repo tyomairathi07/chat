@@ -41,14 +41,17 @@
     </div>
     <!-- END TOPNAV -->
 
-    <div id="log" style="height:150px; overflow-y: scroll; margin-bottom: 1rem;"></div>
+    <div id="log" style="height:150px; overflow-y: scroll; margin-bottom: 1rem; display: none;"></div>
     
+    <div class="error-msg" style="display: none;">
+        <button id="reload" style="margin-top: 1rem; margin-bottom: 0rem;">ページを更新</button>
+    </div>
+
+    <div class="message">
+        【注意】ブラウザの更新ボタンや、Ctrl+Rでページを更新すると、自動的に「自習室一覧」に移動します。
+    </div>
 
     <div>
-        <div class="message">
-            休憩室です
-        </div>
-
         <div class="users">
         <!--
             <div class="user-wrapper">
