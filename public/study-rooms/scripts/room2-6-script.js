@@ -64,10 +64,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 				setStyleOnJoin(peerId, 'yes');
 				mediaSetup(room, peerId);
 			}).catch(function(error) { // error: 'no break'
-				if (error.name) {
+				if (error.name) { 
+					/*
 					// join room w/o stream
 					room = peer.joinRoom(roomId, {mode: 'sfu'});
 					roomHandler(room, user);
+					*/
 					initMediaErrorHandler(error.name, peerId, user);
 				} else if (error == 'no camera') {
 					breakMediaErrorHandler(peerId, user);
@@ -362,7 +364,32 @@ function goToBreakroom() {
 function initMediaErrorHandler(errorName, peerId, user) {
 	console.log(errorName);
 
+	// DB: remove from on-break
 	var ref = rootRef.child('on-break/' + user.uid);
+	ref.once('value').then(function(snapshot) {
+		if (snapshot.exists()) { 
+			ref.remove();
+		}
+	});
+
+	// disable join buttons
+	$('.button-join').attr('disabled', 'disabled');
+
+	// hide radio buttons
+	$(".menu-camera").css('display', 'none');
+
+	var errorMsg = $('.error-msg');
+	// show error message
+	errorMsg.append('※カメラが使用できません。<br>');
+	if (errorName == 'NotAllowedError') { // access to camera denied from browser
+		errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
+	} else if (errorName == 'NotReadableError') { // camera used in another app 
+		errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
+	} else { // other errors
+		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
+	}
+	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	/*
 	ref.once('value').then(function(snapshot) {
 		if (snapshot.exists()) { // back from break
 			var r = snapshot.child('row-index').val();
@@ -381,25 +408,22 @@ function initMediaErrorHandler(errorName, peerId, user) {
 			// disable join buttons
 			$('.button-join').attr('disabled', 'disabled');
 
-			// disable use camera radio
-			$("input[name='use-camera']:first").attr('disabled', 'disabled');
+			// hide radio buttons
+			$(".menu-camera").css('display', 'none');
 
 			var errorMsg = $('.error-msg');
 			// show error message
+			errorMsg.append('※カメラが使用できません。<br>');
 			if (errorName == 'NotAllowedError') { // access to camera denied from browser
-				errorMsg.append('※カメラが使用できません。<br>');
-				errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
-				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+				errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
 			} else if (errorName == 'NotReadableError') { // camera used in another app 
-				errorMsg.append('※カメラが使用できません。<br>');
-				errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
-				errorMsg.append('対策2: 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+				errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
 			} else { // other errors
-				errorMsg.append('※カメラが使用できません。<br>');
-				errorMsg.append('対策: 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+				errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
 			}
 			errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
-
+			
+			// TODO delete
 			// radio button listener
 			$("input[name='use-camera']").change(function() {
 				var val = $(this).val();
@@ -412,6 +436,8 @@ function initMediaErrorHandler(errorName, peerId, user) {
 			})
 		}
 	})
+	*/
+	
 }
 
 // handles MediaDevices error
@@ -419,17 +445,13 @@ function mediaErrorHandler(errorName, peerId) {
 	var errorMsg = $('.error-msg');
 
 	// show error message
+	errorMsg.append('※カメラが使用できません。<br>');
 	if (errorName == 'NotAllowedError') { // access to camera denied from browser
-		errorMsg.append('※カメラが使用できません。<br>');
-		errorMsg.append('対策1: ブラウザからカメラのアクセスを許可 → ページを更新<br>');
-		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
 	} else if (errorName == 'NotReadableError') { // camera used in another app 
-		errorMsg.append('※カメラが使用できません。<br>');
-		errorMsg.append('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br>');
-		errorMsg.append('対策2: ページを更新 → 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
 	} else { // other errors
-		errorMsg.append('※カメラが使用できません。<br>');
-		errorMsg.append('対策: ページを更新 → 右上の「カメラを使用しない」を選択 → 「着席」ボタンを押す (ビデオの代わりにプロフィール画像が表示されます)<br><br>');
+		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
 	}
 	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
 }
