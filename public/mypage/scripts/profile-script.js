@@ -107,6 +107,7 @@ function updatePhoto(user) {
 
 	$('#fileInput').on('change', function() {
 		$('#preview-wrapper').css('display', 'block');
+		$('#update-photo').removeAttr('disabled');
 		readFile(this);
 	});
 
@@ -130,9 +131,12 @@ function updatePhoto(user) {
 				})
 			}).then(function() {
 				hideLoading();
+				// hide croppie
 				$('#preview-wrapper').css('display', 'none');
 				// clear file input
 				$('#fileInput').val('');
+				// disable button
+				$('#update-photo').attr('disabled', 'disabled');
 				showMessage('プロフィール画像を変更しました');
 			})
 			.catch(function(error) {
