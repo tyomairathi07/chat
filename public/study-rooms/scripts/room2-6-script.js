@@ -60,7 +60,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// SW: replace stream -> addVideo
 				sendStream(room, peerId);
 				// set style
-				// TODO
 				setStyleOnJoin(peerId, 'yes');
 				mediaSetup(room, peerId);
 			}).catch(function(error) { // error: 'no break'
@@ -537,8 +536,10 @@ function setRoomName() {
 }
  
 function setStyleOnJoin(id, useCamera) {
-	var cell = $('#' + id);
+	// hide message
+	$('.message').css('display', 'none');
 
+	var cell = $('#' + id);
 	// set border
 	cell.css('border', '0.3rem solid black');
 	// hide "join" button in cell
