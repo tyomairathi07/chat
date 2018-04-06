@@ -378,66 +378,8 @@ function initMediaErrorHandler(errorName, peerId, user) {
 	// hide radio buttons
 	$(".menu-camera").css('display', 'none');
 
-	var errorMsg = $('.error-msg');
 	// show error message
-	errorMsg.append('※カメラが使用できません。<br>');
-	if (errorName == 'NotAllowedError') { // access to camera denied from browser
-		errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
-	} else if (errorName == 'NotReadableError') { // camera used in another app 
-		errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
-	} else { // other errors
-		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
-	}
-	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
-	/*
-	ref.once('value').then(function(snapshot) {
-		if (snapshot.exists()) { // back from break
-			var r = snapshot.child('row-index').val();
-			var c = snapshot.child('cell-index').val();
-			var url = snapshot.child('photo-url').val();
-
-			// DB: add child to room
-			roomRef.child(peerId).set({"row-index": r, "cell-index": c, "photo-url": url});
-
-			// set style
-			setStyleOnJoin(peerId, 'no');
-
-			// remove from on-break
-			ref.remove();
-		} else { // not back from break
-			// disable join buttons
-			$('.button-join').attr('disabled', 'disabled');
-
-			// hide radio buttons
-			$(".menu-camera").css('display', 'none');
-
-			var errorMsg = $('.error-msg');
-			// show error message
-			errorMsg.append('※カメラが使用できません。<br>');
-			if (errorName == 'NotAllowedError') { // access to camera denied from browser
-				errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
-			} else if (errorName == 'NotReadableError') { // camera used in another app 
-				errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
-			} else { // other errors
-				errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
-			}
-			errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
-			
-			// TODO delete
-			// radio button listener
-			$("input[name='use-camera']").change(function() {
-				var val = $(this).val();
-				if (val == 'no') {
-					// remove message
-					errorMsg.empty();
-					// enable join buttons
-					$('.button-join').removeAttr('disabled');
-				}
-			})
-		}
-	})
-	*/
-	
+	showMediaErrorMessage(errorName);
 }
 
 // handles MediaDevices error
@@ -445,15 +387,7 @@ function mediaErrorHandler(errorName, peerId) {
 	var errorMsg = $('.error-msg');
 
 	// show error message
-	errorMsg.append('※カメラが使用できません。<br>');
-	if (errorName == 'NotAllowedError') { // access to camera denied from browser
-		errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
-	} else if (errorName == 'NotReadableError') { // camera used in another app 
-		errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
-	} else { // other errors
-		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
-	}
-	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	showMediaErrorMessage(errorName);
 }
 
 // allows user to choose cameras
@@ -620,5 +554,19 @@ function setStyleOnJoin(id, useCamera) {
 		$('.menu > span').css('display', 'none');
 		$('#select-camera').css('display', 'none');
 	}
+}
+
+function showMediaErrorMessage(errorName) {
+	var errorMsg = $('.error-msg');
+	// show error message
+	errorMsg.append('※カメラが使用できません。<br>');
+	if (errorName == 'NotAllowedError') { // access to camera denied from browser
+		errorMsg.append('対策: ブラウザからカメラのアクセスを許可 → ページを更新<br><br>');
+	} else if (errorName == 'NotReadableError') { // camera used in another app 
+		errorMsg.append('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる → ページを更新<br><br>');
+	} else { // other errors
+		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
+	}
+	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
 
 }
