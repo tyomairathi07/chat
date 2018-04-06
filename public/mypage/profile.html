@@ -22,7 +22,9 @@
 
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="/Croppie-2.6.2/croppie.css">
     <link rel="stylesheet" href="styles/mypage-style.css">
+
 
   </head>
   <body>
@@ -57,24 +59,31 @@
         <table>
             <tr>
                 <td>ユーザー名</td>
-                <td><input id="user-name" name="user-name" style="width: 25rem" type="text"></td>
+                <td>
+                    <input id="user-name" name="user-name" style="width: 25rem; margin-right: 1rem;" type="text"><br>
+                    <button id="update-name">変更</button>
+                </td>
             </tr>
             <tr>
                 <td>
                     プロフィール画像<br>
-                    ※画像の比率は1:1にしてください
                 </td>
                 <td>
                     <img align="middle" class="user-pic" style="margin-bottom: 1rem;"><br>
-                    <input accept="image/*" id="fileInput" type="file" disabled>
+                    <input accept="image/*" id="fileInput" type="file" disabled><br>
+                    <div id="preview-wrapper" style="display: none;">
+                        <div id="preview"></div>
+                        <button id="update-photo">変更</button>
+                    </div>
+                    
                 </td>
             </tr>
         </table>
-        <button id="update" style="font-size: 1.3rem;">保存</button>
     </div>
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="/Croppie-2.6.2/croppie.js"></script>    
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="/scripts/common.js"></script>

@@ -467,6 +467,10 @@ img {
 .main {
 	margin-left: 30rem;
 }
+
+input {
+	margin-bottom: 1rem;
+}
 /** MYPAGE STYLES [END] **/
 
 /* Custom color */

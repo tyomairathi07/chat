@@ -63,7 +63,8 @@ function getParameterByName(name) {
 }
 
 function hideLoading() {
-	$('#loading').css('display', 'none');
+	$('#loading').remove();
+	//$('#loading').css('display', 'none');
 }
 
 function initTopnav(user) {

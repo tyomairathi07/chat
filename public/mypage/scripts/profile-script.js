@@ -14,7 +14,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
 		initTopnav(user);
 		initUserProfile(user);
-		updateUserProfile(user);
+		updateName(user);
+		updatePhoto(user);
 		// sign out user after 30 minutes
 		checkTimeout(user);
 
@@ -52,86 +53,96 @@ function initUserProfile(user) {
 }
 
 function showMessage(text) {
+	var msg = $('.message');
+	// clear message
+	msg.empty();
 	// append message
-	$('.message').append(text + '<br>');
+	msg.append(text);
 	// show message div
-	$('.message').css('display', 'inline-block');
+	msg.css('display', 'inline-block');
 }
 
-function updateName(user, newName, isHide) {
-	// update displayName
-	user.updateProfile({
-		displayName: newName
-	}).then(function() { // success
-		showMessage('ユーザー名を変更しました。');
-		if (isHide) {
+function updateName(user) {
+	$('#update-name').click(function() {
+		showLoading($(this).attr('id'));
+		var name = $('#user-name').val();
+		if (!name) {
 			hideLoading();
+			showMessage('ユーザー名を入力してください');
+		} else {
+			user.updateProfile({
+				displayName: name
+			}).then(function() { // success
+				hideLoading();
+				showMessage('ユーザー名を変更しました')
+			}).catch(function(error) {
+				console.log(error);
+				hideLoading();
+				showMessage('ユーザー名の変更に失敗しました')
+			})
 		}
-	}).catch(function(error) { // error
-		showMessage('エラー: ユーザー名の変更に失敗しました。');
-		if (isHide) {
-			hideLoading();
+	});	
+}
+
+function updatePhoto(user) {
+	var myCroppie = $('#preview').croppie({
+		viewport: {
+			width: 200, 
+			height: 200,
+			type: 'circle'
+		}, boundary: {
+			width: 250,
+			height: 250
 		}
 	});
-}
 
-function updatePhoto(user, file) {
-	// get Storage ref to user > user-pic
-	var fileRef = firebase.storage().ref().child(user.uid + '/photo/' + file.name);
-
-	// TODO delete existing child under photo
-
-	// upload new photo
-	fileRef.put(file)
-	.then(function() { // file upload success
-		// get download URL
-		return fileRef.getDownloadURL();
-	}).then(function(url) {
-		// set image source
-		$('.user-pic').attr('src', url);
-
-		// update profile
-		return user.updateProfile({photoURL: url});
-	}).then(function() { // profile update success
-		showMessage('プロフィール画像を変更しました。');
-		// clear file
-		$('#fileInput').val('');
-		hideLoading();
-	}).catch(function(error) {
-		showMessage('プロフィール画像の変更に失敗しました。');
-		// clear file
-		$('#fileInput').val('');
-		hideLoading();
-	});
-}
-
-function updateUserProfile(user) {
-	let file = null;
-
-	// get new photo
 	$('#fileInput').on('change', function() {
-		file = this.files[0];
+		$('#preview-wrapper').css('display', 'block');
+		readFile(this);
 	});
 
-	// click "save changes" button
-	$('#update').click(function() {
-		// show loading
-		showLoading('update');
+	$('#update-photo').click(function() {
+		showLoading($(this).attr('id'));
+		// get croppie result as blob
+		myCroppie.croppie('result', 'blob').then(function(resp) {
+			// upload to storage
+			var ref = firebase.storage().ref().child('user-photo/' + user.uid);
+			ref.put(resp)
+			.then(function(snapshot) {
+				// get download url
+				return ref.getDownloadURL()
+			}).then(function(url) {
+				$('.user-pic').attr('src', url);
+				// update user photo
+				return user.updateProfile({
+					photoURL: url
+				})
+			}).then(function() {
+				hideLoading();
+				$('#preview-wrapper').css('display', 'none');
+				// clear file input
+				$('#fileInput').val('');
+				showMessage('プロフィール画像を変更しました');
+			})
+			.catch(function(error) {
+				console.log(error);
+				hideLoading();
+				showMessage('プロフィール画像の変更に失敗しました')
+			}) 
+		})
+	})
 
-		// clear message div
-		$('.message').empty();
-		$('.message').css('display', 'none');
+	function readFile(input) {
+		var file = input.files[0];
+		var reader = new FileReader();
 
-		var newName = $('#user-name').val();
-		if ((newName == user.displayName) && (file == null)) { // no update
-			hideLoading();
-		} else if ((newName != user.displayName) && file == null) { // update displayName
-			updateName(user, newName, true);
-		} else if ((newName == user.displayName) && file != null) {// update photo
-			updatePhoto(user, file);
-		} else { // update name & photo
-			updateName(user, newName, false);
-			updatePhoto(user, file);
-		}				
-	});
+		reader.readAsDataURL(file);
+
+		reader.onload = function() {
+			// bind image to croppie
+			myCroppie.croppie('bind', {
+				url: reader.result
+			});
+		}
+	}
 }
