@@ -52,6 +52,13 @@ function initUserProfile(user) {
 	$('#fileInput').prop('disabled', false);
 }
 
+function showError(text) {
+	var errorMsg = $('.error-msg');
+	errorMsg.empty();
+	errorMsg.append(text);
+	errorMsg.css('display', 'inline-block');
+}
+
 function showMessage(text) {
 	var msg = $('.message');
 	// clear message
@@ -65,10 +72,12 @@ function showMessage(text) {
 function updateName(user) {
 	$('#update-name').click(function() {
 		showLoading($(this).attr('id'));
+		$('.error-msg').css('display', 'none');
+		$('.message').css('display', 'none');
 		var name = $('#user-name').val();
 		if (!name) {
 			hideLoading();
-			showMessage('ユーザー名を入力してください');
+			showError('※ユーザー名を入力してください');
 		} else {
 			user.updateProfile({
 				displayName: name
@@ -78,7 +87,7 @@ function updateName(user) {
 			}).catch(function(error) {
 				console.log(error);
 				hideLoading();
-				showMessage('ユーザー名の変更に失敗しました')
+				showError('※ユーザー名の変更に失敗しました')
 			})
 		}
 	});	
@@ -103,6 +112,8 @@ function updatePhoto(user) {
 
 	$('#update-photo').click(function() {
 		showLoading($(this).attr('id'));
+		$('.error-msg').css('display', 'none');
+		$('.message').css('display', 'none');
 		// get croppie result as blob
 		myCroppie.croppie('result', 'blob').then(function(resp) {
 			// upload to storage
@@ -127,7 +138,7 @@ function updatePhoto(user) {
 			.catch(function(error) {
 				console.log(error);
 				hideLoading();
-				showMessage('プロフィール画像の変更に失敗しました')
+				showError('※プロフィール画像の変更に失敗しました')
 			}) 
 		})
 	})

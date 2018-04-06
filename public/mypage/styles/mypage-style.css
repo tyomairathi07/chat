@@ -435,6 +435,13 @@ img {
 }
 
 /** [END] TOPNAV **/
+.error-msg{
+	color: red;
+	display: none;
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin-top: 1rem;
+}
 
 .message {
 	border: 0.1rem solid #d1d1d1;
