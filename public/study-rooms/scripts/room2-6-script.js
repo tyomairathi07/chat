@@ -14,7 +14,7 @@ const rootRef = firebase.database().ref();
 const roomRef = rootRef.child('/' + roomId + '/');
 
 const MAX_MEMBER_COUNT = 5;
-const NUM_BREAKROOMS = 4;
+const NUM_BREAKROOMS = 10;
 
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
@@ -115,37 +115,44 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 		$('#break').click(function() {
+			var cell = $('#' + peerId);
+			var userPic = cell.children('.user-pic');
+			var url = userPic.attr('src');
+
+			// show loading
+			cell.empty();
+			cell.append('<img src="/images/loading.gif">');
+
 			// DB: cancel onDisconnect
 			rootRef.child('on-break/' + user.uid).onDisconnect().cancel();
 			// get row & cell indeces
-			var cell = $('#' + peerId);
 			var r = cell.parent().index();
 			var c = cell.index();
-			// DB: add record to on-break
-			if (!cell.children('.user-pic').length) { // no camera
+			// DB: add to on break
+			if (url === undefined) { // no camera
 				rootRef.child('on-break/' + user.uid).set({
 					'row-index': r,
 					'cell-index': c,
 					'room-id': roomId
 				}).then(function() {
+					// don't show coffee
+					removeCoffee(r, c);
 					// go to break room
 					goToBreakroom();
 				});	
-			} else {
-				var url = cell.children('.user-pic').attr('src');
-
-				// DB: add child to on break
+			} else { // uses camera
 				rootRef.child('on-break/' + user.uid).set({
 					'row-index': r,
 					'cell-index': c,
 					'room-id': roomId,
 					'photo-url': url
 				}).then(function() {
+					// don't show coffee
+					removeCoffee(r, c);
 					// go to break room
 					goToBreakroom();
 				});	
 			}
-			
 		});
 
 
@@ -341,8 +348,9 @@ function goToBreakroom() {
 	looper(0);
 
 	function looper(roomIndex) {
-		console.log('room0-' + roomIndex);
+		//console.log('room0-' + roomIndex);
 		if (roomIndex >= NUM_BREAKROOMS) {
+			// TODO
 			return;
 		}
 		ref.child('room0-' + roomIndex).once('value')
@@ -352,8 +360,9 @@ function goToBreakroom() {
 				if ((memberCount == 0) && (roomIndex != 0)) { // no members
 					roomIndex--;
 				}
+				//console.log('found room: room0-' + roomIndex);
 				// go to BR
-				window.location.href = '/break-rooms/room0-' + roomIndex;
+				window.location.href = '/break-rooms/room0-' + roomIndex + '.html';
 			} else {
 				looper(++roomIndex);
 			}

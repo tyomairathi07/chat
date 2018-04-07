@@ -124,6 +124,14 @@ roomRef.on('child_removed', function(snapshot) {
 
 /** FUNCTIONS **/
 function addUser(id, name, url) {
+	// TODO: delete later
+	if (name == null) {
+		name = 'テストユーザー';
+	}
+	if (url == null) {
+		url = '/images/monster.png';
+	}
+
 	$('.users').append('<div class="user-wrapper" id="' + id + '"><img src="' + url +
 		 '" class="user-pic"><br><span>' + name + '</span></div>');
 	appendLog('added user: ' + id);
