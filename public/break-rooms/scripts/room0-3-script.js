@@ -23,7 +23,7 @@ const onBreakRef = rootRef.child('on-break');
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		//checkUserEntry(user);
+		checkUserEntry(user);
 
 		// set room names
 		setBreakroomName();

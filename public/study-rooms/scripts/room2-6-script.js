@@ -336,26 +336,28 @@ function getCell(r, c) {
 
 // finds open break room and goes there
 function goToBreakroom() {
-	//appendLog('goToBreakroom');
-	var rootRef = firebase.database().ref();
-	var prefix = "room0-";
-	var array = [];
-	var i = 0;
+	var ref = firebase.database().ref();
 
-	for(var i = 0; i  < NUM_BREAKROOMS; i++) {
-		rootRef.child(prefix + i).once('value')
+	looper(0);
+
+	function looper(roomIndex) {
+		console.log('room0-' + roomIndex);
+		if (roomIndex >= NUM_BREAKROOMS) {
+			return;
+		}
+		ref.child('room0-' + roomIndex).once('value')
 		.then(function(snapshot) {
 			var memberCount = snapshot.numChildren();
-			if (memberCount < MAX_MEMBER_COUNT) { // found available room
-				var roomId = snapshot.key;
-				var j = roomId.substr(roomId.length - 1);
-				while(j < MAX_MEMBER_COUNT) {
-					rootRef.child(prefix + j).off();
-					j++;
+			if (memberCount < MAX_MEMBER_COUNT) { // open room
+				if ((memberCount == 0) && (roomIndex != 0)) { // no members
+					roomIndex--;
 				}
-				window.location.href = "/break-rooms/" + roomId + '.html';
+				// go to BR
+				window.location.href = '/break-rooms/room0-' + roomIndex;
+			} else {
+				looper(++roomIndex);
 			}
-		});
+		})
 	}
 }
 

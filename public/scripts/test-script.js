@@ -1,51 +1,49 @@
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
+  authDomain: "fireba-a8775.firebaseapp.com",
+  databaseURL: "https://fireba-a8775.firebaseio.com",
   projectId: "fireba-a8775",
   storageBucket: "fireba-a8775.appspot.com",
+  messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
-var myCroppie = null;
+const NUM_BR = 4;
+const MAX_MEMBER_COUNT = 5;
+var ref = firebase.database().ref();
 
-function readFile(input) {
-	var file = input.files[0];
-	var reader = new FileReader();
+// var roomId = 'room0-3';
 
-	if (!myCroppie) {
-		myCroppie = $('#preview').croppie({
-			viewport: {
-				width: 100,
-				height: 100,
-				type: 'circle'
-			}, boundary: {
-				width: 300,
-				height: 300
+fn(0);
+
+function fn(roomIndex) {
+	console.log('room0-' + roomIndex);
+	if (roomIndex >= NUM_BR) {
+		return;
+	}
+	ref.child('room0-' + roomIndex).once('value')
+	.then(function(snapshot) {
+		var memberCount = snapshot.numChildren();
+		if (memberCount < MAX_MEMBER_COUNT) {
+			if (memberCount == 0) {
+				roomIndex--;
 			}
-		});
-	}
-	
-	reader.onload = function() {
-		myCroppie.croppie('bind', {
-			url: reader.result
-		});
-	}
-
-	reader.readAsDataURL(file);
-}
-
-$('#fileInput').on('change', function() {
-	readFile(this);
-});
-
-$('#ok').click(function() {
-	myCroppie.croppie('result', 'blob').then(function(resp) {
-		var storageRef = firebase.storage().ref().child('test');
-		storageRef.put(resp).then(function(snapshot) {
-			console.log('upload success');
-		}).catch(function(error) {
-			console.log(error);
-		})
-
+			console.log('found room: room0-' + roomIndex);
+		} else {
+			fn(++roomIndex);
+		}
 	})
+}
+/*
+getMemberCount(roomId).then(function(count) {
+	console.log(count);
 })
+
+function getMemberCount(roomId) {
+	return ref.child(roomId).once('value')
+	.then(function(snapshot) {
+		return snapshot.numChildren();
+	});
+}
+*/
