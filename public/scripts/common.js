@@ -66,7 +66,9 @@ function getRoomId() {
 	var path = window.location.pathname;
 	var res1 = path.split('/');
 	var res2 = res1[2].split('.');
-	return res2[0];
+	var roomId = res2[0];
+	console.log(roomId);
+	return roomId;
 }
 
 function hideLoading() {
