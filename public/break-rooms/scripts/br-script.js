@@ -175,6 +175,32 @@ function disconnectionHandler(peerId, user) {
 	onBreakRef.child(user.uid).onDisconnect().remove();
 }
 
+/*
+function findRoom() {
+	var res = null;
+	looper(0);
+
+	function looper(roomIndex) {
+		//console.log('room0-' + roomIndex);
+		if (roomIndex >= NUM_BREAKROOMS) {
+			// TODO
+			return;
+		}
+		rootRef.child('room0-' + roomIndex).once('value')
+		.then(function(snapshot) {
+			var memberCount = snapshot.numChildren();
+			if (memberCount <= 2) { // open room
+				res = roomIndex;
+				console.log(res);
+				return;
+			} else {
+				looper(++roomIndex);
+			}
+		})
+	}
+}
+*/
+
 function getUserCount() {
 	return roomRef.once('value').then(function(snapshot) {
 		return snapshot.numChildren();
@@ -268,21 +294,39 @@ function mediaSetup(room, user) {
 function moveUser() {
 	roomRef.once('value').then(function(snapshot) { // read initial state of data
 		var mCount = snapshot.numChildren();
-		console.log(mCount);
+		//console.log(mCount);
 		if (mCount >= (MAX_USERS + MARGIN_MAX_USERS)) {
 			// move temp users
 			snapshot.forEach(function(childSnapshot) { // ss for peer
 				if (childSnapshot.child('temp').exists()) {
 					if (childSnapshot.key == peerId) {
 						console.log('RELOCATE');
-						// TODO find room w/ users < 2
-						var rIndex = roomId.substr(roomId.length - 1);
-						rIndex++;
-						// DB: cancel onDisconnect
-						var uid = childSnapshot.child('uid').val();
-						var ref = onBreakRef.child(uid);
-						ref.onDisconnect().cancel();
-						window.location.href = "room0-" + rIndex + '.html';
+						// find room w/ users <= 2
+						looper(0);
+
+						function looper(roomIndex) {
+							//console.log('room0-' + roomIndex);
+							if (roomIndex >= NUM_BREAKROOMS) {
+								// TODO
+								return;
+							}
+							rootRef.child('room0-' + roomIndex).once('value')
+							.then(function(snapshot) {
+								var memberCount = snapshot.numChildren();
+								if (memberCount <= 2) { // open room
+									// DB: cancel onDisconnect
+									var uid = childSnapshot.child('uid').val();
+									var ref = onBreakRef.child(uid);
+									ref.onDisconnect().cancel().then(function() {
+										console.log(roomIndex);
+									})
+									window.location.href = "room0-" + roomIndex + '.html';
+									return;
+								} else {
+									looper(++roomIndex);
+								}
+							})
+						}
 					}
 				}
 			})	
