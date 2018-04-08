@@ -359,17 +359,19 @@ h6 {
 .user-pic {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: 50%;
-	max-width: 15rem;
+	max-width: 10rem;
 }
 
 /** [START] BREAK ROOM STYLES **/
 .users {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
+	display: inline-block;
 	margin-top: 1rem; 
 	min-height: 20rem;
 	padding: 0.5rem 0.5rem 0rem 0.5rem;
 	text-align: center;
+	width: 100%;
 }
 
 #chat-log {

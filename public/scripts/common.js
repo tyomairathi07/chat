@@ -20,7 +20,7 @@ function autoSignOut(user) {
 
 function checkEmailVerification(user) {
 	if (!user.emailVerified) {
-		//window.location.href = "/verify.html";
+		window.location.href = "/verify.html";
 	}
 }
 
@@ -60,6 +60,13 @@ function getParameterByName(name) {
 			return paramVal;
 		}
 	}
+}
+
+function getRoomId() {
+	var path = window.location.pathname;
+	var res1 = path.split('/');
+	var res2 = res1[2].split('.');
+	return res2[0];
 }
 
 function hideLoading() {

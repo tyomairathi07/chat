@@ -1,6 +1,5 @@
 /** TODO
-- get user name & icon from DB
-- make links clickable
+- enable checkUserEntry, disconnectionHandler
 **/
 
 // Initialize Firebase
@@ -9,21 +8,28 @@ apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
 authDomain: "fireba-a8775.firebaseapp.com",
 databaseURL: "https://fireba-a8775.firebaseio.com",
 projectId: "fireba-a8775",
-storageBucket: "fireba-a8775.appspot.com",
-messagingSenderId: "86072280692"
+//storageBucket: "fireba-a8775.appspot.com",
+//messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
-const roomId = "room0-3";
+const roomId = getRoomId();
 const rootRef = firebase.database().ref();
 const roomRef = rootRef.child(roomId + '/');
 const onBreakRef = rootRef.child('on-break');
+
+const NUM_BREAKROOMS = 10;
+const MAX_USERS = 5;
+const MARGIN_MAX_USERS = 3;
+
+var peerId = null;
+var room = null;
 
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		checkUserEntry(user);
+		//checkUserEntry(user);
 
 		// set room names
 		setBreakroomName();
@@ -35,8 +41,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 			debug: 3
 		});
 
+		/*
 		let peerId = null;
 		let room = null;
+		*/
 
 		// open page
 		peer.on('open', function(id) {
@@ -109,9 +117,28 @@ roomRef.on('child_added', function(snapshot, prevkey) {
 	var r_id = snapshot.key;
 	var r_name = snapshot.child('name').val();
 	var r_url = snapshot.child('url').val();
-	appendLog('child_added: ' + r_id);
 	addUser(r_id, r_name, r_url);
 	appendChatLog('SYSTEM', r_name + 'が入室しました');
+
+	roomRef.once('value').then(function(snapshot) { // read initial state of data
+		var mCount = snapshot.numChildren();
+		console.log(mCount);
+		if (mCount >= (MAX_USERS + MARGIN_MAX_USERS)) {
+			// move temp users
+			snapshot.forEach(function(childSnapshot) { // ss for peer
+				if (childSnapshot.child('temp').exists()) {
+					if (childSnapshot.key == peerId) {
+						console.log('RELOCATE');
+						// TODO find room w/ users < 2
+						var rIndex = roomId.substr(roomId.length - 1);
+						rIndex++;
+						// TODO DB: cancel onDisconnect
+						window.location.href = "room0-" + rIndex + '.html';
+					}
+				}
+			})	
+		}
+	});
 });
 
 roomRef.on('child_removed', function(snapshot) {
@@ -121,6 +148,7 @@ roomRef.on('child_removed', function(snapshot) {
 	appendLog('child_removed: ' + r_id);
 	appendChatLog('SYSTEM', r_name + 'が退室しました');
 });
+
 
 /** FUNCTIONS **/
 function addUser(id, name, url) {
@@ -166,6 +194,12 @@ function disconnectionHandler(peerId, user) {
 
 	roomRef.child(peerId).onDisconnect().remove();
 	onBreakRef.child(user.uid).onDisconnect().remove();
+}
+
+function getUserCount() {
+	return roomRef.once('value').then(function(snapshot) {
+		return snapshot.numChildren();
+	})
 }
 
 function initChatLog() {
@@ -252,6 +286,33 @@ function mediaSetup(room, user) {
 	})
 }
 
+// DB: move users with temp:true to another BR
+function moveUsers(users) {
+	for (var i = 0; i < users.length; i++) {
+		if (users[i] == peerId) { // user is temp
+			console.log('move user: ' + peerId);
+			// DB: cancel onDisconnect for on-break
+
+			// go to next BR
+			var rIndex = roomId.substr(roomId.length - 1);
+			window.location.href = 'room0-' + (++rIndex) + '.html';
+			break;
+		}
+	}
+	/*
+	var ref = roomRef.child(peerId); // ref to self
+	ref.once('value').then(function(snapshot) {
+		if (snapshot.child('temp').exists()) {
+			console.log('move user: ' + peerId);
+			// go to next BR
+			var rIndex = roomId.substr(roomId.length - 1);
+			console.log('room0-' + ++rIndex);
+			window.location.href = 'room0-' + (++rIndex) + '.html';
+		}
+	})
+	*/
+}
+
 function peerHandler(peer) {
 	peer.on('disconnected', function() {
 		// remove pic & name: self
@@ -265,6 +326,7 @@ function removeUser(id) {
 }
 
 function roomHandler(room, peer, user) {
+	/*
 	room.on('close', function() {
 		// DB: remove peer
 		roomRef.child(peer.id).remove();
@@ -273,6 +335,7 @@ function roomHandler(room, peer, user) {
 		// hide chat input
 		$('.container-input').css('display', 'none');
 	});
+	*/
 
 	room.on('data', function(data) {
 		// get sender
@@ -291,16 +354,28 @@ function roomHandler(room, peer, user) {
 		// DB: add peer
 		var name = user.displayName;
 		var url = user.photoURL;
+		var temp = null;
+
 		if (name == null) {
 			name = 'ユーザー';
 		}
 		if (url == null) { // no photo is set
 			url = '/images/monster.png';
 		}
-		roomRef.child(peer.id).set({
-			"name": name,
-			"url": url
+
+		// DB: get userCount
+		getUserCount().then(function(mCount) { // # of users before new user
+			if (mCount >= MAX_USERS) {
+				temp = true;
+			}
+		}).then(function() {
+			roomRef.child(peer.id).set({
+				'name': name,
+				'url': url,
+				'temp': temp
+			})
 		})
+		
 
 		// show chat input
 		$('.container-input').css('display', 'block');
@@ -309,13 +384,15 @@ function roomHandler(room, peer, user) {
 		mediaSetup(room, user);
 	});
 
+	/*
 	room .on('peerLeave', function(id) {
 		// DB: remove user
 		roomRef.child(id).remove();
 	});
+	*/
 
 	room.on('stream', function(stream) {
-		console.log('stream from: ' + stream.peerId);
+		// console.log('stream from: ' + stream.peerId);
 		var id = stream.peerId;
 		// play stream
 		var iv = setInterval(function() {
