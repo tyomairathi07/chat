@@ -67,7 +67,6 @@ function getRoomId() {
 	var res1 = path.split('/');
 	var res2 = res1[2].split('.');
 	var roomId = res2[0];
-	console.log(roomId);
 	return roomId;
 }
 

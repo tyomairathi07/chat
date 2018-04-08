@@ -233,7 +233,7 @@ function addPhoto(r, c, url) {
 
 // addVideo -> removeCoffee
 function addVideo(id, stream) {
-	console.log('addVideo');
+	//console.log('addVideo');
 	roomRef.child(id).on('value', function(snapshot) {
 		if (!snapshot.child('photo-url').exists()) { // no photo
 			var r = snapshot.child('row-index').val();
@@ -346,7 +346,6 @@ function goToBreakroom() {
 	looper(0);
 
 	function looper(roomIndex) {
-		//console.log('room0-' + roomIndex);
 		if (roomIndex >= NUM_BREAKROOMS) {
 			// TODO
 			return;
@@ -358,7 +357,6 @@ function goToBreakroom() {
 				if ((memberCount == 0) && (roomIndex != 0)) { // no members
 					roomIndex--;
 				}
-				//console.log('found room: room0-' + roomIndex);
 				// go to BR
 				window.location.href = '/break-rooms/room0-' + roomIndex + '.html';
 			} else {
@@ -485,12 +483,10 @@ function roomHandler(room, user) {
 	room.on('open', function() {
 		// log
 		logUserAction(user, 'SR-in');
-		console.log('joined room');
 		dummy();
 	})
 
 	room.on('peerJoin', function(id) {
-		console.log('peer joined: ' + id);
 	})
 
 	room.on('removeStream', function(stream) {
@@ -500,7 +496,7 @@ function roomHandler(room, user) {
 
 	// get stream & add video
 	room.on('stream', function(stream) {
-		console.log('stream from: ' + stream.peerId);
+		//console.log('stream from: ' + stream.peerId);
 		addVideo(stream.peerId, stream);
 
 	});

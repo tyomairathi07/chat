@@ -18,7 +18,7 @@ const onBreakRef = rootRef.child('on-break');
 
 const NUM_BREAKROOMS = 10;
 const MAX_USERS = 5;
-const MARGIN_MAX_USERS = 3;
+const MIN_USERS = 3;
 
 var peerId = null;
 var room = null;
@@ -117,7 +117,7 @@ roomRef.on('child_added', function(snapshot, prevkey) {
 	appendChatLog('SYSTEM', r_name + 'が入室しました');
 
 	// move temp users to another BR
-	moveUser();
+	moveUserOnAdd();
 });
 
 roomRef.on('child_removed', function(snapshot) {
@@ -126,6 +126,9 @@ roomRef.on('child_removed', function(snapshot) {
 	removeUser(r_id);
 	appendLog('child_removed: ' + r_id);
 	appendChatLog('SYSTEM', r_name + 'が退室しました');
+
+	// move users if users <= 2
+	moveUserOnRemove();
 });
 
 
@@ -174,32 +177,6 @@ function disconnectionHandler(peerId, user) {
 	roomRef.child(peerId).onDisconnect().remove();
 	onBreakRef.child(user.uid).onDisconnect().remove();
 }
-
-/*
-function findRoom() {
-	var res = null;
-	looper(0);
-
-	function looper(roomIndex) {
-		//console.log('room0-' + roomIndex);
-		if (roomIndex >= NUM_BREAKROOMS) {
-			// TODO
-			return;
-		}
-		rootRef.child('room0-' + roomIndex).once('value')
-		.then(function(snapshot) {
-			var memberCount = snapshot.numChildren();
-			if (memberCount <= 2) { // open room
-				res = roomIndex;
-				console.log(res);
-				return;
-			} else {
-				looper(++roomIndex);
-			}
-		})
-	}
-}
-*/
 
 function getUserCount() {
 	return roomRef.once('value').then(function(snapshot) {
@@ -291,48 +268,81 @@ function mediaSetup(room, user) {
 	})
 }
 
-function moveUser() {
+function moveUserOnAdd() {
+	roomRef.once('value').then(function(snapshot) {
+		var mCount = snapshot.numChildren();
+		if (mCount >= (MAX_USERS + MIN_USERS)) {
+			snapshot.forEach(function(childSnapshot) {
+				if ((childSnapshot.key == peerId) && (childSnapshot.child('temp').exists())) {
+					console.log('RELOCATE');
+					looper(0);
+
+					function looper(roomIndex) {
+						if (roomIndex >= NUM_BREAKROOMS) {
+							return;
+						}
+						rootRef.child('room0-' + roomIndex).once('value')
+						.then(function(snapshot) {
+							var memberCount = snapshot.numChildren();
+							if (memberCount <= 2) {
+								// DB: cancel on disconnect
+
+								// DB: cancel onDisconnect
+								var uid = childSnapshot.child('uid').val();
+								var ref = onBreakRef.child(uid);
+								ref.onDisconnect().cancel().then(function() {
+									window.location.href = 'room0-' + roomIndex + '.html';
+								})
+								return;
+							} else {
+								looper(++roomIndex)
+							}
+						})
+					}
+				}
+			})
+		}
+	})
+}
+
+
+function moveUserOnRemove() {
 	roomRef.once('value').then(function(snapshot) { // read initial state of data
 		var mCount = snapshot.numChildren();
 		//console.log(mCount);
-		if (mCount >= (MAX_USERS + MARGIN_MAX_USERS)) {
-			// move temp users
-			snapshot.forEach(function(childSnapshot) { // ss for peer
-				if (childSnapshot.child('temp').exists()) {
-					if (childSnapshot.key == peerId) {
-						console.log('RELOCATE');
-						// find room w/ users <= 2
-						looper(0);
+		if (mCount < MIN_USERS) {
+			// move user to another room: 
+			looper(0);
 
-						function looper(roomIndex) {
-							//console.log('room0-' + roomIndex);
-							if (roomIndex >= NUM_BREAKROOMS) {
-								// TODO
-								return;
-							}
-							rootRef.child('room0-' + roomIndex).once('value')
-							.then(function(snapshot) {
-								var memberCount = snapshot.numChildren();
-								if (memberCount <= 2) { // open room
-									// DB: cancel onDisconnect
-									var uid = childSnapshot.child('uid').val();
-									var ref = onBreakRef.child(uid);
-									ref.onDisconnect().cancel().then(function() {
-										console.log(roomIndex);
-									})
-									window.location.href = "room0-" + roomIndex + '.html';
-									return;
-								} else {
-									looper(++roomIndex);
-								}
-							})
-						}
-					}
+			function looper(roomIndex) {
+				if (roomIndex >= NUM_BREAKROOMS) {
+					// TODO
+					return;
 				}
-			})	
+				rootRef.child('room0-' + roomIndex).once('value')
+				.then(function(snapshot) {
+					console.log('room0-' + roomIndex);
+					var memberCount = snapshot.numChildren();
+					if (('room0-' + roomIndex) == roomId) {
+						memberCount--;
+					}
+					console.log(memberCount);
+					if (memberCount < MAX_USERS) { // available room
+						if (memberCount <= 1) { // room only has one or no user
+							roomIndex--;
+						}
+						window.location.href = '/break-rooms/room0-' + roomIndex + '.html';
+					} else {
+						looper(++roomIndex);
+					}
+				})
+			}
+
 		}
 	});
+
 }
+
 
 function peerHandler(peer) {
 	peer.on('disconnected', function() {
