@@ -278,7 +278,10 @@ function moveUser() {
 						// TODO find room w/ users < 2
 						var rIndex = roomId.substr(roomId.length - 1);
 						rIndex++;
-						// TODO DB: cancel onDisconnect
+						// DB: cancel onDisconnect
+						var uid = childSnapshot.child('uid').val();
+						var ref = onBreakRef.child(uid);
+						ref.onDisconnect().cancel();
 						window.location.href = "room0-" + rIndex + '.html';
 					}
 				}
@@ -333,6 +336,7 @@ function roomHandler(room, peer, user) {
 			}
 		}).then(function() {
 			roomRef.child(peer.id).set({
+				'uid': user.uid,
 				'name': name,
 				'url': url,
 				'temp': temp
