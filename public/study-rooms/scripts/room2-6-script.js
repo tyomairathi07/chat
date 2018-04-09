@@ -35,7 +35,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		/** ACTIONS BY USER **/
 		// open page
 		peer.on('open', function(id) {
-			appendLog('my ID: ' + id);
+			console.log(peer.id);
 			// set peerId
 			peerId = id;
 
@@ -353,7 +353,8 @@ function goToBreakroom() {
 		ref.child('room0-' + roomIndex).once('value')
 		.then(function(snapshot) {
 			var memberCount = snapshot.numChildren();
-			if (memberCount < MAX_MEMBER_COUNT) { // open room
+			// TODO
+			if (memberCount < 8) { // open room
 				if ((memberCount == 0) && (roomIndex != 0)) { // no members
 					roomIndex--;
 				}

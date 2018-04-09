@@ -271,9 +271,15 @@ function mediaSetup(room, user) {
 function moveUserOnAdd() {
 	roomRef.once('value').then(function(snapshot) {
 		var mCount = snapshot.numChildren();
-		if (mCount >= (MAX_USERS + MIN_USERS)) {
+
+		if (mCount >= (MAX_USERS + MIN_USERS)) { // over capacitated
+			// DB: cancel disconnection
+			var uid = snapshot.child(peerId).child('uid').val();
+			console.log(uid);
+			onBreakRef.child(uid).onDisconnect().cancel();
+
 			snapshot.forEach(function(childSnapshot) {
-				if ((childSnapshot.key == peerId) && (childSnapshot.child('temp').exists())) {
+				if ((childSnapshot.key == peerId) && (childSnapshot.child('temp').exists())) { // snapshot for peer
 					console.log('RELOCATE');
 					looper(0);
 
@@ -285,14 +291,8 @@ function moveUserOnAdd() {
 						.then(function(snapshot) {
 							var memberCount = snapshot.numChildren();
 							if (memberCount <= 2) {
-								// DB: cancel on disconnect
-
-								// DB: cancel onDisconnect
-								var uid = childSnapshot.child('uid').val();
-								var ref = onBreakRef.child(uid);
-								ref.onDisconnect().cancel().then(function() {
-									window.location.href = 'room0-' + roomIndex + '.html';
-								})
+								alert('定員を超えたため、休憩室を移動します');
+								window.location.href = 'room0-' + roomIndex + '.html';
 								return;
 							} else {
 								looper(++roomIndex)
@@ -309,10 +309,14 @@ function moveUserOnAdd() {
 function moveUserOnRemove() {
 	roomRef.once('value').then(function(snapshot) { // read initial state of data
 		var mCount = snapshot.numChildren();
-		//console.log(mCount);
-		if (mCount < MIN_USERS) {
+
+		if (mCount < MIN_USERS) { // users <= 2
 			// move user to another room: 
-			looper(0);
+			var uid = snapshot.child(peerId).child('uid').val();
+			// DB: cancel disconnection
+			onBreakRef.child(uid).onDisconnect().cancel().then(function() {
+				looper(0);
+			});
 
 			function looper(roomIndex) {
 				if (roomIndex >= NUM_BREAKROOMS) {
@@ -331,6 +335,7 @@ function moveUserOnRemove() {
 						if (memberCount <= 1) { // room only has one or no user
 							roomIndex--;
 						}
+						alert('2人以下になったため、休憩室を移動します')
 						window.location.href = '/break-rooms/room0-' + roomIndex + '.html';
 					} else {
 						looper(++roomIndex);
