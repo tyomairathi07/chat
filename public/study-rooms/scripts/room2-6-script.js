@@ -354,7 +354,7 @@ function goToBreakroom() {
 		.then(function(snapshot) {
 			var memberCount = snapshot.numChildren();
 			// TODO
-			if (memberCount < 8) { // open room
+			if (memberCount < MAX_MEMBER_COUNT) { // open room
 				if ((memberCount == 0) && (roomIndex != 0)) { // no members
 					roomIndex--;
 				}
