@@ -537,6 +537,8 @@ function setRoomName() {
 	rootRef.child('study-rooms/' + roomId + '/name').once('value')
 	.then(function(snapshot) {
 		$('#roomName').text(snapshot.val());
+	}).then(function() {
+		console.log('set room name');
 	});
 }
  

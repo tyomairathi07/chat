@@ -247,7 +247,7 @@ dl,
 ol,
 ul {
 	list-style: none;
-	margin-top: 0;
+	margin: 1rem 0 0;
 	padding-left: 0
 }
 
@@ -275,8 +275,7 @@ ul {
 .button,
 button,
 dd,
-dt,
-li {
+dt {
 	margin-bottom: 1.0rem;
 }
 
@@ -294,8 +293,7 @@ form,
 ol,
 p,
 pre,
-table,
-ul {
+table {
 	margin-bottom: 2.5rem
 }
 
