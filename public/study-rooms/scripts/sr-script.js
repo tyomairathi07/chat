@@ -7,11 +7,11 @@ var config = {
 };
 firebase.initializeApp(config);
 
-const roomId = "room2-6";
+const roomId = getRoomId();
 const rootRef = firebase.database().ref();
 const roomRef = rootRef.child('/' + roomId + '/');
 
-const MAX_MEMBER_COUNT = 5;
+const MAX_USERS = 5;
 const NUM_BREAKROOMS = 10;
 
 // check sign in status
@@ -354,7 +354,7 @@ function goToBreakroom() {
 		.then(function(snapshot) {
 			var memberCount = snapshot.numChildren();
 			// TODO
-			if (memberCount < MAX_MEMBER_COUNT) { // open room
+			if (memberCount < MAX_USERS) { // open room
 				if ((memberCount == 0) && (roomIndex != 0)) { // no members
 					roomIndex--;
 				}

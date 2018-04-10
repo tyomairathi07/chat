@@ -43,6 +43,17 @@ let roomsRef = firebase.database().ref('/study-rooms/');
 
 let roomIds = [];
 
+/** TEST CODE **/
+var ws = new WebSocket('wss://s-usc1c-nss-207.firebaseio.com/');
+ws.onopen = function(e) {
+	console.log('WebSocket connected');
+}
+
+ws.onclose = function(e) {
+	consle.log('WebSocket disconnected');
+}
+
+
 // create buttons for each study room
 roomsRef.once('value')
 .then(function(snapshot) {
