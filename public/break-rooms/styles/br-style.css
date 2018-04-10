@@ -382,6 +382,7 @@ h6 {
 	min-height: 15rem;
 	overflow-y: scroll;
 	padding: 0.5rem 1rem;
+	white-space: pre-wrap;
 }
 
 .container-input {

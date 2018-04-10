@@ -98,7 +98,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		$('#textarea-chat').keypress(function(e) {
-			if (e.which == 13) {
+			if (e.keyCode == 13 && !e.shiftKey) {
 				sendChat(room, user);
 				return false; // equal to e.preventDefault(); prevents newline
 			}
@@ -435,6 +435,7 @@ function sendChat(room, user) {
 	var message = $('#textarea-chat').val();
 	// clear textarea
 	$('#textarea-chat').val('');
+	console.log(message);
 
 	// DB: add to log-chat/roomId/timestamp
 	var ref = rootRef.child('log-chat/' + roomId);
