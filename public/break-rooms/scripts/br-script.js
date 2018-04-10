@@ -152,7 +152,13 @@ function appendLog(text) {
 }
 
 function appendChatLog(sender, message) {
-	$('#chat-log').append('<b>' + sender + ': </b>' + message + '<br>');
+	var log = $('#chat-log');
+	if (sender == 'SYSTEM') {
+		log.append('<span style="color: #9b4dca;">' + message + '</span><br>');
+	} else {
+		log.append('<b>' + sender + ':</b>&nbsp;' + message + '<br>');
+	}
+	// scroll to bottom
 	updateScroll();
 }
 
