@@ -197,31 +197,42 @@ function initChatLog() {
 }
 
 function mediaErrorHandler(errorName, user) {
-	var btn = $('#reload');
+	var reload = $('#reload');
+	var lobby = $('#lobby');
 	// show error message
-	btn.before('※マイクが使用できません。チャットの送受信はできますが、音声は受信できません。<br>');
+	reload.before('<b><span style="color:red;">※マイクが使用できません。</span></b>チャットの送受信はできますが、音声は受信できません。<br>');
 	switch(errorName) {
 		case 'NotAllowedError': 
-			btn.before('対策: ブラウザからマイクのアクセスを許可');
+			reload.before('対策1: ブラウザからマイクのアクセスを許可');
 			break;
 		case 'NotReadableError':
-			btn.before('対策: カメラを使用している他のアプリケーション(Skypeなど)を閉じる');
+			reload.before('対策1: カメラを使用している他のアプリケーション(Skypeなど)を閉じる');
 			break;
 		default:
-			btn.before('対策: PC側でカメラの設定をする');
+			reload.before('対策1: PC側でカメラの設定をする');
 	}
-	btn.before(' → 下のボタンをクリック<br>(ブラウザの更新ボタンは押さないでください)<br><br>');
-	btn.before('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。<br>');
+	reload.before(' → 下のボタンをクリック (ブラウザの更新ボタンは押さないでください)<br>');
+	lobby.before('<br>対策2: ロビーで休憩する (マイク不要のテキストチャットのみの休憩室です)<br>')
+	lobby.after('<br>詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
 	// hide message
 	$('.message').css('display', 'none');
 	$('.error-msg').css('display', 'inline-block');
 
-	btn.click(function() {
+	reload.click(function() {
 		// DB: cancel disconnection
 		onBreakRef.child(user.uid).onDisconnect().cancel()
 		.then(function() {
 			// reload page
 			location.reload();
+		})
+	})
+
+	lobby.click(function() {
+		//DB: cancel disconnection
+		onBreakRef.child(user.uid).onDisconnect().cancel()
+		.then(function() {
+			// go to lobby
+			window.location.href = "room0-0.html";
 		})
 	})
 }
