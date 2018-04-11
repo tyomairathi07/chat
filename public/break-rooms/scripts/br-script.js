@@ -39,11 +39,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			debug: 3
 		});
 
-		/*
-		let peerId = null;
-		let room = null;
-		*/
-
 		// open page
 		peer.on('open', function(id) {
 			// set peer Id
@@ -290,7 +285,9 @@ function moveUserOnAdd() {
 					looper(1);
 
 					function looper(roomIndex) {
-						if (roomIndex > NUM_BREAKROOMS) {
+						if (roomIndex > NUM_BREAKROOMS) { // no open room
+							// go to lobby
+							window.location.href = '/break-rooms/room0-0.html';
 							return;
 						}
 						rootRef.child('room0-' + roomIndex).once('value')
@@ -325,8 +322,9 @@ function moveUserOnRemove() {
 			});
 
 			function looper(roomIndex) {
-				if (roomIndex > NUM_BREAKROOMS) {
-					// TODO
+				if (roomIndex > NUM_BREAKROOMS) { // no open room
+					// go to lobby
+					window.location.href = '/break-rooms/room0-0.html';
 					return;
 				}
 				rootRef.child('room0-' + roomIndex).once('value')

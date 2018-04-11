@@ -346,8 +346,9 @@ function goToBreakroom() {
 	looper(1);
 
 	function looper(roomIndex) {
-		if (roomIndex > NUM_BREAKROOMS) {
-			// TODO
+		if (roomIndex > NUM_BREAKROOMS) { // no open room
+			// go to lobby
+			window.location.href = '/break-rooms/room0-0.html';
 			return;
 		}
 		ref.child('room0-' + roomIndex).once('value')
