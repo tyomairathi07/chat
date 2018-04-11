@@ -10,10 +10,6 @@
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
     <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-<!--
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
--->
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -36,39 +32,55 @@
     </div>
     <!-- END TOPNAV -->
 
-    <h1 style="margin-bottom: 0.5rem;">OUJバーチャル自習室</h1>
+    <!-- START CONTENT -->
+    <div class="content">
+      <h1 style="margin-bottom: 0.5rem;">OUJバーチャル自習室</h1>
 
-    <div class="message" style="display: inline-block;">
-      ※ログアウト後に<b>アンケート</b>が表示されます。お時間に余裕があれば、ご協力いただければ幸いです<br>
-      ※30分間操作がない場合、自動的にログアウトされます(自習室・休憩室の利用中は除く)
-    </div>
-    <br>
-    <div style="display: inline-block;">
-      <div id="error-sign-in" class="error-msg" style="margin-bottom: 1.0rem;"></div>
-
-      <label for="email">メールアドレス</label>
-      <input type="email" id="email"><br>
-
-      <label for="password">
-        パスワード<br>
-        <a href="send-password-reset.html">
-          <span style="font-size: 1.3rem; font-weight: 700; margin-left: .5rem;">※パスワードを忘れた方はここをクリック</span>
-        </a>
-      </label>
-      <input type="password" id="password">
+      <div class="message" style="display: inline-block;">
+        ※ログアウト後に<b>アンケート</b>が表示されます。お時間に余裕があれば、ご協力いただければ幸いです<br>
+        ※30分間操作がない場合、自動的にログアウトされます(自習室・休憩室の利用中は除く)
+      </div>
       <br>
+      <div style="display: inline-block;">
+        <div id="error-sign-in" class="error-msg" style="margin-bottom: 1.0rem;"></div>
 
-      <button id="sign-in" style="vertical-align: top;">ログイン</button>
+        <label for="email">メールアドレス</label>
+        <input type="email" id="email"><br>
 
-      <a href="terms.html">
-        <button class="button-black" id="sign-up" style="float: right;">新規登録はここから</button>
-      </a>
+        <label for="password">
+          パスワード<br>
+          <a href="send-password-reset.html">
+            <span style="font-size: 1.3rem; font-weight: 700; margin-left: .5rem;">※パスワードを忘れた方はここをクリック</span>
+          </a>
+        </label>
+        <input type="password" id="password">
+        <br>
 
+        <button id="sign-in" style="vertical-align: top;">ログイン</button>
+
+        <a href="terms.html">
+          <button class="button-black" id="sign-up" style="float: right;">新規登録はここから</button>
+        </a>
+
+      </div>
     </div>
+    <!-- END CONTENT -->
+
+    <!-- START FOOTER-->
+    <div class="footer">
+      <div class="footer-item">
+        Copyright (C) 2018 Oriko HARADA
+      </div>
+      <div class="footer-item">
+        <a href="/acknowledgements.html">謝辞</a> / <a href="/help.html">お問い合わせ</a>&nbsp;&nbsp;
+      </div>
+    </div>
+    <!-- END FOOTER -->
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <!-- my scripts -->
     <script src="scripts/common.js"></script>
     <script src="scripts/index-script.js"></script>
