@@ -1,7 +1,3 @@
-/** TODO
-- enable checkUserEntry, disconnectionHandler
-**/
-
 // Initialize Firebase
 var config = {
 apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
@@ -27,7 +23,7 @@ var room = null;
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		//checkUserEntry(user);
+		checkUserEntry(user);
 
 		// set room names
 		setBreakroomName();

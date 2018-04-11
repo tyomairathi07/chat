@@ -391,6 +391,7 @@ h6 {
 	border-top: none;
 	padding-top: 1rem;
 	text-align: left;
+	vertical-align: top;
 }
 
 .table-lobby .td-system {

@@ -1,7 +1,3 @@
-/** TODO
-- enable checkUserEntry, disconnectionHandler
-**/
-
 // Initialize Firebase
 var config = {
 apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
@@ -26,13 +22,25 @@ firebase.auth().onAuthStateChanged(function(user) {
 		// handle disconnections
 		disconnectionHandler(user);
 
-		// set room names
+		// set room name
 		setStudyroomName(user);
-		
-		// TODO show 'join' msg after previous chat msgs]/
 
 		// DB: add user to room
-		roomRef.child(user.uid).set({'name': user.displayName || 'ユーザー'})
+		var userRef = roomRef.push();
+		// DB: handle disconnections
+		userRef.onDisconnect().remove();
+
+		// DB: add child
+		userRef.set({
+			'name': user.displayName || 'ユーザー',
+			'uid': user.uid
+		})
+		/*
+		roomRef.child(user.uid).set({
+			'name': user.displayName || 'ユーザー',
+			'uid': user.uid
+		})
+		*/
 		.then(function() {
 			// log user action
 			logUserAction(user, 'BR-in');
@@ -67,52 +75,91 @@ firebase.auth().onAuthStateChanged(function(user) {
 				return false; // equal to e.preventDefault(); prevents newline
 			}
 		});
+
+		/** [START] DB LISTENERS **/
+		roomRef.on('value', function(snapshot) {
+			// update # of users
+			var numUsers = snapshot.numChildren();
+			$('#num-users').text(numUsers);
+		});
+
+		roomRef.orderByKey().startAt(userRef.key).on('child_added', function(childSnapshot) {
+			if (childSnapshot.key != userRef.key) {
+				var name = childSnapshot.child('name').val();
+				console.log(childSnapshot.key);
+
+				sendSystemChat(name + 'が入室しました');
+			}
+			// DB: add to chat log
+			//sendSystemChat(name, 'join');
+		});
+		/*
+		roomRef.on('child_added',function(childSnapshot) {
+			var name = childSnapshot.child('name').val();
+			console.log(name);
+
+			// DB: add to chat log
+			sendSystemChat(name, 'join');
+		});
+		*/
+
+		roomRef.on('child_removed', function(childSnapshot) {
+			var name = childSnapshot.child('name').val();
+			sendSystemChat(name + 'が退室しました');
+
+			// DB: add to chat log
+			//sendSystemChat(name, 'leave');
+		});
+
+		// retreive chats before join
+		var query = chatRef.orderByKey().limitToLast(20);
+		var counter = 1;
+		var max = 20;
+		query.once('value').then(function(snapshot) {
+			if (snapshot.numChildren() < max) {
+				max = snapshot.numChildren();
+			}
+			console.log(max);
+		}).then(function() {
+			query.on('child_added', function(childSnapshot) {
+				onChildAdded(childSnapshot);
+				if (counter == max) {
+					sendSystemChat('<b>＊＊＊ロビーに入室しました＊＊＊</b>');
+				}
+				counter++;
+			});
+		})
+		/*
+		var lastKey;
+		query.once('value').then(function(snapshot) {
+			var counter = 1; // prevent posting same record (at counter = 20)
+			var childCount = snapshot.numChildren();
+			var max = 20;
+			if (childCount < 20) { // cases when less then 20 records
+				max = childCount;
+			}
+			snapshot.forEach(function(childSnapshot) {
+				if (counter <= max) {
+					onChildAdded(childSnapshot);
+				}
+				if (counter == max) {
+					lastKey = childSnapshot.key;
+				}
+				counter++;
+			});
+		}).then(function() {
+			console.log('done');
+			sendSystemChat('ロビーに入室しました');
+			
+			//chatRef.orderByKey().limitToLast(1).on('child_added', onChildAdded);
+			
+		});
+		*/
+		/** [END] DB LISTENERS **/
 	} else {
 		window.location.href = "/";
 	}
 });
-
-/** [START] DB LISTENERS **/
-roomRef.on('value', function(snapshot) {
-	// update # of users
-	var numUsers = snapshot.numChildren();
-	$('#num-users').text(numUsers);
-});
-
-roomRef.on('child_added',function(childSnapshot) {
-	// show system message
-	var name = childSnapshot.child('name').val();
-
-	// DB: add to chat log
-	sendSystemChat(name, 'join');
-})
-
-roomRef.on('child_removed', function(childSnapshot) {
-	var name = childSnapshot.child('name').val();
-
-	// DB: add to chat log
-	sendSystemChat(name, 'leave');
-})
-
-// retrieves new chats after join
-var query = chatRef.orderByKey().limitToLast(20);
-query.once('value').then(function(snapshot) {
-	var counter = 1; // prevent posting same record (at counter = 20)
-	var childCount = snapshot.numChildren();
-	var max;
-	if (childCount < 20) { // cases when less then 20 records
-		max = childCount;
-	}
-	snapshot.forEach(function(childSnapshot) {
-		if (counter < max) {
-			onChildAdded(childSnapshot);
-		}
-		counter++;
-	});
-}).then(function() {
-	chatRef.orderByKey().limitToLast(1).on('child_added', onChildAdded);
-});
-/** [END] DB LISTENERS **/
 
 
 function disconnectionHandler(user) {
@@ -121,13 +168,13 @@ function disconnectionHandler(user) {
 		logUserAction(user, 'BR-out');
 		return undefined;
 	});
-
+	/*
 	roomRef.child(user.uid).onDisconnect().remove();
+	*/
 	onBreakRef.child(user.uid).onDisconnect().remove();
 }
 
 function onChildAdded(childSnapshot) {
-	console.log(childSnapshot.key);
 	var table = $('.table-lobby');
 	// add to chat log
 	var name = childSnapshot.child('name').val();
@@ -151,6 +198,15 @@ function sendChat(user) {
 	var msg = $('#textarea-chat').val();
 	
 	// DB: add child
+	chatRef.push().set({
+		'name': name,
+		'url': url,
+		'msg': msg
+	}).then(function() {
+		// clear textarea
+		$('#textarea-chat').val('');
+	})
+	/*
 	chatRef.child(time).set({
 		'name': name,
 		'url': url,
@@ -159,8 +215,15 @@ function sendChat(user) {
 		// clear textarea
 		$('#textarea-chat').val('');
 	})
+	*/
 }
 
+function sendSystemChat(msg) {
+	console.log(msg)
+	var table = $('.table-lobby');
+	table.append('<tr><td class="td-system" colspan="2">' + msg + '</td></tr>');
+}
+/*
 function sendSystemChat(name, action) {
 	// get time 
 	var time = new Date().getTime();
@@ -177,6 +240,7 @@ function sendSystemChat(name, action) {
 		'msg': msg
 	});
 } 
+*/
 
 function setStudyroomName(user) {
     firebase.database().ref('/on-break/' + user.uid + '/room-id').once('value')
