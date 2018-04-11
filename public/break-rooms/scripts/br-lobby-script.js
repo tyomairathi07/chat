@@ -103,7 +103,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 			if (snapshot.numChildren() < max) { // get # of chats BEFORE join
 				max = snapshot.numChildren();
 			}
+			console.log(max);
 		}).then(function() {
+			if(max == 0) {
+				sendSystemChat('<b>＊＊＊ロビーに入室しました＊＊＊</b>');
+			}
 			query.on('child_added', function(childSnapshot) {
 				onChildAdded(childSnapshot);
 				if (counter == max) { // last chat BEFORE join
