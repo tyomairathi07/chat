@@ -287,10 +287,10 @@ function moveUserOnAdd() {
 			snapshot.forEach(function(childSnapshot) {
 				if ((childSnapshot.key == peerId) && (childSnapshot.child('temp').exists())) { // snapshot for peer
 					console.log('RELOCATE');
-					looper(0);
+					looper(1);
 
 					function looper(roomIndex) {
-						if (roomIndex >= NUM_BREAKROOMS) {
+						if (roomIndex > NUM_BREAKROOMS) {
 							return;
 						}
 						rootRef.child('room0-' + roomIndex).once('value')
@@ -321,11 +321,11 @@ function moveUserOnRemove() {
 			var uid = snapshot.child(peerId).child('uid').val();
 			// DB: cancel disconnection
 			onBreakRef.child(uid).onDisconnect().cancel().then(function() {
-				looper(0);
+				looper(1);
 			});
 
 			function looper(roomIndex) {
-				if (roomIndex >= NUM_BREAKROOMS) {
+				if (roomIndex > NUM_BREAKROOMS) {
 					// TODO
 					return;
 				}
@@ -441,7 +441,6 @@ function sendChat(room, user) {
 	var message = $('#textarea-chat').val();
 	// clear textarea
 	$('#textarea-chat').val('');
-	console.log(message);
 
 	// DB: add to log-chat/roomId/timestamp
 	var ref = rootRef.child('log-chat/' + roomId);
@@ -456,7 +455,7 @@ function sendChat(room, user) {
 
 function setBreakroomName() {
 	var rIndex = roomId.substr(roomId.length - 1);
-	var roomName = '休憩室' + (++rIndex);
+	var roomName = '休憩室' + (rIndex);
 	$('#breakroomName').text(roomName);
 }
 

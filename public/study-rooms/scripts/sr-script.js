@@ -321,7 +321,7 @@ function disconnectionHandler(peerId, user) {
 
 // fires peerJoin event with a dummy peer
 function dummy() {
-	let dummyPeer = new Peer("dummy", {
+	let dummyPeer = new Peer({
 		key: 'b9980fd6-8e93-43cc-ba48-0d80d1d3144d',
 		debug: 3
 	});
@@ -343,10 +343,10 @@ function getCell(r, c) {
 function goToBreakroom() {
 	var ref = firebase.database().ref();
 
-	looper(0);
+	looper(1);
 
 	function looper(roomIndex) {
-		if (roomIndex >= NUM_BREAKROOMS) {
+		if (roomIndex > NUM_BREAKROOMS) {
 			// TODO
 			return;
 		}
@@ -355,7 +355,7 @@ function goToBreakroom() {
 			var memberCount = snapshot.numChildren();
 			// TODO
 			if (memberCount < MAX_USERS) { // open room
-				if ((memberCount == 0) && (roomIndex != 0)) { // no members
+				if ((memberCount == 0) && (roomIndex != 1)) { // no members
 					roomIndex--;
 				}
 				// go to BR
