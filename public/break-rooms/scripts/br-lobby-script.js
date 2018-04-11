@@ -1,3 +1,7 @@
+/** TODO 
+- enable checkUserEntry
+**/
+
 // Initialize Firebase
 var config = {
 apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
@@ -34,14 +38,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		userRef.set({
 			'name': user.displayName || 'ユーザー',
 			'uid': user.uid
-		})
-		/*
-		roomRef.child(user.uid).set({
-			'name': user.displayName || 'ユーザー',
-			'uid': user.uid
-		})
-		*/
-		.then(function() {
+		}).then(function() {
 			// log user action
 			logUserAction(user, 'BR-in');
 			// show input container
@@ -77,103 +74,61 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 		/** [START] DB LISTENERS **/
+		// set # of users online
 		roomRef.on('value', function(snapshot) {
 			// update # of users
 			var numUsers = snapshot.numChildren();
 			$('#num-users').text(numUsers);
 		});
 
+		// log user join
 		roomRef.orderByKey().startAt(userRef.key).on('child_added', function(childSnapshot) {
-			if (childSnapshot.key != userRef.key) {
+			if (childSnapshot.key != userRef.key) { // log new users AFTER current user
 				var name = childSnapshot.child('name').val();
-				console.log(childSnapshot.key);
-
 				sendSystemChat(name + 'が入室しました');
 			}
-			// DB: add to chat log
-			//sendSystemChat(name, 'join');
 		});
-		/*
-		roomRef.on('child_added',function(childSnapshot) {
-			var name = childSnapshot.child('name').val();
-			console.log(name);
 
-			// DB: add to chat log
-			sendSystemChat(name, 'join');
-		});
-		*/
-
+		// log user leave
 		roomRef.on('child_removed', function(childSnapshot) {
 			var name = childSnapshot.child('name').val();
 			sendSystemChat(name + 'が退室しました');
-
-			// DB: add to chat log
-			//sendSystemChat(name, 'leave');
 		});
 
-		// retreive chats before join
+		// read chats
 		var query = chatRef.orderByKey().limitToLast(20);
 		var counter = 1;
 		var max = 20;
 		query.once('value').then(function(snapshot) {
-			if (snapshot.numChildren() < max) {
+			if (snapshot.numChildren() < max) { // get # of chats BEFORE join
 				max = snapshot.numChildren();
 			}
-			console.log(max);
 		}).then(function() {
 			query.on('child_added', function(childSnapshot) {
 				onChildAdded(childSnapshot);
-				if (counter == max) {
+				if (counter == max) { // last chat BEFORE join
 					sendSystemChat('<b>＊＊＊ロビーに入室しました＊＊＊</b>');
 				}
 				counter++;
 			});
 		})
-		/*
-		var lastKey;
-		query.once('value').then(function(snapshot) {
-			var counter = 1; // prevent posting same record (at counter = 20)
-			var childCount = snapshot.numChildren();
-			var max = 20;
-			if (childCount < 20) { // cases when less then 20 records
-				max = childCount;
-			}
-			snapshot.forEach(function(childSnapshot) {
-				if (counter <= max) {
-					onChildAdded(childSnapshot);
-				}
-				if (counter == max) {
-					lastKey = childSnapshot.key;
-				}
-				counter++;
-			});
-		}).then(function() {
-			console.log('done');
-			sendSystemChat('ロビーに入室しました');
-			
-			//chatRef.orderByKey().limitToLast(1).on('child_added', onChildAdded);
-			
-		});
-		*/
 		/** [END] DB LISTENERS **/
 	} else {
 		window.location.href = "/";
 	}
 });
 
-
+// NOTE: another disconnection handling above
 function disconnectionHandler(user) {
 	// log user action
 	$(window).on('beforeunload', function() {
 		logUserAction(user, 'BR-out');
 		return undefined;
 	});
-	/*
-	roomRef.child(user.uid).onDisconnect().remove();
-	*/
 	onBreakRef.child(user.uid).onDisconnect().remove();
 }
 
+// add chat to chat log
 function onChildAdded(childSnapshot) {
 	var table = $('.table-lobby');
 	// add to chat log
@@ -181,15 +136,13 @@ function onChildAdded(childSnapshot) {
 	var url = childSnapshot.child('url').val();
 	var msg = childSnapshot.child('msg').val();
 
-	if (name == 'SYSTEM') {
-		table.append('<tr><td class="td-system" colspan="2">' + msg + '</td></tr>');
-	} else {
-		table.append('<tr><td class="td-user"><img class="user-pic" src="' + url + '"></td>' +
-			'<td class="td-message"><b>' + name + '</b><br>' + msg + '</td></tr>');
-	}
+	table.append('<tr><td class="td-user"><img class="user-pic" src="' + url + '"></td>' +
+		'<td class="td-message"><b>' + name + '</b><br>' + msg + '</td></tr>');
+
 	updateScroll();
 }
 
+// DB: send chat
 function sendChat(user) {
 	// get time
 	var time = new Date().getTime();
@@ -201,47 +154,21 @@ function sendChat(user) {
 	chatRef.push().set({
 		'name': name,
 		'url': url,
-		'msg': msg
+		'msg': msg,
+		'timestamp': time
 	}).then(function() {
 		// clear textarea
 		$('#textarea-chat').val('');
-	})
-	/*
-	chatRef.child(time).set({
-		'name': name,
-		'url': url,
-		'msg': msg
-	}).then(function() {
-		// clear textarea
-		$('#textarea-chat').val('');
-	})
-	*/
+	});
 }
 
+// add user join/leave to chat log
 function sendSystemChat(msg) {
-	console.log(msg)
 	var table = $('.table-lobby');
 	table.append('<tr><td class="td-system" colspan="2">' + msg + '</td></tr>');
 }
-/*
-function sendSystemChat(name, action) {
-	// get time 
-	var time = new Date().getTime();
-	var msg;
-	// DB: add to chat log
-	if (action == 'join') {
-		msg = name + 'が入室しました';
-	} else {
-		msg = name + 'が退室しました';
-	}
-	// DB: add child
-	chatRef.child(time).set({
-		'name': 'SYSTEM',
-		'msg': msg
-	});
-} 
-*/
 
+// sets name of study room where user came from
 function setStudyroomName(user) {
     firebase.database().ref('/on-break/' + user.uid + '/room-id').once('value')
     .then(function(snapshot) { // データの読み込み
@@ -255,6 +182,7 @@ function setStudyroomName(user) {
     });
 }
 
+// scroll to bottom of div
 function updateScroll() {
 	var element = $('#chat-log');
 	element.scrollTop(element.prop('scrollHeight'));
