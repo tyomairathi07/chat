@@ -6,12 +6,10 @@
     <title>新規登録</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -35,132 +33,141 @@
     </div>
     <!-- END TOPNAV -->
 
-    <div style="display: inline-block;">
-      <div id="error-sign-up" class="error-msg"></div>
+    <!-- START MAIN -->
+    <div class="main">
+      <div style="display: inline-block;">
+        <div id="error-sign-up" class="error-msg"></div>
 
-      <table>
-        <tr>
-          <td>
-            <label for="email">メールアドレス</label><br>
-            <span style="display: block;">
-              【注意】
-              <u>放送大学Gmailのメールアドレス</u>を使用してください<br>
-              メールアドレスがわからない方は<a href="/help.html#find_email"><b>このページ</b></a>をご確認ください
-            </span>
-          </td>
-          <td>
-            <input type="email" id="email" style="margin-bottom: 0">
-          </td>
-        </tr>
+        <table>
+          <tr>
+            <td>
+              <label for="email">メールアドレス</label><br>
+              <span style="display: block;">
+                【注意】
+                <u>放送大学Gmailのメールアドレス</u>を使用してください<br>
+                メールアドレスがわからない方は<a href="/help.html#find_email"><b>このページ</b></a>をご確認ください
+              </span>
+            </td>
+            <td>
+              <input type="email" id="email" style="margin-bottom: 0">
+            </td>
+          </tr>
 
-        <tr>
-          <td><label for="password">パスワード(6文字以上)</label></td>
-          <td><input type="password" id="password"></td>
-        </tr>
+          <tr>
+            <td><label for="password">パスワード(6文字以上)</label></td>
+            <td><input type="password" id="password"></td>
+          </tr>
 
-        <tr>
-          <td><label for="password-confirm">確認用パスワード</label></td>
-          <td><input type="password" id="password-confirm"></td>
-        </tr>
+          <tr>
+            <td><label for="password-confirm">確認用パスワード</label></td>
+            <td><input type="password" id="password-confirm"></td>
+          </tr>
 
-        <tr>
-          <td><label for="gender">性別</label></td>
-          <td>
-            <input type="radio" name="gender" value="女性">女性
-            <input type="radio" name="gender" value="男性">男性
-            <input type="radio" name="gender" value="無回答">無回答
-          </td>
-        </tr>
+          <tr>
+            <td><label for="gender">性別</label></td>
+            <td>
+              <input type="radio" name="gender" value="女性">女性
+              <input type="radio" name="gender" value="男性">男性
+              <input type="radio" name="gender" value="無回答">無回答
+            </td>
+          </tr>
 
-        <tr>
-          <td><label for="age-group">年代</label></td>
-          <td>
-            <select name="age-group">
-              <option>10代</option>
-              <option>20代</option>
-              <option>30代</option>
-              <option>40代</option>
-              <option>50代</option>
-              <option>60代</option>
-              <option>70代</option>
-              <option>80代</option>
-              <option>90代以上</option>
-            </select>
-          </td>
-        </tr>
+          <tr>
+            <td><label for="age-group">年代</label></td>
+            <td>
+              <select name="age-group">
+                <option>10代</option>
+                <option>20代</option>
+                <option>30代</option>
+                <option>40代</option>
+                <option>50代</option>
+                <option>60代</option>
+                <option>70代</option>
+                <option>80代</option>
+                <option>90代以上</option>
+              </select>
+            </td>
+          </tr>
 
-        <tr id="tr-student-type">
-          <td><label for="student-type">学生種別</label></td>
-          <td>
-            <select name="student-type" id="student-type">
-              <optgroup label="大学(教養学部)">
-                <option>全科履修生</option>
-                <option>選科/科目/集中科目履修生</option>
-              </optgroup>
-              <optgroup label="大学院">
-                <option>修士全科生</option>
-                <option>修士選科生/修士科目生</option>
-                <option>博士全科生</option>
-              </optgroup>
-              <optgroup label="その他">
-                <option>教職員</option>
-                <option>その他</option>
-              </optgroup>
-            </select>
-          </td>
-        </tr>
+          <tr id="tr-student-type">
+            <td><label for="student-type">学生種別</label></td>
+            <td>
+              <select name="student-type" id="student-type">
+                <optgroup label="大学(教養学部)">
+                  <option>全科履修生</option>
+                  <option>選科/科目/集中科目履修生</option>
+                </optgroup>
+                <optgroup label="大学院">
+                  <option>修士全科生</option>
+                  <option>修士選科生/修士科目生</option>
+                  <option>博士全科生</option>
+                </optgroup>
+                <optgroup label="その他">
+                  <option>教職員</option>
+                  <option>その他</option>
+                </optgroup>
+              </select>
+            </td>
+          </tr>
 
-        <tr id="ba-major" style="border-bottom: 0.1rem solid #e1e1e1;">
-          <td><label for="ba-major">所属コース</label></td>
-          <td>
-            <select name="ba-major">
-              <option>生活と福祉コース</option>
-              <option>心理と教育コース</option>
-              <option>社会と産業コース</option>
-              <option>人間と文化コース</option>
-              <option>情報コース</option>
-              <option>自然と環境コース</option>
-            </select>
-          </td>
-        </tr>
+          <tr id="ba-major" style="border-bottom: 0.1rem solid #e1e1e1;">
+            <td><label for="ba-major">所属コース</label></td>
+            <td>
+              <select name="ba-major">
+                <option>生活と福祉コース</option>
+                <option>心理と教育コース</option>
+                <option>社会と産業コース</option>
+                <option>人間と文化コース</option>
+                <option>情報コース</option>
+                <option>自然と環境コース</option>
+              </select>
+            </td>
+          </tr>
 
-        <tr id="ma-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
-          <td><label for="ma-major">所属プログラム</label></td>
-          <td>
-            <select name="ma-major">
-              <option>生活健康科学プログラム</option>
-              <option>人間発達科学プログラム</option>
-              <option>臨床心理学プログラム</option>
-              <option>社会経営科学プログラム</option>
-              <option>人文学プログラム</option>
-              <option>情報学プログラム</option>
-              <option>自然環境科学プログラム</option>
-            </select>
-          </td>
-        </tr>
+          <tr id="ma-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
+            <td><label for="ma-major">所属プログラム</label></td>
+            <td>
+              <select name="ma-major">
+                <option>生活健康科学プログラム</option>
+                <option>人間発達科学プログラム</option>
+                <option>臨床心理学プログラム</option>
+                <option>社会経営科学プログラム</option>
+                <option>人文学プログラム</option>
+                <option>情報学プログラム</option>
+                <option>自然環境科学プログラム</option>
+              </select>
+            </td>
+          </tr>
 
-        <tr id="phd-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
-          <td><label for="phd-major">所属プログラム</label></td>
-          <td>
-            <select name="phd-major">
-              <option>生活健康科学プログラム</option>
-              <option>人間科学プログラム</option>
-              <option>社会経営学プログラム</option>
-              <option>人文学プログラム</option>
-              <option>自然科学プログラム</option>
-            </select>
-          </td>
-        </tr>
+          <tr id="phd-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
+            <td><label for="phd-major">所属プログラム</label></td>
+            <td>
+              <select name="phd-major">
+                <option>生活健康科学プログラム</option>
+                <option>人間科学プログラム</option>
+                <option>社会経営学プログラム</option>
+                <option>人文学プログラム</option>
+                <option>自然科学プログラム</option>
+              </select>
+            </td>
+          </tr>
 
-        <tr>
-          <td style="padding-top: 3rem;"><button id="sign-up">新規登録を完了する</button></td>
-        </tr>
-      </table>
+          <tr>
+            <td style="padding-top: 3rem;"><button id="sign-up">新規登録を完了する</button></td>
+          </tr>
+        </table>
+      </div>
     </div>
+    <!-- END MAIN -->
+
+    <!-- START FOOTER-->
+    <div class="footer"></div>
+    <!-- END FOOTER -->
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <!-- my scripts -->
     <script type="text/javascript" src="scripts/common.js"></script>
     <script src="scripts/sign-up-script.js"></script>
   </body>

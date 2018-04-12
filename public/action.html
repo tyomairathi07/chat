@@ -6,15 +6,9 @@
     <title>OUJバーチャル自習室</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <!--
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-    
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
-    -->
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -39,46 +33,52 @@
     </div>
     <!-- END TOPNAV -->
 
-    <!-- contents -->
-    <div class="error-msg"></div>
+    <!-- START MAIN -->
+    <div class="main">
+        <div class="error-msg"></div>
 
-     <div id="invalid-link" class="message">
-        無効なリンクです。<br>
-        マイページから再度手続きをお願いします。<br><br>
+         <div id="invalid-link" class="message">
+            無効なリンクです。<br>
+            マイページから再度手続きをお願いします。<br><br>
 
-        <span>
-            ※一番新しいメールのリンクのみ有効です。(古いメールのリンクは無効になります)<br>
-            ※ログインしていない場合は、トップページでログイン → マイページにアクセスしてください。<br><br>
-        </span>
+            <span>
+                ※一番新しいメールのリンクのみ有効です。(古いメールのリンクは無効になります)<br>
+                ※ログインしていない場合は、トップページでログイン → マイページにアクセスしてください。<br><br>
+            </span>
 
-        <a href="/mypage/settings.html"><button>マイページ</button></a>
-        <a href="/"><button class="button-black" style="float: right;">トップページ</button></a>
+            <a href="/mypage/settings.html"><button>マイページ</button></a>
+            <a href="/"><button class="button-black" style="float: right;">トップページ</button></a>
+        </div>
+
+        <!-- email verification-->
+        <div id="verify-success" class="message">
+            アカウント認証が完了しました。<br>
+            システムをご利用いただくには、下の「トップページ」ボタンからログインをお願いします。<br><br>
+            <span>※ログインには、ご登録いただいた<b>メールアドレス・パスワード</b>が必要です</span><br><br>
+            <a href="/"><button>トップページ</button></a>
+        </div>
+
+        <!-- password reset -->
+        <div id="reset-password">
+            <label for="new-password">新しいパスワード(6文字以上)</label>
+            <input type="password" id="new-password"><br>
+
+            <button id="reset">変更</button>
+        </div>
+
+        <div id="reset-success" class="message">
+            パスワードが変更されました。<br>トップページに戻り、新しいパスワードでログインしてください。<br><br>
+            <a href="/"><button class="button-black">トップページ</button></a><br>
+        </div>
     </div>
 
-    <!-- email verification-->
-    <div id="verify-success" class="message">
-        アカウント認証が完了しました。<br>
-        システムをご利用いただくには、下の「トップページ」ボタンからログインをお願いします。<br><br>
-        <span>※ログインには、ご登録いただいた<b>メールアドレス・パスワード</b>が必要です</span><br><br>
-        <a href="/"><button>トップページ</button></a>
-    </div>
-
-    <!-- password reset -->
-    <div id="reset-password">
-        <label for="new-password">新しいパスワード(6文字以上)</label>
-        <input type="password" id="new-password"><br>
-
-        <button id="reset">変更</button>
-    </div>
-
-    <div id="reset-success" class="message">
-        パスワードが変更されました。<br>トップページに戻り、新しいパスワードでログインしてください。<br><br>
-        <a href="/"><button class="button-black">トップページ</button></a><br>
-    </div>
+    <!-- START FOOTER-->
+    <div class="footer"></div>
+    <!-- END FOOTER -->
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="/scripts/common.js"></script>
     <script src="scripts/action-script.js"></script>

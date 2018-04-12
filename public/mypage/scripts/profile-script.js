@@ -5,9 +5,11 @@ var config = {
   databaseURL: "https://fireba-a8775.firebaseio.com",
   projectId: "fireba-a8775",
   storageBucket: "fireba-a8775.appspot.com",
-  messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
+
+// load footer
+loadFooter();
 
 // check user status
 firebase.auth().onAuthStateChanged(function(user) {

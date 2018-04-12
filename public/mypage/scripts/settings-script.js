@@ -4,10 +4,11 @@ var config = {
   authDomain: "fireba-a8775.firebaseapp.com",
   databaseURL: "https://fireba-a8775.firebaseio.com",
   projectId: "fireba-a8775",
-  storageBucket: "fireba-a8775.appspot.com",
-  messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
+
+// load footer
+loadFooter();
 
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {

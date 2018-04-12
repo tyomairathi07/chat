@@ -2,13 +2,13 @@
 var config = {
    apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
    authDomain: "fireba-a8775.firebaseapp.com",
-   //databaseURL: "https://fireba-a8775.firebaseio.com",
    projectId: "fireba-a8775",
-   //storageBucket: "fireba-a8775.appspot.com",
-   //messagingSenderId: "86072280692"
 };
 var app = firebase.initializeApp(config);
 var auth = app.auth();
+
+// load footer 
+loadFooter();
 
 // get action
 var mode = getParameterByName('mode');

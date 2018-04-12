@@ -4,17 +4,12 @@ apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
 authDomain: "fireba-a8775.firebaseapp.com",
 databaseURL: "https://fireba-a8775.firebaseio.com",
 projectId: "fireba-a8775",
-storageBucket: "fireba-a8775.appspot.com",
-messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
-/*
-$('#sign-up').click(function() {
-	var data = getProfile();
-	setProfile('fakeId', data);
-});
-*/
+// load footer
+loadFooter();
+
 $('#sign-up').click(signUp);
 
 $('#student-type').change(function() {
@@ -90,6 +85,8 @@ function showMajor(studentType) {
 			ma.css('display', 'none');
 			phd.css('display', 'none');
 			tr.css('border-bottom', '0.1rem solid #e1e1e1');
+			// change footer margin
+			$('.footer').css('margin-bottom', '0');
 	}
 }
 

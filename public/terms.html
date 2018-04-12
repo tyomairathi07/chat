@@ -6,14 +6,10 @@
 	<title>利用条件</title>
 
 	<!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-<!--
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
--->
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -36,84 +32,92 @@
     </div>
     <!-- END TOPNAV -->
 
-    <div class="message">
-    	【重要】新規登録をされる方は、下記の内容をお読みください。<br>
-    	内容にご承諾いただけた場合、ページ最下部の「承諾する」を選択し、登録をお願いします。
-    </div>
+    <!-- START MAIN -->
+    <div class="main">
+	    <div class="message">
+	    	【重要】新規登録をされる方は、下記の内容をお読みください。<br>
+	    	内容にご承諾いただけた場合、ページ最下部の「承諾する」を選択し、登録をお願いします。
+	    </div>
 
-	<h2>研究へのご協力のお願い</h2>
+		<h2>研究へのご協力のお願い</h2>
 
-	<div style="margin-bottom: 3rem;">
-		本システムは情報コース加藤浩研究室での卒業研究の一環として開発したものです。<br>
-		そのため、利用に際しては下記の研究主旨と利用条件をご理解の上、調査にご協力をお願い申し上げます。<br>
-		なお、本研究に関するお問い合わせは、全て下記研究者までお願いいたします。
-	</div>
-
-	<span style="font-size: 2.0rem;">研究概要</span><br>
-	<div style="margin-bottom: 5rem; margin-left: 3rem;">
-		<b>1.研究計画名:</b> バーチャル自習室の開発と評価<br><br>
-
-		<b>2.研究目的と社会的意義:</b>
-		<div style="margin-left: 3rem;">
-			本研究の目的は、Web上のバーチャルな自習室(以下、「システム」と表記します)が、通信制による学習から生じる不安感や孤独感を解消することと、自宅で学習に取り組む意欲を向上させることに有効であるかどうかを調べることです。本研究の社会的意義は、放送大学生、また、その他の通信制学校に通う学生や自宅学習を行う人全般の学習体験をより良いものにするところにあります。<br><br>
+		<div style="margin-bottom: 3rem;">
+			本システムは情報コース加藤浩研究室での卒業研究の一環として開発したものです。<br>
+			そのため、利用に際しては下記の研究主旨と利用条件をご理解の上、調査にご協力をお願い申し上げます。<br>
+			なお、本研究に関するお問い合わせは、全て下記研究者までお願いいたします。
 		</div>
-		
 
-		<b>3.調査期間:</b> 2017年4月～2018年3月<br><br>
+		<span style="font-size: 2.0rem;">研究概要</span><br>
+		<div style="margin-bottom: 5rem; margin-left: 3rem;">
+			<b>1.研究計画名:</b> バーチャル自習室の開発と評価<br><br>
 
-		<b>4.調査対象者:</b> 放送大学学生<br><br>
+			<b>2.研究目的と社会的意義:</b>
+			<div style="margin-left: 3rem;">
+				本研究の目的は、Web上のバーチャルな自習室(以下、「システム」と表記します)が、通信制による学習から生じる不安感や孤独感を解消することと、自宅で学習に取り組む意欲を向上させることに有効であるかどうかを調べることです。本研究の社会的意義は、放送大学生、また、その他の通信制学校に通う学生や自宅学習を行う人全般の学習体験をより良いものにするところにあります。<br><br>
+			</div>
+			
 
-		<b>5.調査方法・内容:</b><br>
-		<ul class="ul-terms">
-			<li>新規登録時に放送大メールアドレス、性別、年代、学生種別、所属コース/プログラムを伺います。</li>
-			<li>システム利用後にシステムを利用した際の感想を伺う簡単なアンケートを行います。アンケートの回答にかかる時間は、1～5分を想定しています。</li>
-			<li>システムが自動で操作ログを収集します。それには画像・動画・音声・テキストチャットは含まれません。</li>
-		</ul>
+			<b>3.調査期間:</b> 2017年4月～2018年3月<br><br>
 
-		<b>6.個人情報の保護と倫理的配慮:</b> 以下のことを厳守して行います。<br>
-		<ol class="ol-terms">
-			<li>調査対象者のプライバシーは堅く守ります。</li>
-			<li>調査は調査対象者の都合に合わせて行います。</li>
-			<li>データは研究目的以外では使用しません。学会等で発表する場合には、個人が特定されないよう匿名化します。</li>
-			<li>調査対象者の個人情報の管理を徹底します。データファイルはパスワードをかけて保存します。研究者以外は、この情報を閲覧することはできません。研究終了時には、当該データはハードディスク上にも痕跡が残らないように消去します。</li>
-			<li>調査への参加は自由意思であり、いつでもシステムの利用を中止することができます。  その際に、調査対象者への不利益は生じません。</li>
-			<li>調査対象者からのお申し出があれば、その調査対象者から得たデータは全て廃棄し、アカウントを削除します。</li>
-			<li>協力することにおける予測されるリスクとして、システム内の一部では、他の人と自由に会話することが可能なため、不快な思いをする可能性があります。その際には、ただちにその場から退出することができます。また、システム利用後のアンケートにて、そのことを報告することができます。</li>
-			<li>本研究は、放送大学研究倫理委員会の承認を得ています。</li>
-		</ol>
+			<b>4.調査対象者:</b> 放送大学学生<br><br>
 
-		<b>7.免責事項</b>
-		<ol class="ol-terms">
-			<li>本システムは予告なく中断・終了することがあります。</li>
-			<li>本システムの仕様は予告なく変更することがあります。</li>
-			<li>本システムの不具合については、ご報告を受ければ可能な限り対処しますが、対処をお約束するものではありません。</li>
-			<li>研究者の判断により、予告なく本システムの利用をお断りすることがあります</li>
-			<li>本システムを利用することによって調査対象者に生じた損害については一切責任を負わないものとします。</li>
-		</ol>
+			<b>5.調査方法・内容:</b><br>
+			<ul class="ul-terms">
+				<li>新規登録時に放送大メールアドレス、性別、年代、学生種別、所属コース/プログラムを伺います。</li>
+				<li>システム利用後にシステムを利用した際の感想を伺う簡単なアンケートを行います。アンケートの回答にかかる時間は、1～5分を想定しています。</li>
+				<li>システムが自動で操作ログを収集します。それには画像・動画・音声・テキストチャットは含まれません。</li>
+			</ul>
 
-		<b>8.本研究に関する問合せ先</b><br>
-		<div style="margin-left: 3rem;">
-			研究者: 原田 織子<br>
-			所属: 放送大学 情報コース 加藤浩研究室 <br>
-			連絡先: 1420032796[@]campus.ouj.ac.jp ([ ]は外してください)<br>
-			研究監督責任者: 加藤浩 hkato[@]ouj.ac.jp ([ ]は外してください)<br>
+			<b>6.個人情報の保護と倫理的配慮:</b> 以下のことを厳守して行います。<br>
+			<ol class="ol-terms">
+				<li>調査対象者のプライバシーは堅く守ります。</li>
+				<li>調査は調査対象者の都合に合わせて行います。</li>
+				<li>データは研究目的以外では使用しません。学会等で発表する場合には、個人が特定されないよう匿名化します。</li>
+				<li>調査対象者の個人情報の管理を徹底します。データファイルはパスワードをかけて保存します。研究者以外は、この情報を閲覧することはできません。研究終了時には、当該データはハードディスク上にも痕跡が残らないように消去します。</li>
+				<li>調査への参加は自由意思であり、いつでもシステムの利用を中止することができます。  その際に、調査対象者への不利益は生じません。</li>
+				<li>調査対象者からのお申し出があれば、その調査対象者から得たデータは全て廃棄し、アカウントを削除します。</li>
+				<li>協力することにおける予測されるリスクとして、システム内の一部では、他の人と自由に会話することが可能なため、不快な思いをする可能性があります。その際には、ただちにその場から退出することができます。また、システム利用後のアンケートにて、そのことを報告することができます。</li>
+				<li>本研究は、放送大学研究倫理委員会の承認を得ています。</li>
+			</ol>
+
+			<b>7.免責事項</b>
+			<ol class="ol-terms">
+				<li>本システムは予告なく中断・終了することがあります。</li>
+				<li>本システムの仕様は予告なく変更することがあります。</li>
+				<li>本システムの不具合については、ご報告を受ければ可能な限り対処しますが、対処をお約束するものではありません。</li>
+				<li>研究者の判断により、予告なく本システムの利用をお断りすることがあります</li>
+				<li>本システムを利用することによって調査対象者に生じた損害については一切責任を負わないものとします。</li>
+			</ol>
+
+			<b>8.本研究に関する問合せ先</b><br>
+			<div style="margin-left: 3rem;">
+				研究者: 原田 織子<br>
+				所属: 放送大学 情報コース 加藤浩研究室 <br>
+				連絡先: 1420032796[@]campus.ouj.ac.jp ([ ]は外してください)<br>
+				研究監督責任者: 加藤浩 hkato[@]ouj.ac.jp ([ ]は外してください)<br>
+			</div>
+		</div>
+
+		<div class="message">
+			以上についてご承諾いただけた方は、下記から「承諾する」を選んで新規登録にお進み下さい。<br><br>
+
+			上記の説明を読んで理解し、利用条件について<br>
+			<input type="radio" name="agree" value="yes">承諾する
+			<input type="radio" name="agree" value="no">承諾しない<br>
+
+			<a href="/sign-up.html"><button disabled="true" id="proceed">新規登録へ進む</button></a>
+			<a href="/"><button class="button-black" style="float: right;">トップページに戻る</button></a>
 		</div>
 	</div>
+	<!-- END MAIN -->
 
-	<div class="message">
-		以上についてご承諾いただけた方は、下記から「承諾する」を選んで新規登録にお進み下さい。<br><br>
-
-		上記の説明を読んで理解し、利用条件について<br>
-		<input type="radio" name="agree" value="yes">承諾する
-		<input type="radio" name="agree" value="no">承諾しない<br>
-
-		<a href="/sign-up.html"><button disabled="true" id="proceed">新規登録へ進む</button></a>
-		<a href="/"><button class="button-black" style="float: right;">トップページに戻る</button>
-	</div>
-
+	<!-- START FOOTER-->
+    <div class="footer" style="margin-bottom: 8px;"></div>
+    <!-- END FOOTER -->
+	
 	<!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="scripts/common.js"></script>
     <script src="scripts/terms-script.js"></script>

@@ -6,12 +6,10 @@
     <title>アカウント認証のお願い</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -21,19 +19,39 @@
 
   </head>
   <body>
-    <h3>アカウント認証のお願い</h3>
-    <div class="message">
-      OUJバーチャル自習室を利用するためには、アカウントを認証する必要があります。<br>
-      新規登録時のメールアドレスに、アカウント認証メールが届いていますので、メール本文内のリンクをクリックしてアカウントを認証してください。<br><br>
-      アカウント認証メールを再送する場合は、下のボタンをクリックしてください。<br><br>
-      <button id="send">認証メールを再送</button>
-      <a href="/"><button class="button-black" style="float:right;">トップページに戻る</button></a>
+    <!-- START TOPNAV -->
+    <div class="topnav">
+        <div class="breadcrumb">
+            <a href="/"><img id="home" src="/images/home.png"></a> > アカウント認証のお願い
+        </div>
 
+        <div class="topnav-wrapper">
+            <a href="/help.html"><img src="/images/help.png"></a>
+        </div>
+            
     </div>
+    <!-- END TOPNAV -->
+
+    <!-- START MAIN -->
+    <div class="main">
+      <h3>アカウント認証のお願い</h3>
+      <div class="message">
+        OUJバーチャル自習室を利用するためには、アカウントを認証する必要があります。<br>
+        新規登録時のメールアドレスに、アカウント認証メールが届いていますので、メール本文内のリンクをクリックしてアカウントを認証してください。<br><br>
+        アカウント認証メールを再送する場合は、下のボタンをクリックしてください。<br><br>
+        <button id="send">認証メールを再送</button>
+        <a href="/"><button class="button-black" style="float:right;">トップページに戻る</button></a>
+      </div>
+    </div>
+    <!-- END MAIN -->
+
+    <!-- START FOOTER-->
+    <div class="footer"></div>
+    <!-- END FOOTER -->  
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="scripts/common.js"></script>
     <script src="scripts/verify-script.js"></script>

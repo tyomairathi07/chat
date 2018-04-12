@@ -11,12 +11,11 @@
     <title>プロフィール</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-storage.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -38,54 +37,60 @@
         <div class="topnav-wrapper">
             <a href="/mypage/profile.html"><span id="displayName">マイページ</span></a>
             <a href="/help.html"><img src="/images/help.png"></a>
-            <a href="/info.html"><img src="/images/info.png"></a>
             <button id="sign-out" class="button-black">ログアウト</button>
         </div>
             
     </div>
     <!-- END TOPNAV -->
 
-   <!-- START SIDENAV -->
-    <div class="sidenav">
-        <a href="profile.html">プロフィール</a>
-        <a href="settings.html">アカウント設定</a>
-    </div>
-   <!-- END SIDENAV --> 
-
-    <!-- contents -->
     <div class="main">
-        <div class="message"></div>
-        <div class="error-msg"></div>
-        
-        <table>
-            <tr>
-                <td>ユーザー名</td>
-                <td>
-                    <input id="user-name" name="user-name" style="width: 25rem; margin-right: 1rem;" type="text"><br>
-                    <button id="update-name">変更</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    プロフィール画像<br>
-                </td>
-                <td>
-                    <img align="middle" class="user-pic" style="margin-bottom: 1rem;"><br>
-                    <input accept="image/*" id="fileInput" type="file" disabled><br>
-                    <div id="preview-wrapper" style="display: none;">
-                        <div id="preview"></div>
-                    </div>
-                    <button id="update-photo" disabled="disabled">変更</button>
-                    
-                </td>
-            </tr>
-        </table>
+       <!-- START SIDENAV -->
+        <div class="sidenav">
+            <a href="profile.html">プロフィール</a>
+            <a href="settings.html">アカウント設定</a>
+        </div>
+       <!-- END SIDENAV --> 
+
+        <!-- START CONTENTS -->
+        <div class="content">
+            <div class="message"></div>
+            <div class="error-msg"></div>
+            
+            <table>
+                <tr>
+                    <td>ユーザー名</td>
+                    <td>
+                        <input id="user-name" name="user-name" style="width: 25rem; margin-right: 1rem;" type="text"><br>
+                        <button id="update-name">変更</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        プロフィール画像<br>
+                    </td>
+                    <td>
+                        <img align="middle" class="user-pic" style="margin-bottom: 1rem;"><br>
+                        <input accept="image/*" id="fileInput" type="file" disabled><br>
+                        <div id="preview-wrapper" style="display: none;">
+                            <div id="preview"></div>
+                        </div>
+                        <button id="update-photo" disabled="disabled">変更</button>
+                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- END CONTENT -->
     </div>
+
+    <!-- START FOOTER-->
+    <div class="footer"></div>
+    <!-- END FOOTER -->
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/Croppie-2.6.2/croppie.js"></script>    
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="/scripts/common.js"></script>
     <script src="scripts/profile-script.js"></script>

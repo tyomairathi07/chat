@@ -410,6 +410,46 @@ img {
 }
 
 /** [END] TOPNAV **/
+
+/** [START] FOOTER **/
+html, body {
+  	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+.main {
+	flex: 1 0 auto;
+}
+
+.footer {
+	flex-shrink: 0;
+}
+
+.footer {
+	background-color: #f4f5f6;
+	font-size: 1.3rem;
+	height: auto;
+	margin-bottom: 8px;
+	width: 100%;
+}
+
+.footer {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+}
+
+.footer a {
+	color: #606c76;
+	text-decoration: underline;
+}
+/** [END FOOTER] **/
 .content {
 	margin-left: 3rem;
 	margin-bottom: 5rem;
@@ -431,10 +471,6 @@ img {
 .description {
 	margin-bottom: 3rem;
 	margin-left: 6rem;
-}
-
-.main {
-	margin-top: 1rem;
 }
 
 .message {

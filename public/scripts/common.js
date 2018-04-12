@@ -92,21 +92,17 @@ function initTopnav(user) {
 	});
 }
 
-/*
-1回ログインした人のうち、何％が再度利用しているか。
-利用回数の頻度分布は
-1回の平均利用時間は
-休憩室への平均滞在時間は
-休憩室のリピーター率は
+function initTopnavNoUser() {
+	// hide elements
+	$('#displayName').css('display', 'none');
+	$('#sign-out').css('display', 'none');
+}
 
-ログイン (signin): 
-自習室 入室 (SR-in): ページを開いたとき(×「入室」ボタンを押したとき)
-自習室 退室 (SR-out): ページ遷移ORページ更新をしたとき(window.beforeunloadイベントで検知)
-休憩室 入室 (BR-in): 同上
-休憩室 退室 (BR-out): 同上
-ログアウト (signout): ログアウトボタンを押したとき (タイムアウトでログアウトした場合は記録されない; アンケート終了後ではない)
-強制ログアウト (signout-TO)
-*/
+function loadFooter() {
+	$(function() {
+		$('.footer').load('/footer.html');
+	})
+}
 
 function logUserAction(user, action) {
   var time = new Date().getTime();

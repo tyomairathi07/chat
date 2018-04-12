@@ -35,22 +35,35 @@
     </div>
     <!-- END TOPNAV -->
 
-    <div class="message">
-      ご登録いただいたメールアドレスに確認メールを送りました。<br>
-      メール本文中のリンクから、<b>アカウント認証</b>の手続きをお願いします。<br>
-      アカウント認証をした後、トップページからログインしてください。<br>
-      (このページは閉じて大丈夫です)<br><br>
+    <!-- START MAIN -->
+    <div class="main">
+      <div class="message">
+        ご登録いただいたメールアドレスに確認メールを送りました。<br>
+        メール本文中のリンクから、<b>アカウント認証</b>の手続きをお願いします。<br>
+        アカウント認証をした後、トップページからログインしてください。<br>
+        (このページは閉じて大丈夫です)<br><br>
 
-      <span>
-        【注意】アカウント認証をしないと、<u>本システムは利用できません。</u><br>
-        やり方がわからない場合は、<a href="/help.html#registration"><b>このページ</b></a>をお読みください。
-      </span>
+        <span>
+          【注意】アカウント認証をしないと、<u>本システムは利用できません</u>。<br>
+          やり方がわからない場合は、<a href="/help.html#registration"><b>このページ</b></a>をお読みください。
+        </span>
+      </div>
     </div>
+    <!-- END MAIN -->
 
-    
+    <!-- START FOOTER-->
+    <div class="footer" style="margin-bottom: 0;"></div>
+    <!-- END FOOTER -->
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <!-- my scripts -->
+    <script src="/scripts/common.js"></script>
+    <script type="text/javascript">
+      // load footer
+      loadFooter();
+    </script>
+
   </body>
 </html>

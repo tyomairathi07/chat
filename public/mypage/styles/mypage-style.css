@@ -471,7 +471,7 @@ img {
 	display: block;
 	margin: 1rem 2rem;
 }
-.main {
+.content {
 	margin-left: 30rem;
 }
 
@@ -479,6 +479,45 @@ input {
 	margin-bottom: 1rem;
 }
 /** MYPAGE STYLES [END] **/
+
+/** [START] FOOTER **/
+html, body {
+  	height: calc(100% - 8px);
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+.main {
+	flex: 1 0 auto;
+}
+
+.footer {
+	flex-shrink: 0;
+}
+
+.footer {
+	background-color: #f4f5f6;
+	font-size: 1.3rem;
+	height: auto;
+	width: 100%;
+}
+
+.footer {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+}
+
+.footer a {
+	color: #606c76;
+	text-decoration: underline;
+}
+/** [END] FOOTER
 
 /* Custom color */
 .button-black {

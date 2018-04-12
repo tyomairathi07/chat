@@ -9,6 +9,9 @@ var config = {
 };
 firebase.initializeApp(config);
 
+// load footer.html
+loadFooter();
+
 // click "sign in" button
 $('#sign-in').click(function() {
    signIn();

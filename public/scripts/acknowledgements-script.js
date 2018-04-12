@@ -5,7 +5,6 @@ var config = {
   databaseURL: "https://fireba-a8775.firebaseio.com",
   projectId: "fireba-a8775",
   storageBucket: "fireba-a8775.appspot.com",
-  messagingSenderId: "86072280692"
 };
 firebase.initializeApp(config);
 
@@ -14,25 +13,22 @@ loadFooter();
 
 // check user status
 firebase.auth().onAuthStateChanged(function(user) {
-	if (user) { // user is signed in
+	if (user) { 
+		// initialize top nav
 		initTopnav(user);
+		
 		// sign out user after 30 minutes
 		checkTimeout(user);
 
 		// log on disconnection
 		$(window).on('beforeunload', function() {
 			// log
-			logUserAction(user, 'help-out');
+			logUserAction(user, 'acknowledgements-out');
 			return undefined;
 		})		
 
 	} else { // no user is signed in
+		// initialize top nav
 		initTopnavNoUser();
 	}
 });
-
-function initTopnavNoUser() {
-	// hide elements
-	$('#displayName').css('display', 'none');
-	$('#sign-out').css('display', 'none');
-}
