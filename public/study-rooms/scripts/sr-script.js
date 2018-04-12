@@ -35,7 +35,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 		/** ACTIONS BY USER **/
 		// open page
 		peer.on('open', function(id) {
-			console.log(peer.id);
 			// set peerId
 			peerId = id;
 
@@ -538,8 +537,6 @@ function setRoomName() {
 	rootRef.child('study-rooms/' + roomId + '/name').once('value')
 	.then(function(snapshot) {
 		$('#roomName').text(snapshot.val());
-	}).then(function() {
-		console.log('set room name');
 	});
 }
  
