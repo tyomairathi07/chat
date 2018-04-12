@@ -6,12 +6,10 @@
     <title>使い方ガイド</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -41,12 +39,14 @@
       <ul>
         <li><a href="#registration">新規登録の流れ</a></li>
         <li><a href="#find_email">放送大学Gmailのメールアドレスを確認する</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
       </ul>
     </div>
 
     <div class="main">
-      <div class="content" id="registration">
-        <h4>新規登録の流れ</h4>
+      
+      <h4 id="registration">新規登録の流れ</h4>
+      <div class="content">
         1. 新規登録ページに行く
         <div class="description">
           <a href="https://fireba-a8775.firebaseapp.com/sign-up.html">
@@ -86,8 +86,9 @@
         7. 完了！
       </div>
 
-      <div class="content" id="find_email">
-        <h4>放送大学Gmailのメールアドレスを確認する</h4>
+      
+      <h4 id="find_email">放送大学Gmailのメールアドレスを確認する</h4>
+      <div class="content">
         1. システムWakabaにログインする
         <div class="description">
           <a href="https://www.wakaba.ouj.ac.jp">https://www.wakaba.ouj.ac.jp</a>        
@@ -111,12 +112,22 @@
           新規登録ページの「メールアドレス」欄に貼り付けてください
         </div>
       </div>
-    </div>
+
+      
+      <h4 id="contact">お問い合わせ</h4>
+      <div class="content">
+        使い方ガイドを読んでも分からなかった場合や、報告したいことがある場合は、
+        <ul style="margin-left: 3rem;">
+          <li>放送大学のFacebookグループ</li>
+          <li>管理者のメールアドレス <b>1420032796[@]campus.ouj.ac.jp</b> ([ ]は外してください)</li>
+        </ul>
+        のいずれかにご連絡ください。
+      </div>
 
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <script type="text/javascript" src="scripts/common.js"></script>
     <script src="scripts/help-script.js"></script>
   </body>

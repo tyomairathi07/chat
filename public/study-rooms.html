@@ -6,12 +6,10 @@
     <title>自習室一覧</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/4.9.1/firebase-app.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/4.9.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.9.1/firebase-messaging.js"></script>
-    <!--<script defer src="/__/firebase/4.9.1/firebase-storage.js"></script>-->
+    <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
@@ -39,13 +37,21 @@
         下に何も表示されない場合は、ページを更新してください
     </div>
 
-    <div id="rooms">
+    <div id="rooms"></div>
 
+<!--
+    <div id="undergrad-rooms">
+        <h4>大学</h4>
     </div>
+
+    <div id="grad-rooms">
+        <h4>大学院</h4>
+    </div>
+-->
 
     <!-- scripts -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="scripts/common.js"></script>
     <script src="scripts/study-rooms-script.js"></script>

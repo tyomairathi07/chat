@@ -306,7 +306,7 @@ h5,
 h6 {
 	font-weight: 300;
 	letter-spacing: -.1rem;
-	margin: 0;
+	margin-bottom: 1rem;
 }
 
 h1 {
@@ -326,7 +326,7 @@ h3 {
 
 h4 {
 	font-size: 2.2rem;
-	letter-spacing: -.08rem;
+	letter-spacing: 0rem;
 	line-height: 1.35
 }
 
@@ -411,6 +411,7 @@ img {
 
 /** [END] TOPNAV **/
 .content {
+	margin-left: 3rem;
 	margin-bottom: 5rem;
 }
 
@@ -429,7 +430,7 @@ img {
 
 .description {
 	margin-bottom: 3rem;
-	margin-left: 3rem;
+	margin-left: 6rem;
 }
 
 .main {
