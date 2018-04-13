@@ -478,6 +478,13 @@ body {
 	width: 100%;
 }
 
+.top {
+	bottom: 1.5rem;
+	right: 1.5rem;
+	position: fixed;
+	width: 6rem;
+}
+
 ul {
 	margin: 0;
 	padding: 0;
