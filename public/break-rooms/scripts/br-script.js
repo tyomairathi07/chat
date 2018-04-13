@@ -213,7 +213,7 @@ function mediaErrorHandler(errorName, user) {
 	}
 	reload.before(' → 下のボタンをクリック (ブラウザの更新ボタンは押さないでください)<br>');
 	lobby.before('<br>対策2: ロビーで休憩する (マイク不要のテキストチャットのみの休憩室です)<br>')
-	lobby.after('<br>詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	lobby.after('<br>詳しくは<a href="/help.html#sr-camera">こちらのページ</a>をお読みください。');
 	// hide message
 	$('.message').css('display', 'none');
 	$('.error-msg').css('display', 'inline-block');

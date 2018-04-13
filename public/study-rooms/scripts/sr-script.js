@@ -563,6 +563,8 @@ function setStyleOnJoin(id, useCamera) {
 }
 
 function showMediaErrorMessage(errorName) {
+	// hide message
+	$('.message').css('display', 'none');
 	var errorMsg = $('.error-msg');
 	// show error message
 	errorMsg.append('※カメラが使用できません。<br>');
@@ -573,6 +575,6 @@ function showMediaErrorMessage(errorName) {
 	} else { // other errors
 		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
 	}
-	errorMsg.append('詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	errorMsg.append('詳しくは<a href="/help.html#sr-camera">こちらのページ</a>をお読みください。');
 
 }
