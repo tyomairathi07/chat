@@ -661,7 +661,7 @@ img {
 .sidenav {
 	background-color: #f4f5f7;
 	display: inline-block;
-	left: 0rem;
+	left: 8px;
 	position: fixed;
 	margin: 0;
 	top: 7rem;
