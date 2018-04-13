@@ -294,6 +294,7 @@ function moveUserOnAdd() {
 					function looper(roomIndex) {
 						if (roomIndex > NUM_BREAKROOMS) { // no open room
 							// go to lobby
+							alert('休憩室が満室なため、ロビーに移動します');
 							window.location.href = '/break-rooms/room0-0.html';
 							return;
 						}
@@ -331,6 +332,7 @@ function moveUserOnRemove() {
 			function looper(roomIndex) {
 				if (roomIndex > NUM_BREAKROOMS) { // no open room
 					// go to lobby
+					alert('休憩室が満室なため、ロビーに移動します');
 					window.location.href = '/break-rooms/room0-0.html';
 					return;
 				}
