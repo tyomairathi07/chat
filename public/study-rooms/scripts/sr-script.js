@@ -534,8 +534,12 @@ function sendStream(room, pId) {
 }
 
 function setRoomName() {
+	// show loading icon
+	$('.breadcrumb').append('<img id="loading" src="/images/loading.gif">');
 	rootRef.child('study-rooms/' + roomId + '/name').once('value')
 	.then(function(snapshot) {
+		// hide loading icon
+		$('#loading').remove();
 		$('#roomName').text(snapshot.val());
 	});
 }

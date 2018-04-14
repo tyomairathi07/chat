@@ -467,6 +467,8 @@ function setBreakroomName() {
 }
 
 function setStudyroomName(user) {
+	// show loading icon
+	$('#studyroomName').after('<img id="loading" src="/images/loading.gif">');
     firebase.database().ref('/on-break/' + user.uid + '/room-id').once('value')
     .then(function(snapshot) { // データの読み込み
         return snapshot.val();
@@ -475,6 +477,8 @@ function setStudyroomName(user) {
     }).then(function(snapshot) {
         return snapshot.val();
     }).then(function(text) {
+    	// hide loading icon
+    	$('#loading').remove();
         $('#studyroomName').text(text);
     });
 }

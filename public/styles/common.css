@@ -513,6 +513,11 @@ body {
 	margin-bottom: 1rem;
 }
 
+.icon {
+	height: 3rem;
+	vertical-align: middle;
+}
+
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
@@ -520,6 +525,27 @@ body {
 	padding: 0.5rem 1rem;
 	margin-bottom: 3rem;
 	width: auto;
+}
+
+.updates {
+	border: 0.1rem solid #9b4dca;
+	border-radius: .4rem;
+	display: block;
+	max-height: 10rem;
+	overflow-y: scroll;
+	padding: 0.5rem 1rem;
+	margin-bottom: 3rem;
+	width: auto;
+}
+
+.updates-content {
+	margin-left: 3.5rem;
+}
+
+.updates-title {
+	color: #9b4dca;
+	font-size: 1.6rem;
+	font-weight: bold;
 }
 
 .user-pic {
