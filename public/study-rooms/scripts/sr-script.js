@@ -209,13 +209,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 /** FUNCTIONS **/
-function appendLog(text) {
-	$('#log').append(text + '<br>');
-}
-
 // addCoffee -> addVideo
 function addCoffee(r, c) {
-	//appendLog('addCoffee:' + r + ', ' + c);
 	var cell = getCell(r, c);
 	// hide "join" button
 	cell.children('.button-join').css('display', 'none');
@@ -281,7 +276,6 @@ function breakMediaErrorHandler(peerId, user) {
 }
 
 function checkBreakStatus(user, pId) {
-	//appendLog('checkBreakStatus');
 	var ref = rootRef.child('on-break/' + user.uid);
 
 	return ref.once('value')
@@ -414,7 +408,6 @@ function mediaSetup(room, pId) {
 		// add listener to <select>
 		selectCamera.on('change', function() {
 			var source = selectCamera.val();
-			appendLog(source);
 
 			// get new stream
 			var cell = $('#' + pId);
@@ -519,7 +512,6 @@ function sendStream(room, pId) {
 			stream = s
 			if(stream != null) {
 				clearInterval(iv);
-				appendLog('replace stream');
 				room.replaceStream(stream);
 				addVideo(pId, stream);
 			}

@@ -505,6 +505,25 @@ body {
 }
 /** [END] FOOTER **/
 
+/** [START] 404 **/
+.item-404 {
+	border: 0.1rem solid #9b4dca;
+	border-radius: .4rem;
+	display: block;
+	padding: 0.5rem 1rem;
+	text-align: center;
+	width: auto;
+}
+
+.wrapper-404 {
+	align-items: center;
+	display: flex;
+	height: 100%;
+	justify-content: center;
+}
+
+/** [END] 404 **/
+
 .error-msg{
 	color: red;
 	display: none;
