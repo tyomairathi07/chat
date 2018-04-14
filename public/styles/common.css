@@ -533,7 +533,7 @@ body {
 }
 
 .icon {
-	height: 3rem;
+	height: 2.3rem;
 	vertical-align: middle;
 }
 
@@ -558,13 +558,14 @@ body {
 }
 
 .updates-content {
-	margin-left: 3.5rem;
+	/*margin-left: 3.5rem;*/
 }
 
 .updates-title {
 	color: #9b4dca;
 	font-size: 1.6rem;
 	font-weight: bold;
+	margin-bottom: 1rem;
 }
 
 .user-pic {
