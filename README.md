@@ -10,4 +10,5 @@ This README would normally document whatever steps are necessary to get your app
 
 ### Coding rules ###
 * Apply setPromiseTimeout (common.js) for the first database read operation on the page
+
 -> prevents users from waiting a long time for the data to load
