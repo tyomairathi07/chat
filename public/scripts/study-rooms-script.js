@@ -38,9 +38,15 @@ let roomsRef = firebase.database().ref('/study-rooms/');
 
 let roomIds = [];
 
-// create buttons for each study room
-roomsRef.once('value')
-.then(function(snapshot) {
+// show loading
+$('#rooms').append('<img id="loading" src="/images/loading.gif">');
+
+var promise = roomsRef.once('value');
+var ms = 1000 * 5;
+setPromiseTimeout(ms, promise)
+.then((snapshot) => {
+	// hide loading
+	$('#loading').remove();
 	snapshot.forEach(function(roomSnapshot) {
 		// get room id
 		var roomId = roomSnapshot.key;
@@ -63,5 +69,10 @@ roomsRef.once('value')
 			$('#' + snapshot.key).children('span').css('font-weight', '300').text(snapshot.numChildren() + '人');
 
 		})
-	} 
-})
+	}
+}).catch((error) => {
+	if (error == 'promiseTO') {
+		alert('データベースが読み込めないため、ページを更新します');
+		location.reload();
+	}
+});

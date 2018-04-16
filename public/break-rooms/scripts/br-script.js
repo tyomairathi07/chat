@@ -153,15 +153,24 @@ function appendChatLog(sender, message) {
 	updateScroll();
 }
 
+// check if user came to BR from a SR/BR
 function checkUserEntry(user) {
-	onBreakRef.once('value').then(function(snapshot) {
+	var promise = onBreakRef.once('value');
+	var ms = 1000 * 5;
+	setPromiseTimeout(ms, promise)
+	.then((snapshot) => {
 		if (snapshot.child(user.uid).exists()) { // user record exists under /on-break
 			return;
 		} else { // user came from URL
 			// redirect to study-rooms.html
 			window.location.href = "/study-rooms.html";
 		}
-	})
+	}).catch((error) => {
+		if (error == 'promiseTO') {
+			reloadPage(user.uid);
+			alert('データベースが読み込めないため、ページを更新します');
+		}
+	});
 }
 
 function disconnectionHandler(peerId, user) {
@@ -219,12 +228,7 @@ function mediaErrorHandler(errorName, user) {
 	$('.error-msg').css('display', 'inline-block');
 
 	reload.click(function() {
-		// DB: cancel disconnection
-		onBreakRef.child(user.uid).onDisconnect().cancel()
-		.then(function() {
-			// reload page
-			location.reload();
-		})
+		reloadPage(user.uid);
 	})
 
 	lobby.click(function() {
@@ -366,6 +370,15 @@ function peerHandler(peer) {
 	peer.on('disconnected', function() {
 		// remove pic & name: self
 		removeUser(peer.id);
+	});
+}
+
+function reloadPage(uid) {
+	// DB: cancel disconnection
+	return onBreakRef.child(uid).onDisconnect().cancel()
+	.then(function() {
+		// reload page
+		location.reload();
 	});
 }
 

@@ -17,7 +17,6 @@ function autoSignOut(user) {
 	});
 }
 */
-
 function checkEmailVerification(user) {
 	if (!user.emailVerified) {
 		window.location.href = "/verify.html";
@@ -108,6 +107,15 @@ function logUserAction(user, action) {
   var time = new Date().getTime();
   var ref = firebase.database().ref('log-users/' + user.uid);
   return ref.child(time).set(action);
+}
+
+// throws 'promiseTO' when promise times out
+function setPromiseTimeout(ms, promise) {
+	var timeout = new Promise(function(resolve, reject) {
+		setTimeout(reject, ms, 'promiseTO');
+	});
+
+	return Promise.race([timeout, promise]);
 }
 
 function showLoading(btn_id) {

@@ -21,7 +21,7 @@ const chatRef = rootRef.child('log-chat/' + roomId);
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		//checkUserEntry(user);
+		checkUserEntry(user);
 
 		// handle disconnections
 		disconnectionHandler(user);
@@ -103,7 +103,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			if (snapshot.numChildren() < max) { // get # of chats BEFORE join
 				max = snapshot.numChildren();
 			}
-			console.log(max);
 		}).then(function() {
 			if(max == 0) {
 				sendSystemChat('<b>＊＊＊ロビーに入室しました＊＊＊</b>');
@@ -121,6 +120,25 @@ firebase.auth().onAuthStateChanged(function(user) {
 		window.location.href = "/";
 	}
 });
+
+function checkUserEntry(user) {
+	var promise = onBreakRef.once('value');
+	var ms = 1000 * 5;
+	setPromiseTimeout(ms, promise)
+	.then((snapshot) => {
+		if (snapshot.child(user.uid).exists()) { // user record exists under /on-break
+			return;
+		} else { // user came from URL
+			// redirect to study-rooms.html
+			window.location.href = "/study-rooms.html";
+		}
+	}).catch((error) => {
+		if (error == 'promiseTO') {
+			reloadPage(user.uid);
+			alert('データベースが読み込めないため、ページを更新します');
+		}
+	});
+}
 
 // NOTE: another disconnection handling above
 function disconnectionHandler(user) {
@@ -144,6 +162,15 @@ function onChildAdded(childSnapshot) {
 		'<td class="td-message"><b>' + name + '</b><br>' + msg + '</td></tr>');
 
 	updateScroll();
+}
+
+function reloadPage(uid) {
+	// DB: cancel disconnection
+	return onBreakRef.child(uid).onDisconnect().cancel()
+	.then(function() {
+		// reload page
+		location.reload();
+	});
 }
 
 // DB: send chat
