@@ -365,7 +365,6 @@ function moveUserOnRemove() {
 
 }
 
-
 function peerHandler(peer) {
 	peer.on('disconnected', function() {
 		// remove pic & name: self
