@@ -359,7 +359,6 @@ function moveUserOnRemove() {
 					}
 				})
 			}
-
 		}
 	});
 

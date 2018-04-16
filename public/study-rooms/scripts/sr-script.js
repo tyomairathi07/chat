@@ -45,7 +45,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			navigator.mediaDevices
 			.getUserMedia({
 				audio: false,
-				video: {width: 1, height: 1}
+				video: true//{width: 1, height: 1}
 			}).then(function(stream) {
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start roomHandler
@@ -384,6 +384,8 @@ function initMediaErrorHandler(errorName, peerId, user) {
 
 // handles MediaDevices error
 function mediaErrorHandler(errorName, peerId) {
+	console.log(errorName);
+
 	var errorMsg = $('.error-msg');
 
 	// show error message
@@ -417,9 +419,10 @@ function mediaSetup(room, pId) {
 			navigator.mediaDevices.getUserMedia({
 				audio: false,
 				video: {
-					deviceId: {exact: source},
+					deviceId: {exact: source}/*,
 					height: h,
 					width: w
+					*/
 				}
 			}).then(function(stream) {
 				// replace local video
@@ -502,10 +505,10 @@ function sendStream(room, pId) {
 
 	navigator.mediaDevices.getUserMedia({
 		audio: false,
-		video: {
+		video: true/*{
 			width: w,
 			height: h
-		}
+		}*/
 	}).then(function(s) {
 		var stream = null;
 		var iv = setInterval(function() {
@@ -572,6 +575,8 @@ function showMediaErrorMessage(errorName) {
 	// hide message
 	$('.message').css('display', 'none');
 	var errorMsg = $('.error-msg');
+	// clear previous messages
+	errorMsg.empty();
 	// show error message
 	errorMsg.append('※カメラが使用できません。<br>');
 	if (errorName == 'NotAllowedError') { // access to camera denied from browser
@@ -582,5 +587,4 @@ function showMediaErrorMessage(errorName) {
 		errorMsg.append('対策: PC側でカメラの設定をする → ページを更新<br><br>');
 	}
 	errorMsg.append('詳しくは<a href="/help.html#sr-camera">こちらのページ</a>をお読みください。');
-
 }
