@@ -45,7 +45,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			navigator.mediaDevices
 			.getUserMedia({
 				audio: false,
-				video: {width: 1, height: 1}
+				video: true//{width: 1, height: 1}
 			}).then(function(stream) {
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start roomHandler
@@ -84,7 +84,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			c = $(this).parent().index();
 			r = $(this).parent().parent().index();
 
-			// SW: replaceStream -> fires SFURoom#stream (getusermedia is necessary)
+			// SW: replaceStream -> fires SFURoom#stream (getUserMedia is necessary)
 			if (useCamera == 'yes') {
 				// DB: add child
 				roomRef.child(peerId).set({"row-index": r, "cell-index": c});
@@ -419,9 +419,10 @@ function mediaSetup(room, pId) {
 			navigator.mediaDevices.getUserMedia({
 				audio: false,
 				video: {
-					deviceId: {exact: source},
+					deviceId: {exact: source}/*,
 					height: h,
 					width: w
+					*/
 				}
 			}).then(function(stream) {
 				// replace local video
@@ -504,10 +505,10 @@ function sendStream(room, pId) {
 
 	navigator.mediaDevices.getUserMedia({
 		audio: false,
-		video: {
+		video: true/*{
 			width: w,
 			height: h
-		}
+		}*/
 	}).then(function(s) {
 		var stream = null;
 		var iv = setInterval(function() {
