@@ -116,8 +116,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 			var userPic = cell.children('.user-pic');
 			var url = userPic.attr('src');
 
-			// remove video OR user pic
+			// show loading
 			cell.children().remove();
+			cell.append('<img id="loading" src="/images/loading.gif">');
 
 			// DB: cancel onDisconnect
 			rootRef.child('on-break/' + user.uid).onDisconnect().cancel();
@@ -191,14 +192,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 				var r = snapshot.child('row-index').val();
 				var c = snapshot.child('cell-index').val();
 				var cell = getCell(r, c);
-				if (snapshot.key == user.uid) { // new child = user
-					// set loading to cell
-					cell.append('<img id="loading" src="/images/loading.gif">');
-				} else {
+				if (snapshot.key != user.uid) {
 					// hide or remove elements
 					cell.children('.button-join').css('display', 'none');
 					cell.children(':not(.button-join)').remove();
-					// set coffee to cell
 					cell.append('<img class="coffee" src="/images/coffee.png">');
 				}
 			}
