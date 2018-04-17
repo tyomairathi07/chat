@@ -98,15 +98,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 		/** DB LISTENERS **/
 		let flag = false; // append join message if true
 		roomRef.orderByKey().on('child_added', function(snapshot, prevkey) {
-			console.log(flag);
-
 			var r_id = snapshot.child('peer-id').val();
 			var r_name = snapshot.child('name').val();
 			var r_url = snapshot.child('url').val();
 			addUser(r_id, r_name, r_url);
 
 			if (snapshot.key == userRef.key) {
-				console.log(userRef.key);
 				// set flag to true
 				flag = true;
 				appendChatLog('SYSTEM', '<b>＊＊＊休憩室に入室しました＊＊＊</b>');
@@ -131,9 +128,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 		window.location.href = "/";
 	}
 })
-
-
-
 
 /** FUNCTIONS **/
 function addUser(id, name, url) {
