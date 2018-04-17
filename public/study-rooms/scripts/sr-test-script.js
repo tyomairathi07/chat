@@ -246,33 +246,28 @@ function addVideo(id, stream) {
 function breakUsersHandler(user, peerId, room) {
 	var ref = rootRef.child('on-break/' + user.uid);
 
+	let r, c, url;
+
 	return ref.once('value')
 	.then((snapshot) => {
 		if (!snapshot.child('done').exists()) {
 			throw 'notOnBreak';
+		} 
+		r = snapshot.child('row-index').val();
+		c = snapshot.child('cell-index').val();
+		url = snapshot.child('photo-url').val();
+		// DB: add child 
+		return roomRef.child(peerId).set({'row-index': r, 'cell-index': c, 'photo-url': url});
+	}).then(() => {
+		if (url == null) { // uses camera
+			// SW: replace stream
+			sendStream(room, peerId);
+			// set style
+			mediaSetup(room, peerId);
+			setStyleOnJoin(peerId, 'yes');
 		} else {
-			var r = snapshot.child('row-index').val();
-			var c = snapshot.child('cell-index').val();
-			var url = snapshot.child('photo-url').val();
-			var promise;
-			// DB: add child 
-			if (url == null) { // uses camera
-				promise = roomRef.child(peerId).set({'row-index': r, 'cell-index': c})
-				.then(() => {
-					// SW: replace stream
-					sendStream(room, peerId);
-					// set style
-					mediaSetup(room, peerId);
-					setStyleOnJoin(peerId, 'yes');
-				});
-			} else { // no camera
-				promise = roomRef.child(peerId).set({'row-index': r, 'cell-index': c, 'photo-url': url})
-				.then(() => {
-					// set style
-					setStyleOnJoin(peerId, 'no');
-				})
-			}
-			return promise;
+			// set style
+			setStyleOnJoin(peerId, 'no');
 		}
 	}).then(() => {
 		ref.remove();

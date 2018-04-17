@@ -109,9 +109,6 @@ roomRef.on('child_added', function(snapshot, prevkey) {
 
 	// move temp users to another BR
 	moveUserOnAdd();
-
-	/** test code **/
-
 });
 
 roomRef.on('child_removed', function(snapshot) {
@@ -137,15 +134,8 @@ function addUser(id, name, url) {
 	}
 
 	$('.users').append('<div class="user-wrapper" id="' + id + '"><img src="' + url +
-		 '" class="user-pic" onClick="getVolume(this)"><br><span>' + name + '</span></div>');
+		 '" class="user-pic"><br><span>' + name + '</span></div>');
 	appendLog('added user: ' + id);
-}
-
-/** test code **/
-function getVolume(element) {
-	var wrapper = $(element).parent();
-	var audio = wrapper.children('audio');
-	console.log(audio.prop('volume'));
 }
 
 function appendLog(text) {
@@ -163,15 +153,24 @@ function appendChatLog(sender, message) {
 	updateScroll();
 }
 
+// check if user came to BR from a SR/BR
 function checkUserEntry(user) {
-	onBreakRef.once('value').then(function(snapshot) {
+	var promise = onBreakRef.once('value');
+	var ms = 1000 * 5;
+	setPromiseTimeout(ms, promise)
+	.then((snapshot) => {
 		if (snapshot.child(user.uid).exists()) { // user record exists under /on-break
 			return;
 		} else { // user came from URL
 			// redirect to study-rooms.html
 			window.location.href = "/study-rooms.html";
 		}
-	})
+	}).catch((error) => {
+		if (error == 'promiseTO') {
+			reloadPage(user.uid);
+			alert('データベースが読み込めないため、ページを更新します');
+		}
+	});
 }
 
 function disconnectionHandler(peerId, user) {
@@ -223,18 +222,13 @@ function mediaErrorHandler(errorName, user) {
 	}
 	reload.before(' → 下のボタンをクリック (ブラウザの更新ボタンは押さないでください)<br>');
 	lobby.before('<br>対策2: ロビーで休憩する (マイク不要のテキストチャットのみの休憩室です)<br>')
-	lobby.after('<br>詳しくは<a href="/help.html">こちらのページ</a>をお読みください。');
+	lobby.after('<br>詳しくは<a href="/help.html#sr-camera">こちらのページ</a>をお読みください。');
 	// hide message
 	$('.message').css('display', 'none');
 	$('.error-msg').css('display', 'inline-block');
 
 	reload.click(function() {
-		// DB: cancel disconnection
-		onBreakRef.child(user.uid).onDisconnect().cancel()
-		.then(function() {
-			// reload page
-			location.reload();
-		})
+		reloadPage(user.uid);
 	})
 
 	lobby.click(function() {
@@ -304,6 +298,7 @@ function moveUserOnAdd() {
 					function looper(roomIndex) {
 						if (roomIndex > NUM_BREAKROOMS) { // no open room
 							// go to lobby
+							alert('休憩室が満室なため、ロビーに移動します');
 							window.location.href = '/break-rooms/room0-0.html';
 							return;
 						}
@@ -341,6 +336,7 @@ function moveUserOnRemove() {
 			function looper(roomIndex) {
 				if (roomIndex > NUM_BREAKROOMS) { // no open room
 					// go to lobby
+					alert('休憩室が満室なため、ロビーに移動します');
 					window.location.href = '/break-rooms/room0-0.html';
 					return;
 				}
@@ -363,17 +359,24 @@ function moveUserOnRemove() {
 					}
 				})
 			}
-
 		}
 	});
 
 }
 
-
 function peerHandler(peer) {
 	peer.on('disconnected', function() {
 		// remove pic & name: self
 		removeUser(peer.id);
+	});
+}
+
+function reloadPage(uid) {
+	// DB: cancel disconnection
+	return onBreakRef.child(uid).onDisconnect().cancel()
+	.then(function() {
+		// reload page
+		location.reload();
 	});
 }
 
@@ -475,6 +478,8 @@ function setBreakroomName() {
 }
 
 function setStudyroomName(user) {
+	// show loading icon
+	$('#studyroomName').after('<img id="loading" src="/images/loading.gif">');
     firebase.database().ref('/on-break/' + user.uid + '/room-id').once('value')
     .then(function(snapshot) { // データの読み込み
         return snapshot.val();
@@ -483,6 +488,8 @@ function setStudyroomName(user) {
     }).then(function(snapshot) {
         return snapshot.val();
     }).then(function(text) {
+    	// hide loading icon
+    	$('#loading').remove();
         $('#studyroomName').text(text);
     });
 }
