@@ -106,7 +106,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			if (snapshot.key == userRef.key) {
 				// set flag to true
 				flag = true;
-				appendChatLog('SYSTEM', '<b>＊＊＊休憩室に入室しました＊＊＊</b>');
 			} else if (flag) {
 				appendChatLog('SYSTEM', r_name + 'が入室しました');
 			}
@@ -220,6 +219,8 @@ function initChatLog(room) {
 			var message = roomData[i][1];
 			appendChatLog(name, message);
 		}
+		// append join message
+		appendChatLog('SYSTEM', '<b>＊＊＊休憩室に入室しました＊＊＊</b>');
 	})
 }
 
@@ -470,7 +471,7 @@ function sendChat(room, user) {
 	$('#textarea-chat').val('');
 
 	// get name
-	name = user.displayName;
+	name = user.displayName || 'ユーザー';
 
 	// SW: send chat
 	data = {'msg': message, 'name': name};

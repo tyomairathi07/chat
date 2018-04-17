@@ -3,7 +3,7 @@
   <head>    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>休憩室</title>
+    <title>ロビー</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
@@ -15,7 +15,7 @@
 
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="styles/br-style.css">
+    <link rel="stylesheet" href="styles/br-lobby-style.css">
 
   </head>
   <body>
@@ -23,35 +23,26 @@
     <div class="topnav">
         <div class="breadcrumb">
             <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
-            <span id="studyroomName"></span> > 
-            <span id="breakroomName"></span>
+            <span id="studyroomName"></span> > ロビー
         </div>
 
         <div class="menu">
-            <span>マイク選択</span>
-            <select id="select-mic"></select>
             <button class="button-black" id="study">自習室に戻る</button>
         </div>
             
     </div>
     <!-- END TOPNAV -->
 
-    <div id="log" style="height:150px; overflow-y: scroll; margin-bottom: 1rem; display: none;"></div>
-    
-    <div class="error-msg" style="display: none;">
-        <button id="reload">ページを更新</button>
-        <button id="lobby">ロビーに行く</button>
-    </div>
-
     <div class="message">
-        【注意】ブラウザの更新ボタンや、Ctrl+Rでページを更新すると、自動的に「自習室一覧」に移動します。
+        【注意】ブラウザの更新ボタンや、Ctrl+Rでページを更新すると、自動的に「自習室一覧」に移動します。<br>
+        ロビーでは、音声通話はできません。<b>テキストチャットのみ</b>可能です。<br><br>
+        <b><span style="color: #9b4dca">参加中: <span id="num-users"></span>人</span></b>
     </div>
 
     <div>
-        <div class="users">
+        <div id="chat-log">
+            <table class="table-lobby"></table>
         </div>
-
-        <div id="chat-log"></div>
 
         <div class="container-input">
             <textarea id="textarea-chat" placeholder="チャットを入力..." rows="5"></textarea>
