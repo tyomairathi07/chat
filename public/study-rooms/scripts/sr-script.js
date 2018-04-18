@@ -41,37 +41,23 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// DB: handle disconnections
 			disconnectionHandler(peerId, user);
 
-			// SW: join room with minimum stream
 			navigator.mediaDevices
 			.getUserMedia({
 				audio: false,
 				video: {width: 1, height: 1}
 			}).then(function(stream) {
+				// SW: join room
 				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
 				// start roomHandler
 				roomHandler(room, user);
-			}).then(function() {
-				// DB: check break status
-				return checkBreakStatus(user, peerId);
-			}).then(function() {	
-				// SW: replace stream -> addVideo
-				sendStream(room, peerId);
-				// set style
-				setStyleOnJoin(peerId, 'yes');
-				mediaSetup(room, peerId);
-			}).catch(function(error) { // error: 'no break'
-				if (error.name) { 
-					/*
-					// join room w/o stream
-					room = peer.joinRoom(roomId, {mode: 'sfu'});
-					roomHandler(room, user);
-					*/
+			}).then(() => {
+				// automatically add users from BR
+				return breakUsersHandler(user, peerId, room);
+			}).catch((error) => {
+				if (error.name) {
 					initMediaErrorHandler(error.name, peerId, user);
-				} else if (error == 'no camera') {
-					breakMediaErrorHandler(peerId, user);
-				} 
+				}
 				console.log(error);
-				return;
 			});
 		})
 
@@ -84,19 +70,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 			c = $(this).parent().index();
 			r = $(this).parent().parent().index();
 
-			// SW: replaceStream -> fires SFURoom#stream (getusermedia is necessary)
+			// SW: replaceStream -> fires SFURoom#stream 
 			if (useCamera == 'yes') {
 				// DB: add child
-				roomRef.child(peerId).set({"row-index": r, "cell-index": c});
-
-				var i = setInterval(function() {
-					var r = room;
-					if(r != null) {
-						clearInterval(i);
-						sendStream(r, peerId);
-						mediaSetup(r, peerId);
-					}
-				}, 10);
+				roomRef.child(peerId).set({"row-index": r, "cell-index": c})
+				.then(() => {
+					sendStream(room, peerId);
+					mediaSetup(room, peerId);
+				});
 			} else {
 				var url = user.photoURL;
 				if (url == null) {
@@ -132,8 +113,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 					'cell-index': c,
 					'room-id': roomId
 				}).then(function() {
-					// don't show coffee
-					removeCoffee(r, c);
 					// go to break room
 					goToBreakroom();
 				});	
@@ -215,17 +194,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 /** FUNCTIONS **/
-/*
-// addCoffee -> addVideo
-function addCoffee(r, c) {
-	var cell = getCell(r, c);
-	// hide "join" button
-	cell.children('.button-join').css('display', 'none');
-	// add coffee
-	cell.append('<img class="coffee" src="/images/coffee.png">');
-}
-*/
-
 function addPhoto(r, c, url) {
 	var cell = getCell(r, c);
 	cell.children('.button-join').css('display', 'none');
@@ -264,47 +232,33 @@ function addVideo(id, stream) {
 	})
 }
 
-function breakMediaErrorHandler(peerId, user) {
+function breakUsersHandler(user, peerId, room) {
 	var ref = rootRef.child('on-break/' + user.uid);
 
-	ref.once('value')
-	.then(function(snapshot) {
-		var r = snapshot.child('row-index').val();
-		var c = snapshot.child('cell-index').val();
-		var url = snapshot.child('photo-url').val();
-
-		// DB: add child to room
-		return roomRef.child(peerId).set({
-			'row-index': r,
-			'cell-index': c,
-			'photo-url': url 
-		});
-	}).then(function() {
-		setStyleOnJoin(peerId, 'no');
-		ref.remove();
-	})
-}
-
-function checkBreakStatus(user, pId) {
-	var ref = rootRef.child('on-break/' + user.uid);
+	let r, c, url;
 
 	return ref.once('value')
-	.then(function(snapshot) {
-		if(!snapshot.child('done').exists()) { // no record in on-break
-			throw 'no break';
-		} else if (snapshot.child('photo-url').exists()) {
-			throw 'no camera';
+	.then((snapshot) => {
+		if (!snapshot.child('done').exists()) {
+			throw 'notOnBreak';
+		} 
+		r = snapshot.child('row-index').val();
+		c = snapshot.child('cell-index').val();
+		url = snapshot.child('photo-url').val();
+		// DB: add child 
+		return roomRef.child(peerId).set({'row-index': r, 'cell-index': c, 'photo-url': url});
+	}).then(() => {
+		if (url == null) { // uses camera
+			// SW: replace stream
+			sendStream(room, peerId);
+			// set style
+			mediaSetup(room, peerId);
+			setStyleOnJoin(peerId, 'yes');
 		} else {
-			var r = snapshot.child('row-index').val();
-			var c = snapshot.child('cell-index').val();
-			var a = [r, c];
-			return a;
+			// set style
+			setStyleOnJoin(peerId, 'no');
 		}
-	}).then(function(array) {
-		// DB: add record to roomRef
-		return roomRef.child(pId).set({'row-index': array[0], 'cell-index': array[1]});
-	}).then(function() {
-		// DB: remove record from on-break
+	}).then(() => {
 		ref.remove();
 	})
 }
@@ -421,30 +375,8 @@ function mediaSetup(room, pId) {
 		selectCamera.on('change', function() {
 			var source = selectCamera.val();
 
-			// get new stream
-			var cell = $('#' + pId);
-			var w = cell.width();
-			var h = cell.height();
-
-			navigator.mediaDevices.getUserMedia({
-				audio: false,
-				video: {
-					deviceId: {exact: source},
-					height: h,
-					width: w
-				}
-			}).then(function(stream) {
-				// replace local video
-				cell.children('video').get(0).srcObject = stream;
-				// SW: send stream to room
-				room.replaceStream(stream);
-			}).catch(function(error) {
-				if (error.name) {
-					mediaErrorHandler(error.name, pId);
-				} else {
-					console.log(error);
-				}
-			})
+			var vConstraints = {deviceId : {exact: source}, frameRate: 10};
+			sendStream(room, pId, vConstraints);
 		});
 	});
 }
@@ -489,6 +421,9 @@ function roomHandler(room, user) {
 	room.on('open', function() {
 		// log
 		logUserAction(user, 'SR-in');
+		// enable buttons
+		$('.button-join').removeAttr('disabled');
+		// start dummy peer connection
 		dummy();
 	})
 
@@ -508,26 +443,21 @@ function roomHandler(room, user) {
 	});
 }
 
-function sendStream(room, pId) {
-	var w = $('#' + pId).width();
-	var h = $('#' + pId).height();
+function sendStream(room, peerId, videoConstraints = {frameRate: 10}) {
+	var cell = $('#' + peerId);
+	if (!cell.children('video').length) { // no video tag
+		cell.append('<video autoplay="true" muted></video>');
+	}
+	var video = cell.children('video').get(0);
 
 	navigator.mediaDevices.getUserMedia({
-		audio: false,
-		video: {
-			width: w,
-			height: h
-		}
-	}).then(function(s) {
-		var stream = null;
-		var iv = setInterval(function() {
-			stream = s
-			if(stream != null) {
-				clearInterval(iv);
-				room.replaceStream(stream);
-				addVideo(pId, stream);
-			}
-		}, 10);
+		audio: false, 
+		video: videoConstraints
+	}).then((stream) => {
+		// SW: send stream
+		room.replaceStream(stream);
+		// replace local video
+		video.srcObject = stream;
 	}).catch(function(error) {
 		if (error.name) {
 			mediaErrorHandler(error.name, pId);
