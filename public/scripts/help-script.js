@@ -16,8 +16,8 @@ loadFooter();
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
 		initTopnav(user);
-		// sign out user after 30 minutes
-		checkTimeout(user);
+		// sign out user after 20 minutes
+		checkTimeout(20, user);
 
 		// log on disconnection
 		$(window).on('beforeunload', function() {

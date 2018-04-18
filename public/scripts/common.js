@@ -23,28 +23,14 @@ function checkEmailVerification(user) {
 	}
 }
 
-function checkTimeout(user) {
-	// get sign-in time
-	var ref = firebase.database().ref('sign-in/' + user.uid);
-	ref.once('value')
-	.then(function(snapshot) {
-		return snapshot.val();
-	}).then(function(ms) {
-		var signIn = new Date(parseInt(ms));
-		var timeout = new Date();
-		timeout.setMinutes(signIn.getMinutes() + 30); // 30 minutes after last sign-in
-
-		var i = setInterval(function() {
-			var now = new Date();
-			if (now > timeout) {
-				clearInterval(i);
-				// log
-				logUserAction(user, 'signout-TO')
-				// sign out
-				signOut(user);
-			}
-		})
-	})
+function checkTimeout(minutes, user) {
+	ms = 1000 * 60 * minutes;
+	setTimeout(() => {
+		// log
+		logUserAction(user, 'signout-TO');
+		// signout
+		signOut(user);
+	}, ms);
 }
 
 function getParameterByName(name) {
@@ -127,12 +113,9 @@ function showLoading(btn_id) {
 }
 
 function signOut(user) {
-	// DB: remove sign-in record
-	var ref = firebase.database().ref('sign-in/' + user.uid);
-	ref.remove().then(function() {
-		// sign out
-		return 	firebase.auth().signOut();
-	}).then(function() {
+	// signout	
+	firebase.auth().signOut()
+	.then(function() {
 		// redirect to login page
 		window.location.href = "/";
 	}).catch(function(error) {

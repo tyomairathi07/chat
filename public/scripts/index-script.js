@@ -26,19 +26,10 @@ $('#password').keypress(function(e) {
     }  
 });
 
-function logSignIn(user) {
-  var time = new Date().getTime();
-  var ref = firebase .database().ref('sign-in/')
-  return ref.child(user.uid).set(time);
-}
-
 function onSuccessSignIn(user) {
     // log
-    logUserAction(user, 'signin');
-
-    logSignIn(user)
-    .then(function() {
-      window.location.href = "/study-rooms.html";        
+    logUserAction(user, 'signin').then(() => {
+      window.location.href = "/study-rooms.html";
     });
 }
 

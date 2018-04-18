@@ -18,8 +18,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 		initUserProfile(user);
 		updateName(user);
 		updatePhoto(user);
-		// sign out user after 30 minutes
-		checkTimeout(user);
+		// sign out user after 10 minutes
+		checkTimeout(10, user);
 
 		// log on disconnection
 		$(window).on('beforeunload', function() {
