@@ -41,13 +41,16 @@ function getProfile() {
 }
 
 function setProfile(uid, data) {
-	var dbRef = firebase.database().ref('user-profile/' + uid);
-	return dbRef.set({
+	var ref = firebase.database().ref('user-profile').push();
+	return ref.set({
+		"uid": uid,
 		"性別": data[0],
 		"年代": data[1],
 		"学生種別": data[2],
 		"所属コース・プログラム": data[3]
-	});
+	}).catch(error => {
+		console.log(error);
+	})
 
 }
 
