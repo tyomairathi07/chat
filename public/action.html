@@ -25,7 +25,6 @@
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/action.css">
 
   </head>
   <body>
@@ -47,7 +46,8 @@
     <div class="main">
         <div class="error-msg"></div>
 
-         <div id="invalid-link" class="message">
+        <!-- invalid link-->
+         <div id="invalid-link" class="message" style="display: none;">
             無効なリンクです。<br>
             マイページから再度手続きをお願いします。<br><br>
 
@@ -61,7 +61,7 @@
         </div>
 
         <!-- email verification-->
-        <div id="verify-success" class="message">
+        <div id="verify-success" class="message" style="display: none;">
             アカウント認証が完了しました。<br>
             システムをご利用いただくには、下の「トップページ」ボタンからログインをお願いします。<br><br>
             <span>※ログインには、ご登録いただいた<b>メールアドレス・パスワード</b>が必要です</span><br><br>
@@ -69,14 +69,14 @@
         </div>
 
         <!-- password reset -->
-        <div id="reset-password">
+        <div id="reset-password" style="display: none;">
             <label for="new-password">新しいパスワード(6文字以上)</label>
             <input type="password" id="new-password"><br>
 
             <button id="reset">変更</button>
         </div>
 
-        <div id="reset-success" class="message">
+        <div id="reset-success" class="message" style="display: none;">
             パスワードが変更されました。<br>トップページに戻り、新しいパスワードでログインしてください。<br><br>
             <a href="/"><button class="button-black">トップページ</button></a><br>
         </div>
