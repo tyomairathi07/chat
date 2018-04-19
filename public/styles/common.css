@@ -688,7 +688,9 @@ body {
 }
 
 .ul-terms {
+	margin-bottom: 2.5rem;
 	margin-left: 3rem;
+	margin-top: 0.2rem;
 }
 
 .ol-terms > li {
