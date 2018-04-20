@@ -78,6 +78,57 @@ $('#logs').click(() => {
 	})
 })
 
+$('#survey').click(() => {
+	const ref = firebase.database().ref('survey');
+	const keys = [
+		'uid',
+	 	'timestamp',
+	 	'自習室は勉強の励みになりましたか？*',
+	 	'自習室へのご意見・ご要望等ありましたらご記入ください',
+	 	'休憩室は有用でしたか？*',
+	 	'休憩室で不快なことがあった場合、ご記入ください',
+	 	'休憩室へのご意見・ご要望等ありましたらご記入ください',
+	 	'システムを使用していないときと比べて、勉強のしやすさは変わりましたか？*',
+	 	'システムを他の人にもすすめたいと思いましたか？*',
+	 	'操作方法がわかりづらい箇所があった場合、ご記入ください',
+	 	'システム全体へのご意見・ご要望等ありましたらご記入ください'
+	 	];
+	var csv = '';
+
+	// append keys
+	csv += keys.join(columnDelimiter);
+	csv += lineDelimiter;
+
+	// show loading
+	showLoading('survey');
+
+	ref.once('value').then((snapshot) => {
+		snapshot.forEach((childSnapshot) => {
+			for (var i = 0; i < keys.length; i++) {
+				var key = keys[i];
+				var val = childSnapshot.child(key).val();
+				if ((typeof val) == 'string') {
+					// escape double quotes
+					val = val.replace(/"/g, '""');
+					// wrap with double quotes -> preserve commas & newline
+					val = '\"' + val + '\"';
+				}
+				csv += val;
+				if (i != (keys.length - 1)) {
+					// append comma
+					csv += columnDelimiter;
+				} else {
+					csv += lineDelimiter;
+				}
+			}
+		})
+	}).then(() => {
+		// hide loading
+		hideLoading();
+		downloadCSV(csv, 'survey');
+	})
+})
+
 function downloadCSV(csv, kind) {
 	// get date
 	var date = new Date();
