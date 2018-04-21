@@ -45,11 +45,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 				var ref = firebase.database().ref('survey').push();
 				ref.set({'uid': user.uid, 'timestamp': new Date().getTime()})
 				.then(() => {
+					/** test code **/
+					var promises = [];
 					for (var i = 0; i < questions.length; i++) {
-						console.log(i);
-						ref.child(questions[i]).set(answers[i]);
+						var promise = ref.child(questions[i]).set(answers[i]);
+						promises.push(promise);
 					}
+					return Promise.all(promises);
 				}).then(() => {
+					console.log('ok');
 					alert('回答を送信しました。ご協力ありがとうございました');
 					signOut(user);
 				}).catch((error) => {
