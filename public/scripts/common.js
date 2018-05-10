@@ -66,6 +66,16 @@ function initTopnav(user) {
 		$('#displayName').text(name);
 	}
 
+	$('#sign-out').click(function() {
+		logUserAction(user, 'signout').then(function() {
+			// cancel logging for page
+			$(window).off('beforeunload');
+			// go to survey page
+			window.location.href = "/survey.html";
+		})
+	});
+
+	/*
 	// sign out user
 	$('#sign-out').click(function() {
 		// log
@@ -75,6 +85,7 @@ function initTopnav(user) {
 		// go to survey page
 		window.location.href = "/survey.html";
 	});
+	*/
 }
 
 function initTopnavNoUser() {
@@ -113,7 +124,7 @@ function showLoading(btn_id) {
 }
 
 function signOut(user) {
-	// signout	
+	// signout
 	firebase.auth().signOut()
 	.then(function() {
 		// redirect to login page

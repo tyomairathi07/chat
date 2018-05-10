@@ -1,3 +1,7 @@
+/**
+IMPORTANT: enable domain check
+**/
+
 // Initialize Firebase
 var config = {
 apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
@@ -107,12 +111,15 @@ function signUp() {
 	// clear previous errors
 	errorMsg.empty('').css('display', 'none');;
 
+	/*
 	if (!pattern.test(email)) {
 		// check email domain
 		showErrorMsg('※放送大学の「@campus.ouj.ac.jp」で終わるメールアドレスを入力してください');
 		// hide loading icon
 		hideLoading();
-	} else if (password !== passwordConfirm) {
+	} else 
+	*/
+	if (password !== passwordConfirm) {
 		// check password match
 		showErrorMsg('※パスワードが一致しません');
 		// hide loading icon
