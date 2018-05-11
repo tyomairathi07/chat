@@ -309,7 +309,7 @@ function moveUserOnAdd(uid) {
 
 			snapshot.forEach(function(childSnapshot) {
 				if ((childSnapshot.child('peer-id') == peerId) && (childSnapshot.child('temp').exists())) { // snapshot for peer
-					console.log('RELOCATE');
+					//console.log('RELOCATE');
 					looper(1);
 
 					function looper(roomIndex) {
@@ -323,7 +323,7 @@ function moveUserOnAdd(uid) {
 						.then(function(snapshot) {
 							var memberCount = snapshot.numChildren();
 							if (memberCount <= 2) {
-								alert('定員を超えたため、休憩室を移動します');
+								alert('定員を超えたため、休憩室から移動します');
 								window.location.href = 'room0-' + roomIndex + '.html';
 								return;
 							} else {
