@@ -70,7 +70,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 function checkRequired() {
 	var flag = false; // true if unanswered required field exists
-	var names = ['q0_0', 'q1_0', 'q2_0', 'q2_1']; // names required fields
+	var names = ['q0_0', 'q0_1', 'q0_2', 'q1_0', 'q2_0', 'q2_1']; // names required fields
 	
 	names.forEach((name) => {
 		var value = $("input:checked[name='" + name + "']").val();
