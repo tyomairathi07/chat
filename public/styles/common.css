@@ -553,7 +553,7 @@ body {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
 	display: inline-block;
-	margin-bottom: 3rem;
+	margin-bottom: 1.5rem;
 	padding: 0.5rem 1rem;
 	width: auto;
 }
@@ -621,16 +621,19 @@ body {
 	border: 0.1rem solid #9b4dca;
 	border-radius: .4rem;
 	display: block;
-	max-height: 10rem;
+	max-height: 20rem;
 	overflow-y: scroll;
 	padding: 0.5rem 1rem;
 	margin-bottom: 3rem;
 	width: auto;
 }
 
-.updates-content {
-	/*margin-left: 3.5rem;*/
+/*
+.updates-content hr {
+	color: #d1d1d1;
+	margin: 1rem 0;
 }
+*/
 
 .updates-title {
 	color: #9b4dca;

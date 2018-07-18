@@ -460,7 +460,7 @@ function sendStream(room, peerId, videoConstraints = {frameRate: 10}) {
 		video.srcObject = stream;
 	}).catch(function(error) {
 		if (error.name) {
-			mediaErrorHandler(error.name, pId);
+			mediaErrorHandler(error.name, peerId);
 		} else {
 			console.log(error);
 		}
