@@ -456,6 +456,19 @@ table img {
 	max-height: 70%;
 }
 
+/* SR style 
+.button-join {
+	opacity: .5;
+	cursor: default;
+}
+
+.button-join:hover,
+.button-join:focus {
+	background-color: #9b4dca;
+	border-color: #9b4dca
+}
+*/
+
 /* Custom color */
 .button-black {
   background-color: black;

@@ -14,17 +14,21 @@ const roomRef = rootRef.child('/' + roomId + '/');
 const MAX_USERS = 5;
 const NUM_BREAKROOMS = 10;
 
+let peerId = null;
+let room = null;
+let localStream = null;
+
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if(user) {
 		// check email verification
 		checkEmailVerification(user);
-		
-		let peerId = null;
-		let room = null;
 
 		// set room name
+		// show loading: check DB for breaks & room name -> removed in 2 places
+		$('.breadcrumb').append('<img id="loading" src="/images/loading.gif">');
 		setRoomName();
+		
 
 		// create Peer
 		const peer = new Peer({
@@ -46,14 +50,21 @@ firebase.auth().onAuthStateChanged(function(user) {
 				audio: false,
 				video: {width: 1, height: 1}
 			}).then(function(stream) {
+				localStream = stream;
 				// SW: join room
-				room = peer.joinRoom(roomId, {mode: 'sfu', stream: stream});
+				room = peer.joinRoom(roomId, {mode: 'sfu', stream: localStream});
 				// start roomHandler
 				roomHandler(room, user);
 			}).then(() => {
 				// automatically add users from BR
 				return breakUsersHandler(user, peerId, room);
 			}).catch((error) => {
+				if (error == 'notOnBreak') {
+					// hide loading
+					$('#loading').remove();
+					// enable buttons
+					$('.button-join').removeAttr('disabled');
+				}
 				if (error.name) {
 					initMediaErrorHandler(error.name, peerId, user);
 				}
@@ -107,7 +118,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			var r = cell.parent().index();
 			var c = cell.index();
 			// DB: add to on break
-			if (url === undefined) { // no camera
+			if (url === undefined) { // uses camera
 				rootRef.child('on-break/' + user.uid).set({
 					'row-index': r,
 					'cell-index': c,
@@ -116,7 +127,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 					// go to break room
 					goToBreakroom();
 				});	
-			} else { // uses camera
+			} else { // no camera
 				rootRef.child('on-break/' + user.uid).set({
 					'row-index': r,
 					'cell-index': c,
@@ -130,7 +141,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 				});	
 			}
 		});
-
 
 		/** DB LISTENERS **/
 
@@ -259,12 +269,26 @@ function breakUsersHandler(user, peerId, room) {
 			setStyleOnJoin(peerId, 'no');
 		}
 	}).then(() => {
+		// hide loading
+		$('#loading').remove();
 		ref.remove();
 	})
 }
 
 function disconnectionHandler(peerId, user) {
 	$(window).on('beforeunload', function() {
+		// free camera
+		if (localStream) {
+			var tracks = localStream.getTracks();
+			tracks.forEach(function(track) {
+				track.stop();
+			});
+		}
+
+		var video = $('#'+peerId).children('video').get(0);
+		if (video)
+			video.srcObject = null;
+	
 		// log
 		logUserAction(user, 'SR-out');
 		return undefined;
@@ -454,10 +478,11 @@ function sendStream(room, peerId, videoConstraints = {frameRate: 10}) {
 		audio: false, 
 		video: videoConstraints
 	}).then((stream) => {
+		localStream = stream;
 		// SW: send stream
-		room.replaceStream(stream);
+		room.replaceStream(localStream);
 		// replace local video
-		video.srcObject = stream;
+		video.srcObject = localStream;
 	}).catch(function(error) {
 		if (error.name) {
 			mediaErrorHandler(error.name, peerId);
@@ -468,17 +493,12 @@ function sendStream(room, peerId, videoConstraints = {frameRate: 10}) {
 }
 
 function setRoomName() {
-	// show loading icon
-	$('.breadcrumb').append('<img id="loading" src="/images/loading.gif">');
-
 	// set timeout
 	var promise = rootRef.child('study-rooms/' + roomId + '/name').once('value');
 	var ms = 1000 * 5; // timeout limit
 
 	setPromiseTimeout(ms, promise)
 	.then((snapshot) => { // data retreived in time
-		// hide loading icon
-		$('#loading').remove();
 		$('#roomName').text(snapshot.val());
 	}).catch((error) => {
 		if (error == 'promiseTO') {
