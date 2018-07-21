@@ -59,9 +59,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// automatically add users from BR
 				return breakUsersHandler(user, peerId, room);
 			}).catch((error) => {
+				// hide loading
+				$('#loading').remove();
 				if (error == 'notOnBreak') {
-					// hide loading
-					$('#loading').remove();
 					// enable buttons
 					$('.button-join').removeAttr('disabled');
 				}

@@ -48,7 +48,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			navigator.mediaDevices
 			.getUserMedia({
 				audio: false,
-				video: {width: 1, height: 1}
+				video: true
 			}).then(function(stream) {
 				localStream = stream;
 				// SW: join room
@@ -59,9 +59,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// automatically add users from BR
 				return breakUsersHandler(user, peerId, room);
 			}).catch((error) => {
+				// hide loading
+				$('#loading').remove();
 				if (error == 'notOnBreak') {
-					// hide loading
-					$('#loading').remove();
 					// enable buttons
 					$('.button-join').removeAttr('disabled');
 				}
@@ -397,6 +397,8 @@ function mediaSetup(room, pId) {
 
 		// add listener to <select>
 		selectCamera.on('change', function() {
+			// clear error
+			$('error-msg').empty();
 			var source = selectCamera.val();
 
 			var vConstraints = {deviceId : {exact: source}, frameRate: 10};
