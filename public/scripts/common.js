@@ -91,6 +91,7 @@ function initTopnav(user) {
 function initTopnavNoUser() {
 	// hide elements
 	$('#displayName').css('display', 'none');
+	$('#mb').css('display', 'none');
 	$('#sign-out').css('display', 'none');
 }
 

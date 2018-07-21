@@ -10,33 +10,30 @@
 
       gtag('config', 'UA-114730552-1');
     </script>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>プロフィール</title>
+    <title>伝言板</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/4.12.1/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
     <script defer src="/__/firebase/4.12.1/firebase-auth.js"></script>
-    <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
-    <script defer src="/__/firebase/4.12.1/firebase-storage.js"></script>
+     <script defer src="/__/firebase/4.12.1/firebase-database.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" href="/Croppie-2.6.2/croppie.css">
-    <link rel="stylesheet" href="styles/mypage-style.css">
-
+    <link rel="stylesheet" href="/styles/common.css">
 
   </head>
   <body>
+
     <!-- START TOPNAV -->
     <div class="topnav">
         <div class="breadcrumb">
-            <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
-            マイページ > プロフィール
+            <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 伝言板
         </div>
 
         <div class="topnav-wrapper">
@@ -49,58 +46,49 @@
     </div>
     <!-- END TOPNAV -->
 
+    <!-- START MAIN -->
     <div class="main">
-       <!-- START SIDENAV -->
-        <div class="sidenav">
-            <a href="profile.html">プロフィール</a>
-            <a href="settings.html">アカウント設定</a>
+        <div>
+            <textarea id="board-input" placeholder="伝言を入力..."></textarea>
+            <button id="send">書き込み</button>
         </div>
-       <!-- END SIDENAV --> 
 
-        <!-- START CONTENTS -->
-        <div class="content">
-            <div class="message"></div>
-            <div class="error-msg"></div>
-            
+        <div id="board">
             <table>
-                <tr>
-                    <td>ユーザー名</td>
-                    <td>
-                        <input id="user-name" name="user-name" style="width: 25rem; margin-right: 1rem;" type="text"><br>
-                        <button id="update-name">変更</button>
-                    </td>
-                </tr>
+            <!--
                 <tr>
                     <td>
-                        プロフィール画像<br>
-                    </td>
+                        <img src="/images/monster.png" class="user-pic"></td>
                     <td>
-                        <img align="middle" class="user-pic" style="margin-bottom: 1rem;"><br>
-                        <input accept="image/*" id="fileInput" type="file" disabled><br>
-                        <div id="preview-wrapper" style="display: none;">
-                            <div id="preview"></div>
-                        </div>
-                        <button id="update-photo" disabled="disabled">変更</button>
-                        
+                        <b>もんすたー : 2018-07-21 13:00</b><br>
+                        今日は20:00くらいから自習します。
                     </td>
                 </tr>
+                 <tr>
+                    <td>
+                        <img src="/images/robot.png" class="user-pic"></td>
+                    <td>
+                        <b>ろぼっと : 2018-07-21 11:00</b><br>
+                        こんにちは。<br>
+                        夕方まで自習する予定です。
+                    </td>
+                </tr>
+            -->
             </table>
-        </div>
-        <!-- END CONTENT -->
+        </div>        
     </div>
+    <!-- END MAIN -->
 
     <!-- START FOOTER-->
-    <div class="footer"></div>
-    <!-- END FOOTER -->
+    <div class="footer" style="margin-bottom: 8px;"></div>
+    <!-- END FOOTER --> 
 
     <!-- scripts -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="/Croppie-2.6.2/croppie.js"></script>    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!-- my scripts -->
     <script src="/scripts/common.js"></script>
-    <script src="scripts/profile-script.js"></script>
+    <script src="scripts/message-board-script.js"></script>
+
   </body>
 </html>
-
-

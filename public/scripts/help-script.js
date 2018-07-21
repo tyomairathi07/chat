@@ -30,9 +30,3 @@ firebase.auth().onAuthStateChanged(function(user) {
 		initTopnavNoUser();
 	}
 });
-
-function initTopnavNoUser() {
-	// hide elements
-	$('#displayName').css('display', 'none');
-	$('#sign-out').css('display', 'none');
-}
