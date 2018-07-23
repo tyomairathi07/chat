@@ -44,11 +44,17 @@
 
     <!-- START CONTENT -->
     <div class="main">
-      <img src="/images/okirou.png" style="display: inline; margin: 0 3rem 1rem 0; vertical-align: middle; width: 10rem;">
-      <h1 style="display: inline;">バーチャル自習室～オキ朗～</h1>      
+      <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+        <div>
+          <img src="/images/okirou.png" id="okirou">
+        </div>
+        <div style="flex-grow: 1;">
+          <h1 style="display: inline;">バーチャル自習室<br class="resp-br">～オキ朗～</h1>  
+        </div>
+      </div>
 
-      <div style="display: flex;">
-        <div style="display: inline-block; margin-left: 1rem;">
+      <div class="resp-row">
+        <div class="item">
           <div id="error-sign-in" class="error-msg"></div>
 
           <label for="email">メールアドレス</label>
@@ -57,7 +63,7 @@
           <label for="password">
             パスワード<br>
             <a href="send-password-reset.html">
-              <span style="font-size: 1.3rem; font-weight: 700; margin-left: .5rem;">※パスワードを忘れた方はここをクリック</span>
+              <span style="font-weight: 700;">※パスワードを忘れた方はここをクリック</span>
             </a>
           </label>
           <input type="password" id="password">
@@ -70,7 +76,7 @@
           </a>
         </div>
 
-        <div style="margin-left: 3rem;">
+        <div class="item">
           <div class="message">
             ※ログアウト後に<b>アンケート</b>が表示されます。お時間に余裕があれば、ご協力いただければ幸いです<br>
             ※30分間操作がない場合、自動的にログアウトされます(自習室・休憩室の利用中は除く)

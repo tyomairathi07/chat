@@ -346,6 +346,12 @@ h1 {
 	font-size: 4.6rem;
 	line-height: 1.2
 }
+@media (max-width: 600px) {
+	h1 {
+		font-size: 2.5rem;
+		font-weight: 700;
+	}
+}
 
 h2 {
 	font-size: 3.6rem;
@@ -355,6 +361,13 @@ h2 {
 h3 {
 	font-size: 2.8rem;
 	line-height: 1.3
+}
+@media (max-width: 600px) {
+	h3 {
+		font-size: 1.6rem;
+		font-weight: bold;
+		letter-spacing: 0;
+	}
 }
 
 h4 {
@@ -572,15 +585,17 @@ body {
 
 .content .arrow {
 	border: none;
+	display: block;
 	margin-left: 5rem;
 	width: 5rem;
 }
 
-.content img {
+.content img:not(.icon):not(.arrow) {
 	border: 0.1rem solid #d1d1d1;
 	display: block;
 	margin: 1rem 0;
 	width: 50rem;
+	max-width: 100%;
 }
 
 .content span {
@@ -609,38 +624,93 @@ body {
 	padding: 0;
 }
 
+@media (max-width: 600px) {
+	.content,
+	.content * {
+		margin-left: 0;
+	}
+	.top {
+		width: 4rem;
+	}
+}
+
 /** [END HELP] **/
 
 /** [START INDEX] **/
+.resp-br {
+	display: none;
+}
+@media (max-width: 600px) {
+	.resp-br {
+		display: inherit;
+	}
+}
+
+.resp-row {
+	display: flex;
+}
+
+.resp-row > .item:not(:first-child) {
+	font-size: 1.4rem;
+	margin-left: 3rem;
+}
+
+@media (max-width: 600px) {
+	.resp-row {
+		display: block;
+	}
+
+	.resp-row input {
+		position: relative;
+		width: 100%;
+	}
+	.resp-row > .item:not(:first-child) {
+		margin: 0;
+	}
+	.resp-row > .item:nth-child(2) {
+		margin-top: 3rem;
+	}
+}
+
 .icon {
-	height: 2.3rem;
+	height: 2rem;
 	vertical-align: middle;
+}
+
+#okirou { 
+	margin: 0 3rem 1rem 0; 
+	width: 10rem;
+}
+@media (max-width: 600px) {
+	#okirou {
+		width: 7rem;
+	}
 }
 
 .updates {
 	border: 0.1rem solid #9b4dca;
 	border-radius: .4rem;
-	display: block;
+	display: flex;
+	flex-direction: column;
 	max-height: 20rem;
-	overflow-y: scroll;
-	padding: 0.5rem 1rem;
 	margin-bottom: 3rem;
 	width: auto;
 }
 
-/*
-.updates-content hr {
-	color: #d1d1d1;
-	margin: 1rem 0;
+.updates-content {
+	height: 100%;
+	overflow-y: scroll;
+	padding: 0.5rem 1rem;
+	position: relative;
 }
-*/
 
 .updates-title {
 	color: #9b4dca;
-	font-size: 1.6rem;
+	font-size: 1.4rem;
 	font-weight: bold;
-	margin-bottom: 1rem;
+	padding: .5rem 0 .5rem 1rem;
 }
+
 /** [END INDEX] **/
 
 /** [START MESSAGE-BOARD] **/

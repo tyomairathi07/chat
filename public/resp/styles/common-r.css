@@ -1,0 +1,36 @@
+body {
+	color: #606c76;
+	font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	font-size: 1.1em;
+}
+
+/** COMMON STYLES **/
+label {
+	display: block;
+}
+
+/*
+.flex-grid {
+	display: flex;
+}
+
+.col {
+	flex: 1;
+}
+
+@media (max-width: 600px) {
+	.flex-grid {
+		display: block;
+	}
+}
+*/
+.icon {
+	width: 1.5rem;
+}
+
+
+/** INDEX **/
+
+#okirou {
+	width: 25%;
+}

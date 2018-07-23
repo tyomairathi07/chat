@@ -264,7 +264,7 @@ function breakUsersHandler(user, peerId, room) {
 			// set style
 			mediaSetup(room, peerId);
 			setStyleOnJoin(peerId, 'yes');
-		} else {
+		} else { // no camera
 			// set style
 			setStyleOnJoin(peerId, 'no');
 		}

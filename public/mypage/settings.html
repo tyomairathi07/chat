@@ -49,7 +49,7 @@
     <div class="main">
         <!-- START SIDENAV -->
         <div class="sidenav">
-            <a href="profile.html">プロフィール</a>
+            <a href="profile.html">プロフィール</a><br>
             <a href="settings.html">アカウント設定</a>
         </div>
         <!-- END SIDENAV -->
@@ -57,6 +57,39 @@
         <!-- START CONTENT -->
         <div class="content">
             <div class="message"></div>
+
+        <div class="resp-row">
+            <div class="label">メールアドレス</div>
+            <div class="item" id="user-email"></div>
+        </div>
+
+        <hr>
+
+        <div class="resp-row">
+            <div class="label">パスワード</div>
+            <div class="item">
+                <button id="reset-password">パスワード再設定</button><br>
+                <span style="font-size: 1.3rem;">※パスワード再設定用のメールが届きます</span> 
+            </div>
+        </div>
+
+        <hr>
+        
+        <div class="resp-row">
+            <div class="label">アカウント認証</div>
+            <div class="item" id="verified">
+                <div id="wrapper-verify">
+                    <button id="send-verify">アカウント認証</button><br>
+                    <span style="font-size: 1.3rem;">※アカウント認証用のメールが届きます</span>
+                </div>
+            </div>
+        </div>
+
+        <!--
+            <button class="button-red">アカウントを削除</button>
+        -->
+
+        <!--
             <div>
                 <table>
                     <tr>
@@ -80,10 +113,8 @@
                         </td> 
                     </tr>                          
                 </table>
-            <!--
-                <button class="button-red">アカウントを削除</button>
-            -->
             </div>
+        -->
         </div>
         <!-- END CONTENT -->
     </div>

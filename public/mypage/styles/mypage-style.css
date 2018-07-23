@@ -176,8 +176,8 @@ input[type='submit'].button-clear[disabled]:hover {
 
 hr {
 	border: 0;
-	border-top: 0.1rem solid #f4f5f6;
-	margin: 3.0rem 0
+	border-top: 0.1rem solid #d1d1d1;
+	margin: 1.5rem 0
 }
 
 input[type='email'],
@@ -398,6 +398,7 @@ img {
 	background-color: #f4f5f6;
 	height: 5rem;
 	line-height: 100%;
+	margin-bottom: 1rem;
 	padding: 1rem 0;
 	position: relative;
 	top: 0;
@@ -440,15 +441,16 @@ img {
 	display: none;
 	font-size: 1.4rem;
 	font-weight: 600;
-	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 
 .message {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
 	display: none;
-	margin: 1rem 0rem;
+	margin-bottom: 1rem;
 	padding: 0.5rem 1rem;
+	width: 100%;
 }
 
 .user-pic {
@@ -458,25 +460,70 @@ img {
 }
 
 /** MYPAGE STYLES [START] **/
-.sidenav {
-	background-color: #f4f5f7;
-	left: 8px;
-	position: fixed;
-	margin: 0;
-	top: 7rem;
-	width: 20rem;
-}
-
-.sidenav a {
-	display: block;
-	margin: 1rem 2rem;
-}
-.content {
-	margin-left: 30rem;
-}
-
 input {
 	margin-bottom: 1rem;
+}
+
+.content {
+	margin-left: 3rem;
+}
+
+.item {
+	flex-grow: 1;
+}
+
+.label {
+	font-weight: bold;
+	margin-right: 3rem;
+	width: 15rem;
+}
+
+.main {
+	align-items: flex-start;
+	display: flex;
+}
+
+.resp-row {
+	display: flex;
+	align-content: flex-start;
+	justify-content: space-between;
+}
+
+
+.sidenav {
+	background-color: #f4f5f7;
+	line-height: 2.0;
+	padding: .5rem 1.5rem;
+}
+
+@media (max-width: 600px) {
+	input {
+		width: auto;
+	}
+
+	.content {
+		margin-bottom: 1rem;
+		margin-left: 0;
+		width: 100%;
+	}
+
+	.resp-row {
+		display: block;
+	}
+
+	.label {
+		margin-bottom: 1rem;
+	}
+
+	.sidenav {
+		display: none;
+	}
+
+	.user-pic {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 /** MYPAGE STYLES [END] **/
 
