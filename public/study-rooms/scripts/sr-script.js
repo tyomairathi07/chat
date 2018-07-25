@@ -24,11 +24,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		// load top nav
 		loadTopnavSr();
 		// check email verification
-		checkEmailVerification(user);
-
-		// set room name
-		setRoomName();
-		
+		checkEmailVerification(user);		
 
 		// create Peer
 		const peer = new Peer({
@@ -376,6 +372,8 @@ function loadTopnavSr() {
 		$('.topnav-sr').load('topnav-sr.html', () => {
 			// show loading: check DB for breaks & room name -> removed in 2 places
 			$('.breadcrumb').append('<img id="loading" src="/images/loading.gif">');
+			// set room name
+			setRoomName();
 		});
 	})
 }
