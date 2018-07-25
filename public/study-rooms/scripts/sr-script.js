@@ -48,7 +48,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			navigator.mediaDevices
 			.getUserMedia({
 				audio: false,
-				video: {width: 1, height: 1}
+				video: true //{width: 1, height: 1}
 			}).then(function(stream) {
 				localStream = stream;
 				// SW: join room
