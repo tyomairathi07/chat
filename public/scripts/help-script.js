@@ -14,8 +14,10 @@ loadFooter();
 
 // check user status
 firebase.auth().onAuthStateChanged(function(user) {
+	// load topnav
+	loadTopnav(user);
+	
 	if (user) { // user is signed in
-		initTopnav(user);
 		// sign out user after 20 minutes
 		checkTimeout(20, user);
 
@@ -26,7 +28,5 @@ firebase.auth().onAuthStateChanged(function(user) {
 			return undefined;
 		})		
 
-	} else { // no user is signed in
-		initTopnavNoUser();
-	}
+	} 
 });

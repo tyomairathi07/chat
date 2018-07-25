@@ -11,6 +11,9 @@ projectId: "fireba-a8775",
 };
 firebase.initializeApp(config);
 
+// load top nav
+loadTopnav(null);
+
 // load footer
 loadFooter();
 

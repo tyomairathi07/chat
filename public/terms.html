@@ -26,19 +26,26 @@
 	<!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="/styles/common.css">
+    <style type="text/css">
+    	.desc1 { margin-bottom: 5rem; margin-left: 3rem; }
+    	.desc2 { margin-left: 3rem; }
+
+    	@media(max-width: 600px) {
+    		h2 { font-size: 2rem; text-align: center; }
+    		h4 { font-size: 2rem; letter-spacing: normal; }
+    		.desc1,
+    		.desc2,
+    		.ol-terms,
+    		.ul-terms
+    		 { margin-left: 0; }
+    		 .main { padding: 0 1rem; }
+    		 .message { font-size: 1.4rem; width: 100%; }
+    	}
+    </style>
 </head>
 <body>
 	<!-- START TOPNAV -->
-    <div class="topnav">
-        <div class="breadcrumb">
-            <a href="/"><img id="home" src="/images/home.png"></a> > 利用条件
-        </div>
-
-        <div class="topnav-wrapper">
-            <a href="/help.html"><img src="/images/help.png"></a>
-        </div>
-            
-    </div>
+    <div class="topnav"></div>
     <!-- END TOPNAV -->
 
     <!-- START MAIN -->
@@ -57,11 +64,11 @@
 		</div>
 
 		<h4>研究概要</h4>
-		<div style="margin-bottom: 5rem; margin-left: 3rem;">
+		<div class="desc1">
 			<b>1.研究計画名:</b> バーチャル自習室の開発と評価<br><br>
 
 			<b>2.研究目的と社会的意義:</b>
-			<div style="margin-left: 3rem;">
+			<div class="desc2">
 				本研究の目的は、Web上のバーチャルな自習室(以下、「システム」と表記します)が、通信制による学習から生じる不安感や孤独感を解消することと、自宅で学習に取り組む意欲を向上させることに有効であるかどうかを調べることです。本研究の社会的意義は、放送大学生、また、その他の通信制学校に通う学生や自宅学習を行う人全般の学習体験をより良いものにするところにあります。<br><br>
 			</div>
 			
@@ -99,7 +106,7 @@
 			</ol>
 
 			<b>8.本研究に関する問合せ先</b><br>
-			<div style="margin-left: 3rem;">
+			<div class="desc2">
 				研究者: 原田 織子<br>
 				所属: 放送大学 情報コース 加藤浩研究室 <br>
 				連絡先: 1420032796[@]campus.ouj.ac.jp ([ ]は外してください)<br>

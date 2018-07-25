@@ -14,7 +14,8 @@ loadFooter();
 // check user status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
-		initTopnav(user);
+		// load topnav
+		loadTopnav(user);
 		initUserProfile(user);
 		updateName(user);
 		updatePhoto(user);

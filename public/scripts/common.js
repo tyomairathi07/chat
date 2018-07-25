@@ -1,22 +1,3 @@
-/*
-function autoSignOut(user) {
-	// get sign-out time
-	var time = new Date().getTime();
-
-	// DB: add record to /sign-out/user.uid
-	var ref = firebase.database().ref('sign-out');
-	ref.child(user.uid).set(time)
-	.then(function() {
-		// sign-out
-		return firebase.auth().signOut();
-	}).then(function() {
-		// redirect to login page
-		window.location.href = "/";
-	}).catch(function(error) {
-		console.log(error);
-	});
-}
-*/
 function checkEmailVerification(user) {
 	if (!user.emailVerified) {
 		window.location.href = "/verify.html";
@@ -60,13 +41,25 @@ function hideLoading() {
 	//$('#loading').css('display', 'none');
 }
 
-function initTopnav(user) {
-	var name = user.displayName;
-	if (name != null) {
-		$('#displayName').text(name);
-	}
+function loadFooter() {
+	$(function() {
+		$('.footer').load('/footer.html');
+	})
+}
 
-	$('#sign-out').click(function() {
+function loadTopnav(user) {
+	$(function() {
+		$('.topnav').load('/topnav.html', () => {
+			if (user == null) {
+				$('#mypage').css('display', 'none');
+				$('#mb').css('display', 'none');
+				$('#sign-out').css('display', 'none');
+				$('#topnav-sign-in').css('display', 'inline');
+			}
+		});
+	});
+
+	$('.topnav').on('click', '#sign-out', () => {
 		logUserAction(user, 'signout').then(function() {
 			// cancel logging for page
 			$(window).off('beforeunload');
@@ -75,30 +68,7 @@ function initTopnav(user) {
 		})
 	});
 
-	/*
-	// sign out user
-	$('#sign-out').click(function() {
-		// log
-		logUserAction(user, 'signout');
-		// cancel logging for page
-		$(window).off('beforeunload');
-		// go to survey page
-		window.location.href = "/survey.html";
-	});
-	*/
-}
-
-function initTopnavNoUser() {
-	// hide elements
-	$('#displayName').css('display', 'none');
-	$('#mb').css('display', 'none');
-	$('#sign-out').css('display', 'none');
-}
-
-function loadFooter() {
-	$(function() {
-		$('.footer').load('/footer.html');
-	})
+	
 }
 
 function logUserAction(user, action) {

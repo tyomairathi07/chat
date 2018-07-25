@@ -14,12 +14,12 @@ loadFooter();
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
+		// load topnav
+		loadTopnav(user);
 		// check email verification
 		checkEmailVerification(user);
-		// set display name
-		initTopnav(user);
 		// sign out user after 10 minutes
-		checkTimeout(10, user);
+		checkTimeout(20, user);
 
 		let boardRef = firebase.database().ref('message-board');
 

@@ -386,56 +386,6 @@ img {
 
 /*# sourceMappingURL=milligram.min.css.map */
 
-/** [START] TOPNAV **/
-.breadcrumb {
-	min-height: 100%;
-	font-size: 1.6rem;
-	font-weight: bold;
-}
-
-
-.topnav {
-	background-color: #f4f5f6;
-	height: 5rem;
-	line-height: 100%;
-	margin-bottom: 1rem;
-	padding: 1rem 0;
-	position: relative;
-	top: 0;
-	left: 0;
-	width: 100%;
-}
-
-.topnav a {
-	font-size: 1.4rem;
-	font-weight: 700;
-	letter-spacing: 0;
-}
-
-.topnav button {
-	display: inline;
-	font-size: 1.1rem;
-	line-height: 100%;
-	margin: 0 1rem;
-	padding: 1rem;
-}
-
-.topnav div {
-	display: inline;
-	vertical-align: middle;
-}
-
-.topnav img {
-	margin: 0 1rem;
-	max-height: 3rem;
-	vertical-align: middle;
-}
-
-.topnav-wrapper {
-	float: right;
-}
-
-/** [END] TOPNAV **/
 .error-msg{
 	color: red;
 	display: none;
@@ -496,6 +446,10 @@ input {
 	padding: .5rem 1.5rem;
 }
 
+#toggle {
+	display: none;
+}
+
 @media (max-width: 600px) {
 	input {
 		width: auto;
@@ -523,6 +477,11 @@ input {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	#toggle {
+		display: inline-block;
+		margin-top: 3rem; width: 100%;
 	}
 }
 /** MYPAGE STYLES [END] **/

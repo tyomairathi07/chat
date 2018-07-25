@@ -416,63 +416,6 @@ span {
 	float: right
 }
 
-/** [START] TOPNAV **/
-.breadcrumb {
-	min-height: 100%;
-	font-size: 1.6rem;
-	font-weight: bold;
-}
-
-.breadcrumb span {
-	display: inline;
-	min-height: 100%;
-	font-size: 1.6rem;
-	font-weight: bold;
-}
-
-.topnav {
-	background-color: #f4f5f6;
-	height: 5rem;
-	line-height: 100%;
-	margin-bottom: 1rem;
-	padding: 1rem 0;
-	position: relative;
-	top: 0;
-	left: 0;
-	width: 100%;
-}
-
-.topnav span {
-	font-size: 1.4rem;
-	font-weight: 700;
-	letter-spacing: 0;
-}
-
-.topnav button {
-	display: inline;
-	font-size: 1.1rem;
-	line-height: 100%;
-	margin: 0 1rem;
-	padding: 1rem;
-}
-
-.topnav div {
-	display: inline;
-	vertical-align: middle;
-}
-
-.topnav img {
-	margin: 0 1rem;
-	max-height: 3rem;
-	vertical-align: middle;
-}
-
-.topnav-wrapper {
-	float: right;
-}
-
-/** [END] TOPNAV **/
-
 /** [START] SIDENAV **/
 .sidenav {
 	background-color: #f4f5f7;
@@ -717,7 +660,7 @@ body {
 #board {
 	border: 0.1rem solid #d1d1d1;
 	border-radius: .4rem;
-	margin-top: 1.5rem;
+	margin: 1.5rem 0;
 	overflow-y: scroll;
 	padding: 1rem;
 }
@@ -745,9 +688,19 @@ body {
 	width: 100%;
 }
 
+@media {
+	#board .user-pic {
+		width: 5rem;
+	}
+}
+
 /** [END MESSAGE-BOARD]
 
 /** [START STUDY-ROOMS] **/
+#rooms > div {
+	display: inline-block;
+}
+
 #rooms #loading {
 	display: block;
 	margin: 5rem auto 0 auto;
@@ -762,6 +715,22 @@ body {
 	line-height: 3.8rem;
 	margin: 1.5rem;
 	padding: 0 3.0rem;
+}
+
+@media (max-width: 600px) {
+	#rooms {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	#rooms .button-outline {
+		display: block;
+		line-height: 1.5;
+		margin: 1rem auto;
+		padding: 0.5rem 0;
+		width: 80%;
+	}
 }
 /** [END STUDY-ROOMS] **/
 

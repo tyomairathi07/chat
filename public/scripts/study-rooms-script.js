@@ -7,16 +7,17 @@ var config = {
 };
 firebase.initializeApp(config);
 
+
 // load footer
 loadFooter();
 
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
+		// load topnav
+		loadTopnav(user);
 		// check email verification
 		checkEmailVerification(user);
-		// set display name
-		initTopnav(user);
 		// sign out user after 10 minutes
 		checkTimeout(10, user);
 
@@ -58,7 +59,7 @@ setPromiseTimeout(ms, promise)
 		
 		// create button
 		$('#rooms').append('<a href="/study-rooms/' + roomId + '.html"><button class="button button-outline" id="' 
-			+ roomId + '" style="margin: 1.5rem;">' + roomName + '</button></a>');
+			+ roomId + '">' + roomName + '</button></a>');
 		$('#' + roomId).append('<br><span></span>');
 	})
 }).then(function() {

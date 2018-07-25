@@ -11,6 +11,8 @@ firebase.initializeApp(config);
 
 // load footer.html
 loadFooter();
+// load topnav
+loadTopnav(null);
 
 // click "sign in" button
 $('#sign-in').click(function() {

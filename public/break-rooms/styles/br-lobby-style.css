@@ -475,9 +475,40 @@ h6 {
 	float: right;
 }
 
+.topnav .menu-resp {
+	display: none;
+}
+
 .menu span {
 	font-size: 1.3rem;
 	margin-right: 0.1rem;
+}
+
+@media (max-width: 600px) {
+	body {
+		font-size: 1.4rem;
+	}
+	.topnav {
+		height: auto;
+		line-height: normal;
+	}
+
+	.topnav * {
+		font-size: 1.4rem;
+	}
+
+	.topnav img {
+		height: 2rem;
+	}
+
+	.topnav .menu {
+		display: none;
+	}
+
+	.topnav .menu-resp {
+		display: inline;
+		float: right;
+	}
 }
 /** [END] TOPNAV **/
 

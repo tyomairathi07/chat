@@ -12,6 +12,8 @@ loadFooter();
 
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {
+	// load top nav
+	loadTopnav(user);
 	if (user) {
 		$('#send').click(() => {
 			// reset bg color for questions

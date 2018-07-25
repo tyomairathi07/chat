@@ -30,20 +30,7 @@
   </head>
   <body>
     <!-- START TOPNAV -->
-    <div class="topnav">
-        <div class="breadcrumb">
-            <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
-            マイページ > アカウント設定
-        </div>
-
-        <div class="topnav-wrapper">
-            <a href="/mypage/profile.html"><span id="displayName">マイページ</span></a>
-            <a href="/message-board.html"><img id="mb" src="/images/mb.png"></a>
-            <a href="/help.html"><img src="/images/help.png"></a>
-            <button id="sign-out" class="button-black">ログアウト</button>
-        </div>
-            
-    </div>
+    <div class="topnav"></div>
     <!-- END TOPNAV -->
 
     <div class="main">
@@ -54,67 +41,38 @@
         </div>
         <!-- END SIDENAV -->
 
-        <!-- START CONTENT -->
+        <!-- START CONTENT -->   
         <div class="content">
             <div class="message"></div>
 
-        <div class="resp-row">
-            <div class="label">メールアドレス</div>
-            <div class="item" id="user-email"></div>
-        </div>
-
-        <hr>
-
-        <div class="resp-row">
-            <div class="label">パスワード</div>
-            <div class="item">
-                <button id="reset-password">パスワード再設定</button><br>
-                <span style="font-size: 1.3rem;">※パスワード再設定用のメールが届きます</span> 
+            <div class="resp-row">
+                <div class="label">メールアドレス</div>
+                <div class="item" id="user-email"></div>
             </div>
-        </div>
 
-        <hr>
-        
-        <div class="resp-row">
-            <div class="label">アカウント認証</div>
-            <div class="item" id="verified">
-                <div id="wrapper-verify">
-                    <button id="send-verify">アカウント認証</button><br>
-                    <span style="font-size: 1.3rem;">※アカウント認証用のメールが届きます</span>
+            <hr>
+
+            <div class="resp-row">
+                <div class="label">パスワード</div>
+                <div class="item">
+                    <button id="reset-password">パスワード再設定</button><br>
+                    <span style="font-size: 1.3rem;">※パスワード再設定用のメールが届きます</span> 
                 </div>
             </div>
-        </div>
 
-        <!--
-            <button class="button-red">アカウントを削除</button>
-        -->
-
-        <!--
-            <div>
-                <table>
-                    <tr>
-                        <td>メールアドレス</td>
-                        <td id="user-email"></td>
-                    </tr>
-                    <tr>
-                        <td>パスワード</td>
-                        <td>
-                            <button id="reset-password">パスワード再設定</button><br>
-                            <span style="font-size: 1.3rem;">※パスワード再設定用のメールが届きます</span> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>アカウント認証</td>
-                        <td id="verified">
-                            <div id="wrapper-verify">
-                                <button id="send-verify">アカウント認証</button><br>
-                                <span style="font-size: 1.3rem;">※アカウント認証用のメールが届きます</span>
-                            </div>
-                        </td> 
-                    </tr>                          
-                </table>
+            <hr>
+            
+            <div class="resp-row">
+                <div class="label">アカウント認証</div>
+                <div class="item" id="verified">
+                    <div id="wrapper-verify">
+                        <button id="send-verify">アカウント認証</button><br>
+                        <span style="font-size: 1.3rem;">※アカウント認証用のメールが届きます</span>
+                    </div>
+                </div>
             </div>
-        -->
+        
+            <a href="profile.html"><button class="button-black" id="toggle">プロフィール</button></a>
         </div>
         <!-- END CONTENT -->
     </div>

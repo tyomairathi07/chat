@@ -1,0 +1,49 @@
+<link rel="stylesheet" type="text/css" href="/styles/topnav-style.css">
+
+<div class="breadcrumb">
+    <a href="/study-rooms.html"><img src="/images/home.png"></a><span id="location"></span>
+</div>
+
+<img src="/images/menu.png" id="topnav-menu">
+
+<div class="topnav-wrapper">
+    <div id="mypage">
+        <a href="/mypage/profile.html">
+        	<img src="/images/mypage.png" title="マイページ">
+        	<span>マイページ</span>
+        </a>
+    </div>
+    <div id="mb">
+        <a href="/message-board.html">
+        	<img src="/images/mb.png" title="伝言板">
+        	<span>伝言板</span>
+        </a>
+    </div>
+    <div id="help">
+        <a href="/help.html">
+        	<img src="/images/help.png" title="使い方ガイド">
+        	<span>使い方ガイド</span>
+        </a>
+    </div>
+    <button class="button-black" id="sign-out">ログアウト</button>
+    <button class="button-black" id="topnav-sign-in">ログイン</button>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+	// set current page
+	$('#location').text($('title').text());
+
+	$('#topnav-menu').click(() => {
+		var wrapper = $('.topnav-wrapper');
+		if (wrapper.css('display') == 'none') {
+			wrapper.css('display', 'flex');
+		}
+		else
+			wrapper.css('display', 'none');
+	});
+
+    $('#topnav-sign-in').click(() => {
+        window.location.href = "/";
+    })
+</script>

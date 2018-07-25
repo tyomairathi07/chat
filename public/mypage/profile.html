@@ -33,19 +33,7 @@
   </head>
   <body>
     <!-- START TOPNAV -->
-    <div class="topnav">
-        <div class="breadcrumb">
-            <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
-            マイページ > プロフィール
-        </div>
-
-        <div class="topnav-wrapper">
-            <a href="/mypage/profile.html"><span id="displayName">マイページ</span></a>
-            <a href="/message-board.html"><img id="mb" src="/images/mb.png"></a>
-            <a href="/help.html"><img src="/images/help.png"></a>
-            <button id="sign-out" class="button-black">ログアウト</button>
-        </div>
-    </div>
+    <div class="topnav"></div>
     <!-- END TOPNAV -->
 
     <div class="main">
@@ -82,32 +70,8 @@
                     <button id="update-photo" disabled="disabled">変更</button>
                 </div>
             </div>
-        
-        <!--
-            <table>
-                <tr>
-                    <td>ユーザー名</td>
-                    <td>
-                        <input id="user-name" name="user-name" style="width: 25rem; margin-right: 1rem;" type="text"><br>
-                        <button id="update-name">変更</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        プロフィール画像<br>
-                    </td>
-                    <td>
-                        <img align="middle" class="user-pic" style="margin-bottom: 1rem;"><br>
-                        <input accept="image/*" id="fileInput" type="file" disabled><br>
-                        <div id="preview-wrapper" style="display: none;">
-                            <div id="preview"></div>
-                        </div>
-                        <button id="update-photo" disabled="disabled">変更</button>
-                        
-                    </td>
-                </tr>
-            </table>
-        -->
+
+            <a href="settings.html"><button class="button-black" id="toggle">アカウント設定</button></a>
         </div>
         <!-- END CONTENT -->
     </div>

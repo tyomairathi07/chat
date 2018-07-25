@@ -21,12 +21,12 @@ let localStream = null;
 // check sign in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if(user) {
+		// load top nav
+		loadTopnavSr();
 		// check email verification
 		checkEmailVerification(user);
 
 		// set room name
-		// show loading: check DB for breaks & room name -> removed in 2 places
-		$('.breadcrumb').append('<img id="loading" src="/images/loading.gif">');
 		setRoomName();
 		
 
@@ -103,7 +103,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 		});
 
 
-		$('#break').click(function() {
+		$('.topnav-sr').on('click', '.break', function() {
 			var cell = $('#' + peerId);
 			var userPic = cell.children('.user-pic');
 			var url = userPic.attr('src');
@@ -370,6 +370,16 @@ function initMediaErrorHandler(errorName, peerId, user) {
 	showMediaErrorMessage(errorName);
 }
 
+// load top nav & show loading
+function loadTopnavSr() {
+	$(function() {
+		$('.topnav-sr').load('topnav-sr.html', () => {
+			// show loading: check DB for breaks & room name -> removed in 2 places
+			$('.breadcrumb').append('<img id="loading" src="/images/loading.gif">');
+		});
+	})
+}
+
 // handles MediaDevices error
 function mediaErrorHandler(errorName, peerId) {
 	console.log(errorName);
@@ -521,8 +531,12 @@ function setStyleOnJoin(id, useCamera) {
 	$("table").find('.button-join').attr('disabled', 'disabled');
 	
 	// switch menu
+	var mediaQuery = window.matchMedia("(max-width: 600px");
 	$('.menu-camera').css('display', 'none');
-	$(".menu").css('display', 'inline-block');
+	if (mediaQuery.matches)
+		$('.menu-resp').css('display', 'inline-block');
+	else 
+		$(".menu").css('display', 'inline-block');
 
 	if (useCamera == 'no') { // no camera
 		$('.menu > span').css('display', 'none');

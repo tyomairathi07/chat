@@ -24,7 +24,7 @@ var room = null;
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// check if user came from a studyroom
-		//checkUserEntry(user);
+		checkUserEntry(user);
 
 		// set room name
 		setStudyroomName(user);
@@ -52,7 +52,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			sendChat(room, user);
 		})
 
-		$('#study').click(function() {
+		$('.study').click(function() {
 			var uid = user.uid;
 			var uidRef = onBreakRef.child(uid);
 			// DB: cancel onDisconnect; ONLY when goes back to study room

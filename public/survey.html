@@ -27,16 +27,23 @@
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="styles/common.css">
-
+    <style type="text/css">
+        #system span { font-size: 1.6rem; font-weight: 300; }
+        @media (max-width: 600px) {
+            h3 { font-size: 2rem; font-weight: 300; }
+            hr { margin: 1.5rem 0; }
+            .content-sidenav { margin: 0 1rem; }
+            .content-sidenav textarea { width: 100%; }
+            .message { width: 100%; }
+            .sidenav { display: none; }
+            #system span { font-size: 1.4rem; }
+        }
+    </style>
   </head>
   <body>
 
     <!-- START TOPNAV -->
-    <div class="topnav">
-         <div class="breadcrumb">
-            <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > <span>使用後アンケート</span>
-        </div>
-    </div>
+    <div class="topnav"></div>
     <!-- END TOPNAV -->
 
     <!-- START MAIN -->
@@ -106,7 +113,7 @@
 
             <div id="system" name="system">
                 <h3>システム全般について</h3>
-                ※「システム」とは「バーチャル自習室～オキ朗～」のウェブサイト全体を指します<br><br>
+                <span>※「システム」とは「バーチャル自習室～オキ朗～」のウェブサイト全体を指します<span><br><br>
 
                 <label id="l2_0">システムを使用していないときと比べて、勉強のしやすさは変わりましたか？<span class="asterisk">*</span></label>
                 <input name="q2_0" type="radio" value="1" required>勉強しやすくならなかった<br>

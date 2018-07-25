@@ -1,0 +1,104 @@
+<style type="text/css">
+	.breadcrumb {
+		min-height: 100%;
+		font-size: 1.6rem;
+		font-weight: bold;
+	}
+
+	.topnav-br {
+		background-color: #f4f5f6;
+		height: 5rem;
+		line-height: 100%;
+		margin-bottom: 1rem;
+		padding: 1rem 0;
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+	}
+
+	.topnav-br a {
+		font-size: 1.4rem;
+		font-weight: 700;
+		letter-spacing: 0;
+	}
+
+	.topnav-br button {
+		display: inline;
+		line-height: 100%;
+		margin: 0 1rem;
+		padding: 1rem;
+	}
+
+	.topnav-br div {
+		display: inline;
+		vertical-align: middle;
+	}
+
+	.topnav-br img {
+		margin: 0 1rem;
+		max-height: 3rem;
+		vertical-align: middle;
+	}
+
+	.topnav-br select {
+		display: inline; 
+		margin-right: 1rem;
+		width: 15rem; 
+		height: auto;
+	}
+
+	.topnav-br .menu {
+		float: right;
+	}
+
+	.topnav-br .menu-resp {
+		display: none;
+	}
+
+	.menu span {
+		font-size: 1.3rem;
+		margin-right: 0.1rem;
+	}
+	
+
+	@media (max-width: 600px) {
+		.topnav-br {
+			height: auto;
+			line-height: normal;
+		}
+
+		.topnav-br * {
+			font-size: 1.4rem;
+		}
+
+		.topnav-br img {
+			height: 2rem;
+		}
+
+		.topnav-br .menu {
+			display: none;
+		}
+
+		.topnav-br .menu-resp {
+			display: inline;
+			float: right;
+		}
+	}
+</style>
+
+<div class="breadcrumb">
+    <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a> > 
+    <span id="studyroomName"></span> > 
+    <span id="breakroomName"></span>
+</div>
+
+<div class="menu">
+    <span>マイク選択</span>
+    <select id="select-mic"></select>
+    <button class="button-black study">自習室に戻る</button>
+</div>
+
+<div class = "menu-resp">
+	<img class="study" src="/images/leave.png">
+</div>

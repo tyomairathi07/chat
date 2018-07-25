@@ -26,21 +26,24 @@
     <!-- CSS styles -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="styles/common.css">
+    <style type="text/css">
+      input[type='email'] { margin-bottom: 0; }
+      label[for='email'] { margin-bottom: 0; }
+      #ba-major, #ma-major, #phd-major { border-bottom: 0.1rem solid #e1e1e1; }
+
+      @media (max-width: 600px) {
+        input[type='email'],
+        input[type='password'],
+        select:last-of-type { margin-bottom: 2rem; }
+        td { display: block; padding: 0 1rem; }
+        #ba-major, #ma-major, #phd-major { border: none; }
+      }
+    </style>
 
   </head>
   <body>
      <!-- START TOPNAV -->
-    <div class="topnav">
-        <div class="breadcrumb">
-            <a href="/"><img id="home" src="/images/home.png"></a> > 
-            新規登録
-        </div>
-
-        <div class="topnav-wrapper">
-            <a href="/help.html"><img src="/images/help.png"></a>
-        </div>
-            
-    </div>
+    <div class="topnav"></div>
     <!-- END TOPNAV -->
 
     <!-- START MAIN -->
@@ -51,7 +54,7 @@
         <table>
           <tr>
             <td>
-              <label for="email" style="margin-bottom: 0">メールアドレス</label>
+              <label for="email">メールアドレス</label>
               <span style="display: block;">
                 【注意】
                 <u>放送大学Gmailのメールアドレス</u>を使用してください<br>
@@ -59,7 +62,7 @@
               </span>
             </td>
             <td>
-              <input type="email" id="email" style="margin-bottom: 0">
+              <input type="email" id="email">
             </td>
           </tr>
 
@@ -120,7 +123,7 @@
             </td>
           </tr>
 
-          <tr id="ba-major" style="border-bottom: 0.1rem solid #e1e1e1;">
+          <tr id="ba-major">
             <td><label for="ba-major">所属コース</label></td>
             <td>
               <select name="ba-major">
@@ -134,7 +137,7 @@
             </td>
           </tr>
 
-          <tr id="ma-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
+          <tr id="ma-major" style="display: none;">
             <td><label for="ma-major">所属プログラム</label></td>
             <td>
               <select name="ma-major">
@@ -149,7 +152,7 @@
             </td>
           </tr>
 
-          <tr id="phd-major" style="border-bottom: 0.1rem solid #e1e1e1; display: none;">
+          <tr id="phd-major" style="display: none;">
             <td><label for="phd-major">所属プログラム</label></td>
             <td>
               <select name="phd-major">

@@ -25,9 +25,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 		// check if user came from a studyroom
 		checkUserEntry(user);
 
-		// set room names
-		setBreakroomName();
-		setStudyroomName(user);
+		// load top nav
+		loadTopnavBr(user);
 
 		// DB: create ref
 		userRef = roomRef.push();
@@ -71,7 +70,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			sendChat(room, user);
 		})
 
-		$('#study').click(function() {
+		$('.topnav-br').on('click', '.study', function() {
 			var uid = user.uid;
 			var uidRef = onBreakRef.child(uid);
 			// DB: cancel onDisconnect; ONLY when goes back to study room
@@ -221,6 +220,16 @@ function initChatLog(room) {
 		}
 		// append join message
 		appendChatLog('SYSTEM', '<b>＊＊＊休憩室に入室しました＊＊＊</b>');
+	})
+}
+
+function loadTopnavBr(user) {
+	$(function() {
+		$('.topnav-br').load('topnav-br.html', () => {
+			// set room names
+			setBreakroomName();
+			setStudyroomName(user);
+		});
 	})
 }
 

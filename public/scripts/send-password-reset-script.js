@@ -6,6 +6,9 @@ var config = {
 };
 firebase.initializeApp(config);
 
+// load topnav
+loadTopnav(null);
+
 // load footer
 loadFooter();
 
