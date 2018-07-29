@@ -453,8 +453,6 @@ function roomHandler(room, user) {
 	room.on('open', function() {
 		// log
 		logUserAction(user, 'SR-in');
-		// enable buttons
-		$('.button-join').removeAttr('disabled');
 		// start dummy peer connection
 		dummy();
 	})
