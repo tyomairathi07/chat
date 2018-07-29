@@ -1,4 +1,104 @@
-<link rel="stylesheet" type="text/css" href="/styles/topnav-style.css">
+<style type="text/css">
+    .breadcrumb {
+        font-size: 1.6rem;
+        font-weight: bold;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #location { 
+        display: inline;
+        font-size: 1.6rem;
+        font-weight: bold;
+    }
+
+    .topnav {
+        background-color: #f4f5f6;
+        margin-bottom: 1rem;
+        padding: 1rem 0;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    .topnav button {
+        display: inline;
+        font-size: 1.1rem;
+        line-height: 100%;
+        margin: 0 1rem;
+        padding: 1rem;
+    }
+
+    .topnav img {
+        margin: 0 1rem;
+        height: 3rem;
+        vertical-align: middle;
+    }
+
+    .topnav-wrapper {
+        display: inline;
+        float: right;
+        vertical-align: middle;
+    }
+
+    .topnav-wrapper > div {
+        display: inline;
+    }
+
+    .topnav-wrapper span {
+        display: none;
+    }   
+
+    #topnav-menu {
+        display: none;
+    }
+
+    #topnav-sign-in {
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+        .breadcrumb {
+            padding-bottom: .5rem;
+        }
+
+        .topnav * {
+            font-size: 1.4rem;
+        }
+
+        .topnav img {
+            height: 2rem;
+        }
+
+        .topnav-wrapper {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .topnav-wrapper > * {
+            margin-bottom: .5rem;
+        }
+
+        .topnav-wrapper button {
+            padding: .7rem 0;
+        }
+
+        .topnav-wrapper span {
+            display: inline;
+        }
+
+        #location {
+            font-size: 1.4rem;
+        }
+
+        #topnav-menu {
+            display: inline-block;
+            float: right;
+        }
+    }
+</style>
 
 <div class="breadcrumb">
     <a href="/study-rooms.html"><img src="/images/home.png"></a><span id="location"></span>
