@@ -1,7 +1,44 @@
 function checkEmailVerification(user) {
-	if (!user.emailVerified) {
+	if (!user.emailVerified && !user.isAnonymous) { // allow anonymous users
 		window.location.href = "/verify.html";
 	}
+}
+
+// no logging
+function checkGuestTimeout(user) {
+	if (!user.isAnonymous)
+		return;
+	
+	var now = new Date().getTime();
+	var tl;
+	// get time limit from DB
+	var ref = firebase.database().ref('guests/' + user.uid);
+	ref.once('value')
+	.then((snapshot) => {
+		tl = parseInt(snapshot.val());
+		// alert user if < 1 minute
+		return new Promise(resolve => {
+			setTimeout(() => {
+				alert('残り時間1分です');
+				resolve();
+			}, tl - now - 60*1000);
+		});
+	}).then(() => {
+		return new Promise(resolve => {
+			setTimeout(() => {
+				resolve();
+			}, 60 * 1000);
+		});
+	}).then(() => {
+		return firebase.auth().signOut();
+	}).then(() => {
+		return ref.remove();
+	}).then(() => {
+		// redirect
+		window.location.href = "/";
+	}).catch(err => {
+		console.log(err);
+	});
 }
 
 function checkTimeout(minutes, user) {
@@ -73,7 +110,14 @@ function loadTopnav(user) {
 
 function logUserAction(user, action) {
   var time = new Date().getTime();
-  var ref = firebase.database().ref('log-users/' + user.uid);
+  var ref = firebase.database().ref('log-users');
+
+  if (user.isAnonymous) {
+  	ref = ref.child('000guest');
+  } else {
+  	ref = ref.child(user.uid);
+  }
+
   return ref.child(time).set(action);
 }
 

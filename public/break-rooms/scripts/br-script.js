@@ -27,6 +27,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 		// load top nav
 		loadTopnavBr(user);
+		// check guest time limit
+		checkGuestTimeout(user);
 
 		// DB: create ref
 		userRef = roomRef.push();

@@ -624,6 +624,7 @@ body {
 	margin: 0 3rem 1rem 0; 
 	width: 10rem;
 }
+
 @media (max-width: 600px) {
 	#okirou {
 		width: 7rem;

@@ -23,6 +23,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if(user) {
 		// load top nav
 		loadTopnavSr();
+		// check guest time limit
+		checkGuestTimeout(user);
 		// check email verification
 		checkEmailVerification(user);		
 

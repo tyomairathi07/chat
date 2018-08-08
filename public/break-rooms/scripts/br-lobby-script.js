@@ -29,6 +29,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 		// set room name
 		setStudyroomName(user);
 
+		// check guest time limit
+		checkGuestTimeout(user);
+
 		// DB: create ref
 		var userRef = roomRef.push();
 

@@ -16,6 +16,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
 		// load topnav
 		loadTopnav(user);
+		// check guest time limit
+		checkGuestTimeout(user);
 		// check email verification
 		checkEmailVerification(user);
 		// sign out user after 10 minutes
@@ -60,7 +62,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 			// get photo
 			var ref = firebase.storage().ref('user-photo/' + uid);
 			ref.getDownloadURL().then(url => {
-				console.log(url == null);
 				$('table').prepend('<tr><td><img src="' + url + '" class="user-pic"></td><td><b>' + 
 					name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
 			}).catch(error => {

@@ -15,6 +15,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
 		// load topnav
 		loadTopnav(user);
+		// check guest time limit
+		checkGuestTimeout(user);
 		initUserSettings(user);
 		// sign out user after 30 minutes
 		checkTimeout(10, user);

@@ -19,6 +19,31 @@ $('#sign-in').click(function() {
    signIn();
 });
 
+// anonymous sign in
+$('#guest-sign-in').click(() => {
+  var ref = firebase.database().ref('guests');
+  var now = new Date().getTime();
+  var tl = now + 10*60*1000;
+
+  var guest;
+  // sign in
+  firebase.auth().signInAnonymously()
+  .then(user => {
+    guest = user;
+    // save time limit to DB
+    return ref.child(guest.uid).set(tl);
+  }).then(() => {
+    // log
+    return logUserAction(guest, 'signin');
+  }).then(() => { // redirect
+    window.location.href = "/study-rooms.html";
+  }).catch(err => {
+    console.log(err);
+  })
+  
+  
+})
+
 // press ENTER key
 $('#password').keypress(function(e) {
     if (e.which == 13) {

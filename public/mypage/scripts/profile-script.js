@@ -16,11 +16,20 @@ firebase.auth().onAuthStateChanged(function(user) {
 	if (user) { // user is signed in
 		// load topnav
 		loadTopnav(user);
+		// check guest time limit
+		checkGuestTimeout(user);
 		initUserProfile(user);
 		updateName(user);
 		updatePhoto(user);
 		// sign out user after 10 minutes
 		checkTimeout(10, user);
+
+		// disable link to account settings
+		if (user.isAnonymous) {
+			$('.sidenav :last-child').removeAttr('href');
+			$('.sidenav :last-child').css('color', '#606c76');;
+			$('#toggle').attr('disabled', 'disabled');
+		}
 
 		// log on disconnection
 		$(window).on('beforeunload', function() {
