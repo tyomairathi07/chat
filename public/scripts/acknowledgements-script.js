@@ -15,7 +15,9 @@ loadFooter();
 firebase.auth().onAuthStateChanged(function(user) {
 	// load topnav
 	loadTopnav(user);
-	if (user) { 		
+	if (user) {
+		// check guest time limit
+		checkGuestTimeout(user); 		
 		// sign out user after 10 minutes
 		checkTimeout(10, user);
 

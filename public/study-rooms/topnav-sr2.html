@@ -1,0 +1,96 @@
+<style type="text/css">
+	.breadcrumb {
+		font-size: 1.6rem;
+		font-weight: bold;
+	}
+
+	.topnav-sr {
+		background-color: #f4f5f6;
+		height: 5rem;
+		line-height: 100%;
+		margin-bottom: 1rem;
+		padding: 1rem 0;
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+	}
+
+	.topnav-sr a {
+		font-size: 1.4rem;
+		font-weight: 700;
+		letter-spacing: 0;
+	}
+
+	.topnav-sr button {
+		display: inline;
+		line-height: 100%;
+		margin: 0 1rem;
+		padding: 1rem;
+	}
+
+	.topnav-sr div {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.topnav-sr label {
+		display: inline;
+		font-size: 1.4rem;
+		font-weight: 300;
+	}
+
+	.topnav-sr img {
+		margin: 0 1rem;
+		max-height: 3rem;
+		cursor: pointer;
+		vertical-align: middle;
+	}
+
+	.topnav-sr select {
+		display: inline; 
+		margin-right: 1rem;
+		width: 15rem; 
+		height: auto;
+	}
+
+	.topnav-sr .menu, 
+	.topnav-sr .menu-resp {
+		display: none;
+		float: right;
+	}
+
+	.menu span {
+		font-size: 1.3rem;
+		margin-right: 0.1rem;
+	}
+
+	@media (max-width: 600px) {
+		.topnav-sr {
+			height: auto;
+			line-height: normal;
+		}
+		.topnav-sr * {
+			font-size: 1.4rem;
+		}
+
+		.topnav-sr img {
+			height: 2rem;
+		}
+	}
+</style>
+
+<div class="breadcrumb">
+    <a href="/study-rooms.html"><img id="home" src="/images/home.png"></a><span id="roomName"></span>
+</div>
+
+<div class="menu">
+    <button class="button-black break" id="break" style="padding: .6rem 1rem .5rem;">
+        <img src="/images/coffee_white.png" style="margin: 0 1rem 0.5rem 0;">休憩室に行く</button>
+    <a href="/study-rooms.html"><button class="button-black leave">退室</button></a>
+</div>
+
+<div class="menu-resp">
+	<img class="break" src="/images/coffee.png">
+	<a href="/study-rooms.html"><img src="/images/leave.png"></a>
+</div>

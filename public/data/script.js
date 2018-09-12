@@ -15,8 +15,9 @@ const lineDelimiter = '\n';
 
 $('#profiles').click(() => {
 	const ref = firebase.database().ref('user-profile');
-	const keys = ['uid', '性別', '学生種別', '所属コース・プログラム'];
+	const keys = ['uid', '性別', '学生種別', '年代', '所属コース・プログラム'];
 	var csv = '';
+	console.log(keys.length);
 
 	// append keys
 	csv += keys.join(columnDelimiter);

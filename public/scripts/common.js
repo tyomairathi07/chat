@@ -16,13 +16,19 @@ function checkGuestTimeout(user) {
 	ref.once('value')
 	.then((snapshot) => {
 		tl = parseInt(snapshot.val());
-		// alert user if < 1 minute
-		return new Promise(resolve => {
-			setTimeout(() => {
-				alert('残り時間1分です');
-				resolve();
-			}, tl - now - 60*1000);
-		});
+		var alertTime = tl - now - 60 * 1000;
+		if (alertTime < 0)
+			return tl;
+		else {
+			// alert user if < 1 minute
+			return new Promise(resolve => {
+				setTimeout(() => {
+					alert('残り時間1分です');
+					resolve();
+				}, alertTime);
+			});
+		}
+
 	}).then(() => {
 		return new Promise(resolve => {
 			setTimeout(() => {

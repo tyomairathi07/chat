@@ -45,12 +45,31 @@ firebase.auth().onAuthStateChanged(function(user) {
 				'name' : name,
 				'uid' : user.uid,
 				'message' : msg,
-				'timestamp' : ts
+				'timestamp' : ts,
 			});
 		});
 
+		/*
+		// DB listener
+		boardRef.on('child_added', data => {
+			var msg = data.child('message').val();
+			var name = data.child('name').val();
+			var ts = data.child('timestamp').val();
+			var uid = data.child('uid').val();
+			var url = data.child('url').val() || "/images/monster.png";
+
+			// replace newlines with brs
+			msg = msg.replace(/\n/g, '<br>');
+
+			$('table').prepend('<tr><td><img src="' + url + '" class="user-pic"></td><td><b>' + 
+				name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
+		});
+		*/
+		
+
 		// DB listener
 		boardRef.on('child_added', (data) => {
+			console.log(data.key + ' start');
 			var msg = data.child('message').val();
 			var name = data.child('name').val();
 			var ts = data.child('timestamp').val();
@@ -64,12 +83,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 			ref.getDownloadURL().then(url => {
 				$('table').prepend('<tr><td><img src="' + url + '" class="user-pic"></td><td><b>' + 
 					name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
+				console.log(data.key + ' end');
+
 			}).catch(error => {
 				$('table').prepend('<tr><td><img src="/images/monster.png" class="user-pic"></td><td><b>' + 
 				name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
-			})
-
-			
+			});
 		})
 	} else {
 		// redirect to login page
