@@ -1,7 +1,5 @@
 /** TODO
 - clean up css
-- adjust style for mobile	
-- log user action
 **/
 
 // Initialize Firebase
@@ -33,6 +31,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 		checkEmailVerification(user);
 		// handle disconnections
 		disconnectionHandler(user);	
+
+		// log
+		logUserAction(user, 'SR2-in');
 
 		// handle users on break
 		breakUsersHandler(user).catch(err => { console.log(err) });	
@@ -173,7 +174,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 function disconnectionHandler(user) {
 	$(window).on('beforeunload', function() {
 		// log
-		logUserAction(user, 'SR-out');
+		logUserAction(user, 'SR2-out');
 		return undefined;
 	})
 
