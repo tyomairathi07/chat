@@ -28,6 +28,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 		$('#send').click(() => {
 			// get date
 			var date = new Date();
+			var ms = date.getTime();
+			console.log(ms);
 			var min = date.getMinutes();
 			if (min < 10)
 				min = '0' + min;
@@ -39,9 +41,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 			var msg = $('#board-input').val();
 			$('#board-input').val('');
 
-			// write message to DB
-			var ref = boardRef.push();
-			ref.set({
+			boardRef.child(ms).set({
 				'name' : name,
 				'uid' : user.uid,
 				'message' : msg,
@@ -49,47 +49,32 @@ firebase.auth().onAuthStateChanged(function(user) {
 			});
 		});
 
-		/*
 		// DB listener
-		boardRef.on('child_added', data => {
-			var msg = data.child('message').val();
-			var name = data.child('name').val();
-			var ts = data.child('timestamp').val();
-			var uid = data.child('uid').val();
-			var url = data.child('url').val() || "/images/monster.png";
+		var prevTask = Promise.resolve();
 
-			// replace newlines with brs
-			msg = msg.replace(/\n/g, '<br>');
+		boardRef.orderByKey().on('child_added', (data) => {
+			prevTask = prevTask.finally(async() => {
+				console.log(data.key);
+				var msg = data.child('message').val();
+				var name = data.child('name').val();
+				var ts = data.child('timestamp').val();
+				var uid = data.child('uid').val();
 
-			$('table').prepend('<tr><td><img src="' + url + '" class="user-pic"></td><td><b>' + 
-				name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
-		});
-		*/
-		
+				// replace newlines with brs
+				msg = msg.replace(/\n/g, '<br>');
 
-		// DB listener
-		boardRef.on('child_added', (data) => {
-			console.log(data.key + ' start');
-			var msg = data.child('message').val();
-			var name = data.child('name').val();
-			var ts = data.child('timestamp').val();
-			var uid = data.child('uid').val();
+				// get photo
+				var ref = firebase.storage().ref('user-photo/' + uid);
+				await ref.getDownloadURL().then(url => {
+					$('table').prepend('<tr><td><img src="' + url + '" class="user-pic"></td><td><b>' + 
+						name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
 
-			// replace newlines with brs
-			msg = msg.replace(/\n/g, '<br>');
-
-			// get photo
-			var ref = firebase.storage().ref('user-photo/' + uid);
-			ref.getDownloadURL().then(url => {
-				$('table').prepend('<tr><td><img src="' + url + '" class="user-pic"></td><td><b>' + 
+				}).catch(error => {
+					$('table').prepend('<tr><td><img src="/images/monster.png" class="user-pic"></td><td><b>' + 
 					name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
-				console.log(data.key + ' end');
-
-			}).catch(error => {
-				$('table').prepend('<tr><td><img src="/images/monster.png" class="user-pic"></td><td><b>' + 
-				name + ' </b> ' + ts + '<br>' + msg + '</td></tr>');
+				});
 			});
-		})
+		});
 	} else {
 		// redirect to login page
 		window.location.href = "/";
