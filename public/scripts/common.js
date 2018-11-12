@@ -103,12 +103,24 @@ function loadTopnav(user) {
 	});
 
 	$('.topnav').on('click', '#sign-out', () => {
+		// EXPERIMENT
+		logUserAction(user, 'signout')
+		.then(function() {
+			// cancel logging for page
+			$(window).off('beforeunload');
+			return firebase.auth().signOut();
+		}).then(() => {
+			window.location.href = "https://www.ouj.ac.jp/";
+		})
+
+		/*
 		logUserAction(user, 'signout').then(function() {
 			// cancel logging for page
 			$(window).off('beforeunload');
 			// go to survey page
-			window.location.href = "/survey.html";
+			window.location.href = "/survery.html";
 		})
+		*/
 	});
 
 	

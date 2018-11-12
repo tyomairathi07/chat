@@ -72,8 +72,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 		// click: "join" button
 		$(".button-join").click(function() {
+			/*  EXPERIMENT
 			// get radio button value
 			var useCamera = $('input[name=use-camera]:checked').val();
+			*/
+			var useCamera = 'yes';
 
 			// get cellIndex, rowIndex
 			c = $(this).parent().index();

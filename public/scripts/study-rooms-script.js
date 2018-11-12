@@ -54,6 +54,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// get room name
 				var roomName = roomSnapshot.child('name').val();
 				
+				//  EXPERIMENT append line break if room2-1
+				if (roomId == 'room2-1') {
+					$('#rooms').append('<hr>');
+				}
+
 				// create button
 				$('#rooms').append('<a href="/study-rooms/' + roomId + '.html"><button class="button button-outline" id="' 
 					+ roomId + '">' + roomName + '</button></a>');
