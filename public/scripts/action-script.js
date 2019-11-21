@@ -5,6 +5,7 @@ var config = {
    projectId: "fireba-a8775",
 };
 var app = firebase.initializeApp(config);
+
 var auth = app.auth();
 
 // load top nav

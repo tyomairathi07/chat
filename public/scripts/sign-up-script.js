@@ -6,8 +6,11 @@ IMPORTANT: enable domain check
 var config = {
 apiKey: "AIzaSyDRmp_XJqP10QY0oop0Y0u7WalMhDqrhaQ",
 authDomain: "fireba-a8775.firebaseapp.com",
+// authDomain: "fireba-a8775.firebaseapp.com",
 databaseURL: "https://fireba-a8775.firebaseio.com",
+// databaseURL: "https://fireba-a8775.firebaseio.com",
 projectId: "fireba-a8775",
+// projectId: "fireba-a8775",
 };
 firebase.initializeApp(config);
 
@@ -114,14 +117,14 @@ function signUp() {
 	// clear previous errors
 	errorMsg.empty('').css('display', 'none');;
 
-	if (!pattern.test(email)) {
-		// check email domain
-		showErrorMsg('※放送大学の「@campus.ouj.ac.jp」で終わるメールアドレスを入力してください');
-		// hide loading icon
-		hideLoading();
-	} else 
-	
-	if (password !== passwordConfirm) {
+	// if (!pattern.test(email)) {
+	// 	// check email domain
+	// 	showErrorMsg('※放送大学の「@campus.ouj.ac.jp」で終わるメールアドレスを入力してください');
+	// 	// hide loading icon
+	// 	hideLoading();
+	// } else 
+    
+    if (password !== passwordConfirm) {
 		// check password match
 		showErrorMsg('※パスワードが一致しません');
 		// hide loading icon

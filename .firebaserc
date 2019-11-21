@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "fireba-a8775"
+    "default": "fireba-a8775",
+    "chat": "testproject-de306"
   }
 }

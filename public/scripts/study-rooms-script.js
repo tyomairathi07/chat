@@ -8,85 +8,88 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
 // load footer
 loadFooter();
 
 // check sign-in status
 firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
-		// load topnav
-		loadTopnav(user);
-		// check guest time limit
-		checkGuestTimeout(user);
-		// check email verification
-		checkEmailVerification(user);
-		// sign out user after 10 minutes
-		checkTimeout(10, user);
+        alert('login')
+		// // load topnav
+		// loadTopnav(user);
+		// // check guest time limit
+		// checkGuestTimeout(user);
+		// // check email verification
+		// checkEmailVerification(user);
+		// // sign out user after 10 minutes
+		// checkTimeout(10, user);
 		// send notifications
-		saveMessagingDeviceToken(user);
+        // 通知を送るための「デバイストークン」を取得するやつ Cloud Functions使用
+        // とりあえず消す
+		// saveMessagingDeviceToken(user);
 
-		let rootRef = firebase.database().ref();
-		let roomsRef = firebase.database().ref('/study-rooms/');
+		// let rootRef = firebase.database().ref();
+		// let roomsRef = firebase.database().ref('/study-rooms/');
 
-		let roomIds = [];
+		// let roomIds = [];
 
-		var promise = roomsRef.once('value');
-		var ms = 1000 * 5;
+		// var promise = roomsRef.once('value');
+		// var ms = 1000 * 5;
 
-		/** notification variables **/
-		var title = 'バーチャル自習室～オキ朗～';
-		var img = 'images/okirou-256.png';
+		// /** notification variables **/
+		// var title = 'バーチャル自習室～オキ朗～';
+		// var img = 'images/okirou-256.png';
 
-		// show loading
-		$('#rooms').append('<img id="loading" src="/images/loading.gif">');
+		// // show loading
+		// $('#rooms').append('<img id="loading" src="/images/loading.gif">');
 
-		setPromiseTimeout(ms, promise)
-		.then((snapshot) => {
-			// hide loading
-			$('#loading').remove();
-			snapshot.forEach(function(roomSnapshot) {
-				// get room id
-				var roomId = roomSnapshot.key;
-				// add room id to array
-				roomIds.push(roomId);
+		// setPromiseTimeout(ms, promise)
+		// .then((snapshot) => {
+		// 	// hide loading
+		// 	$('#loading').remove();
+		// 	snapshot.forEach(function(roomSnapshot) {
+		// 		// get room id
+		// 		var roomId = roomSnapshot.key;
+		// 		// add room id to array
+		// 		roomIds.push(roomId);
 				
-				// get room name
-				var roomName = roomSnapshot.child('name').val();
+		// 		// get room name
+		// 		var roomName = roomSnapshot.child('name').val();
 				
-				//  EXPERIMENT append line break if room2-1
-				if (roomId == 'room2-1') {
-					$('#rooms').append('<hr>');
-				}
+		// 		//  EXPERIMENT append line break if room2-1
+		// 		if (roomId == 'room2-1') {
+		// 			$('#rooms').append('<hr>');
+		// 		}
 
-				// create button
-				$('#rooms').append('<a href="/study-rooms/' + roomId + '.html"><button class="button button-outline" id="' 
-					+ roomId + '">' + roomName + '</button></a>');
-				$('#' + roomId).append('<br><span></span>');
-			})
-		}).then(function() {
-			// set listener for each room
-			for(i = 0; i < roomIds.length; i++) {
-				var roomId = roomIds[i];
-				rootRef.child(roomId).on('value', snapshot => {
-					updateMembers(snapshot);
-				});	
-			}
-		}).catch((error) => {
-			if (error == 'promiseTO') {
-				alert('データベースが読み込めないため、ページを更新します');
-				location.reload();
-			}
-		});
+		// 		// create button
+		// 		$('#rooms').append('<a href="/study-rooms/' + roomId + '.html"><button class="button button-outline" id="' 
+		// 			+ roomId + '">' + roomName + '</button></a>');
+		// 		$('#' + roomId).append('<br><span></span>');
+		// 	})
+		// }).then(function() {
+		// 	// set listener for each room
+		// 	for(i = 0; i < roomIds.length; i++) {
+		// 		var roomId = roomIds[i];
+		// 		rootRef.child(roomId).on('value', snapshot => {
+		// 			updateMembers(snapshot);
+		// 		});	
+		// 	}
+		// }).catch((error) => {
+		// 	if (error == 'promiseTO') {
+		// 		alert('データベースが読み込めないため、ページを更新します');
+		// 		location.reload();
+		// 	}
+		// });
 
-		// log on disconnection
-		$(window).on('beforeunload', function() {
-			// log
-			logUserAction(user, 'SRlist-out');
-			return undefined;
-		})		
+		// // log on disconnection
+		// $(window).on('beforeunload', function() {
+		// 	// log
+		// 	logUserAction(user, 'SRlist-out');
+		// 	return undefined;
+		// })		
 
 	} else {
+        alert('not logged in')
 		// redirect to login page
 		window.location.href = "/";
 	}

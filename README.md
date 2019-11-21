@@ -15,3 +15,6 @@ This README would normally document whatever steps are necessary to get your app
 
 ### メモ ###
 * 2019/11/15 コードを自分の実験用に変え始める．dependenciesのエラーがたくさんあるよとgithubに言われる．
+* 2019/11/22 study-rooms.html->study-rooms-script.js
+*            study-rooms.script.jsのif(user){}内はすべコメントアウトしてある
+*            TODO:jsファイルのinitalizeApp()をinitFirebase()に書き換えてログインできるか試す
